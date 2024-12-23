@@ -1,0 +1,19 @@
+# Ignorar el entorno virtual
+.venv/
+.env/
+
+# Ignorar el archivo de variables de entorno
+.env
+
+# Ignorar caché de Python
+__pycache__/
+modulos_sat/__pycache__/
+modulos_harmony/__pycache__/
+modulos_cami/__pycache__/
+*.pyc
+
+# Ignorar otros archivos generados por el sistema operativo o el editor
+.DS_Store
+*.log
+.idea/
+.vscode/
