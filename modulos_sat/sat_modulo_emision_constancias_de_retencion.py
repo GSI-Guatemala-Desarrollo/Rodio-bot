@@ -367,7 +367,8 @@ def sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_
     EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS,
     EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS,
     EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR,
-    EMISION_CONSTANCIAS_NO_DE_FACTURA
+    EMISION_CONSTANCIAS_NO_DE_FACTURA,
+    EMISION_CONSTANCIAS_FECHA_FACTURA
 ):
     try:
         logging.info(f"\n\n\n-x-x-x- (PASOS 11-14) sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf -x-x-x-\n")
@@ -466,6 +467,7 @@ def sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_
             EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS,
             EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS,
             EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR,
+            EMISION_CONSTANCIAS_FECHA_FACTURA,
             numero_constancia_de_retencion_y_nombre_pdf,
             numero_de_factura_retenida
         )
@@ -476,7 +478,7 @@ def sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_
 
 # Función auxiliar de la anterior, no se encuentra en la configuración de los flujos porque necesita el numero de constancia que se genera en la anterior función
 # solamente existe para simplificar y separar los procesos de descargar pdf y de cambiar directorio y nombre. (Pasos 16-17)
-def cambiar_nombre_y_directorio_pdf(driver, EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS, EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS, EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR, numero_constancia_de_retencion_y_nombre_pdf, numero_de_factura_retenida):
+def cambiar_nombre_y_directorio_pdf(driver, EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS, EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS, EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR, EMISION_CONSTANCIAS_FECHA_FACTURA, numero_constancia_de_retencion_y_nombre_pdf, numero_de_factura_retenida):
     try:
         logging.info(f"\n\n\n-x-x-x- (PASOS 15-18) cambiar_nombre_y_directorio_pdf -x-x-x-\n")
         # Construir la ruta del archivo PDF descargado
