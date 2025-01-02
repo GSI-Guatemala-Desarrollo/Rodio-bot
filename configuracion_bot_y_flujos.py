@@ -11,7 +11,7 @@ from constantes import (
     BRAVE_BINARY_PATH,
 )
 
-from modulos_harmony.harmony_modulo_introd_comprobantes import harmony_introd_comprobantes_agregar_factura, harmony_introd_comprobantes_copiar_documento
+from modulos_harmony.harmony_modulo_introd_comprobantes import harmony_introd_comprobantes_agregar_factura, harmony_introd_comprobantes_anexar_documento_y_comentario, harmony_introd_comprobantes_copiar_documento, harmony_introd_comprobantes_pagos
 from modulos_sat.sat_login import sat_dirigir_a_pagina_y_verificar_estado_login
 from modulos_sat.sat_navegar_a_modulo import sat_navegar_por_busqueda
 from modulos_sat.sat_modulo_emision_constancias_de_retencion import (
@@ -61,6 +61,13 @@ def caso_1_reten_IVA_GEN (
     
     h_introd_comprobantes_uni_po,
     h_introd_comprobantes_no_pedido,
+    h_introd_comprobantes_iva,
+    h_introd_comprobantes_no_serie,
+    
+    h_introd_comprobantes_pdf_path,
+    h_introd_comprobantes_nombre_pdf,
+    h_introd_comprobantes_nombre_proveedor,
+    h_introd_comprobantes_comentario,
     # Valores Cami
     cami_nombre_empresa
     ):
@@ -84,9 +91,12 @@ def caso_1_reten_IVA_GEN (
     harmony_navegar_a_modulo(driver, indices=(13, 1, 1, 1))
     # Paso 2
     harmony_introd_comprobantes_agregar_factura(driver, h_introd_comprobantes_id_proveedor, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_fecha_factura)
-    # Pasos 3-5
-    harmony_introd_comprobantes_copiar_documento(driver, h_introd_comprobantes_uni_po, h_introd_comprobantes_no_pedido)
-    
+    # Pasos 3-6
+    harmony_introd_comprobantes_copiar_documento(driver, h_introd_comprobantes_uni_po, h_introd_comprobantes_no_pedido, h_introd_comprobantes_iva, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_no_serie)
+    # Pasos 7-8
+    harmony_introd_comprobantes_anexar_documento_y_comentario(driver, h_introd_comprobantes_pdf_path, h_introd_comprobantes_nombre_pdf, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_nombre_proveedor, h_introd_comprobantes_comentario)
+    # Pasos 9-10
+    harmony_introd_comprobantes_pagos(driver, h_introd_comprobantes_fecha_factura)
 # --------------------- Caso 1 - Funciones Cami ---------------------
     # Pasos
     # cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
@@ -285,6 +295,16 @@ def configurar_driver():
     options = Options()
     options.add_argument("--disable-blink-features=AutomationControlled")
     options.add_argument("--disable-web-security")
+    options.add_argument("--disable-gpu")
+
+    # Evitar problemas de sandbox en contenedores
+    options.add_argument("--no-sandbox")
+
+    # Limitar logs
+    options.add_argument("--log-level=3")
+
+    # Aumentar memoria compartida en Docker u otras VMs
+    options.add_argument("--disable-dev-shm-usage")
 
     options.binary_location = BRAVE_BINARY_PATH
     options.add_argument("--start-maximized")  # Pantalla completa

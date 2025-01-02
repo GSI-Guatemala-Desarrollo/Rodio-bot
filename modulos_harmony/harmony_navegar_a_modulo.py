@@ -1,7 +1,7 @@
 import logging
 import time
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support.ui import WebDriverWait
+from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 
 def harmony_navegar_a_modulo(driver, indices):
@@ -40,14 +40,14 @@ def harmony_navegar_a_modulo(driver, indices):
             # Hacer scroll para asegurarse de que sea visible
             driver.execute_script("arguments[0].scrollIntoView(true);", li_element)
             logging.info(f"Desplazado a la vista el elemento en nivel {i + 1}, índice {index}.")
-            time.sleep(0.5)
+            time.sleep(1)
 
             # Expandir la sublista si no es el último nivel
             if i < len(indices) - 1:
                 toggle_div = li_element.find_element(By.XPATH, './div[@class="ptnav2toggle"]')
                 toggle_div.click()
                 logging.info(f"Flecha desplegada en nivel {i + 1}, índice {index}.")
-                time.sleep(0.5)  # Espera para cargar la sublista
+                time.sleep(1)  # Espera para cargar la sublista
                 current_ul = li_element.find_element(By.XPATH, './ul')
                 logging.info(f"Sublista encontrada en nivel {i + 1}.")
             else:
@@ -61,7 +61,7 @@ def harmony_navegar_a_modulo(driver, indices):
                 
                 driver.execute_script("arguments[0].scrollIntoView(true);", link_element)
                 logging.info(f"Desplazado a la vista el enlace: {link_element.text}.")
-                time.sleep(0.5)  # Esperar un poco para asegurar que sea visible
+                time.sleep(1)  # Esperar un poco para asegurar que sea visible
 
                 try:
                     # Intentar hacer clic en el enlace con un manejo de excepciones específico
