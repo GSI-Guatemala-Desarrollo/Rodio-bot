@@ -11,7 +11,14 @@ from constantes import (
     BRAVE_BINARY_PATH,
 )
 
-from modulos_harmony.harmony_modulo_introd_comprobantes import harmony_introd_comprobantes_agregar_factura, harmony_introd_comprobantes_anexar_documento_y_comentario, harmony_introd_comprobantes_copiar_documento, harmony_introd_comprobantes_pagos
+from modulos_harmony.harmony_modulo_introd_comprobantes import (
+    harmony_introd_comprobantes_agregar_factura,
+    harmony_introd_comprobantes_anexar_documento_y_comentario,
+    harmony_introd_comprobantes_copiar_documento,
+    harmony_introd_comprobantes_descripcion_e_iva,
+    harmony_introd_comprobantes_guardar,
+    harmony_introd_comprobantes_pagos_y_retencion,
+    )
 from modulos_sat.sat_login import sat_dirigir_a_pagina_y_verificar_estado_login
 from modulos_sat.sat_navegar_a_modulo import sat_navegar_por_busqueda
 from modulos_sat.sat_modulo_emision_constancias_de_retencion import (
@@ -68,6 +75,11 @@ def caso_1_reten_IVA_GEN (
     h_introd_comprobantes_nombre_pdf,
     h_introd_comprobantes_nombre_proveedor,
     h_introd_comprobantes_comentario,
+    
+    h_introd_comprobantes_lista_porcentaje_retencion,
+    
+    h_introd_comprobantes_lista_descripciones,
+    h_introd_comprobantes_lista_iva,
     # Valores Cami
     cami_nombre_empresa
     ):
@@ -96,7 +108,11 @@ def caso_1_reten_IVA_GEN (
     # Pasos 7-8
     harmony_introd_comprobantes_anexar_documento_y_comentario(driver, h_introd_comprobantes_pdf_path, h_introd_comprobantes_nombre_pdf, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_nombre_proveedor, h_introd_comprobantes_comentario)
     # Pasos 9-10
-    harmony_introd_comprobantes_pagos(driver, h_introd_comprobantes_fecha_factura)
+    harmony_introd_comprobantes_pagos_y_retencion(driver, h_introd_comprobantes_fecha_factura, h_introd_comprobantes_lista_porcentaje_retencion)
+    # Pasos 11-12
+    harmony_introd_comprobantes_descripcion_e_iva(driver, h_introd_comprobantes_lista_descripciones, h_introd_comprobantes_lista_iva)
+    # Paso 13
+    # harmony_introd_comprobantes_guardar(driver) # Comentar la llamada a esta funcion en caso de pruebas para que no realice los cambios en harmony.
 # --------------------- Caso 1 - Funciones Cami ---------------------
     # Pasos
     # cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)

@@ -59,6 +59,11 @@ from constantes import (
     H_INTROD_COMPROBANTES_NOMBRE_PDF,
     H_INTROD_COMPROBANTES_NOMBRE_PROVEEDOR,
     H_INTROD_COMPROBANTES_COMENTARIO,
+    
+    H_INTROD_COMPROBANTES_LISTA_PORCENTAJE_RETENCION,
+    
+    H_INTROD_COMPROBANTES_LISTA_DESCRIPCIONES,
+    H_INTROD_COMPROBANTES_LISTA_IVA,
     # Cami
     CAMI_NOMBRE_EMPRESA,
 )
@@ -108,6 +113,11 @@ try:
                         H_INTROD_COMPROBANTES_NOMBRE_PDF,
                         H_INTROD_COMPROBANTES_NOMBRE_PROVEEDOR,
                         H_INTROD_COMPROBANTES_COMENTARIO,
+                        
+                        H_INTROD_COMPROBANTES_LISTA_PORCENTAJE_RETENCION,
+                        
+                        H_INTROD_COMPROBANTES_LISTA_DESCRIPCIONES,
+                        H_INTROD_COMPROBANTES_LISTA_IVA,
                         # CAMI
                         CAMI_NOMBRE_EMPRESA
                         )

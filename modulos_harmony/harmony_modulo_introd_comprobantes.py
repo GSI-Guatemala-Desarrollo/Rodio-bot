@@ -67,13 +67,11 @@ def harmony_introd_comprobantes_agregar_factura(driver, proveedor_id, no_factura
             EC.element_to_be_clickable((By.XPATH, '//*[@id="#ICSearch"]'))
         )
         btn_anadir.click()
-
         logging.info("Factura añadida correctamente.")
 
     except Exception as e:
         logging.error("Error al agregar la factura: %s", e, exc_info=True)
         # Manejo adicional de errores si fuera necesario
-
 
 def harmony_introd_comprobantes_copiar_documento(
     driver,
@@ -102,6 +100,28 @@ def harmony_introd_comprobantes_copiar_documento(
 
     try:
         logging.info("Iniciando 'harmony_introd_comprobantes_copiar_documento'...")
+
+        # --- Nuevo Paso: Esperar a que aparezca el componente
+        #     <div id="win0divVOUCHER_BUSINESS_UNIT">, que indica que la siguiente página ya cargó ---
+        logging.info("Esperando a que aparezca 'win0divVOUCHER_BUSINESS_UNIT' antes de continuar...")
+        start_time = time.time()
+        timeout_segundos = 60  # Ajusta el tiempo máximo según tu escenario
+
+        while True:
+            if (time.time() - start_time) > timeout_segundos:
+                logging.critical("No apareció 'win0divVOUCHER_BUSINESS_UNIT' antes de timeout. Abortando flujo.")
+                return  # O podrías lanzar una excepción si lo deseas
+            
+            try:
+                driver.find_element(By.ID, "win0divVOUCHER_BUSINESS_UNIT")
+                logging.info("'win0divVOUCHER_BUSINESS_UNIT' encontrado. Continuando con el flujo.")
+                break  # Rompe el bucle si lo encontramos
+            except:
+                pass  # Si no está, lo reintentamos en el siguiente ciclo
+
+            time.sleep(1)
+        # --- Fin Nuevo Paso ---
+
         time.sleep(5)
         # 1. Seleccionar la opción 'N Recepción Ped' (value='PORV') en el select
         logging.info("Seleccionando opción 'N Recepción Ped' en el select.")
@@ -128,6 +148,7 @@ def harmony_introd_comprobantes_copiar_documento(
             EC.presence_of_element_located((By.ID, "VCHR_PANELS_WRK_BUSINESS_UNIT_PO"))
         )
         input_uni_po.clear()
+        time.sleep(1)
         input_uni_po.send_keys(uni_po)
 
         # 5. Ingresar número de pedido
@@ -136,6 +157,7 @@ def harmony_introd_comprobantes_copiar_documento(
             EC.presence_of_element_located((By.ID, "VCHR_PANELS_WRK_PO_ID"))
         )
         input_no_pedido.clear()
+        time.sleep(1)
         input_no_pedido.send_keys(no_pedido)
 
         # 6. Clic en el botón 'Buscar'
@@ -143,7 +165,7 @@ def harmony_introd_comprobantes_copiar_documento(
         btn_buscar = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, "VCHR_PANELS_WRK_PB_GET_PO"))
         )
-        time.sleep(1)
+        time.sleep(2)
         btn_buscar.click()
 
         # 7. Esperamos a que la tabla se cargue.
@@ -179,9 +201,6 @@ def harmony_introd_comprobantes_copiar_documento(
         logging.info(f"Valor bruto recuperado: {gross_amount_text}")
 
         # 12. Parsear y calcular IVA
-        #     - Removemos las comas de miles y reemplazamos comas decimales si fuera necesario
-        #     - Ojo que Peoplesoft a veces muestra algo como "4,651.78" (coma para miles, punto para decimales)
-        #       Simplemente removemos las comas y convertimos a float
         amount_no_commas = gross_amount_text.replace(",", "")  # "4651.78"
         try:
             gross_amount_float = float(amount_no_commas)
@@ -189,7 +208,6 @@ def harmony_introd_comprobantes_copiar_documento(
             logging.error("No se pudo parsear el valor bruto de la factura a float. Se usará 0.")
             gross_amount_float = 0.0
 
-        #     Calculamos el IVA: (gross_amount * iva_percent) / 100
         iva_calculado = (gross_amount_float * iva_percent) / 100.0
         logging.info(f"IVA calculado: {iva_calculado:.2f} (usando {iva_percent}% de {gross_amount_float:.2f})")
 
@@ -199,7 +217,6 @@ def harmony_introd_comprobantes_copiar_documento(
             EC.element_to_be_clickable((By.ID, "VOUCHER_VAT_ENTRD_AMT"))
         )
         vat_amount_element.clear()
-        # Formateamos el IVA con dos decimales (o según tu caso). Ej: "465.18"
         vat_amount_element.send_keys(f"{iva_calculado:,.2f}")
         time.sleep(1)
 
@@ -224,6 +241,7 @@ def harmony_introd_comprobantes_copiar_documento(
     except Exception as e:
         logging.error("Error en 'harmony_introd_comprobantes_copiar_documento': %s", e, exc_info=True)
         # Manejo adicional de errores si fuera necesario
+
 
 def harmony_introd_comprobantes_anexar_documento_y_comentario(
     driver, 
@@ -403,26 +421,26 @@ def harmony_introd_comprobantes_anexar_documento_y_comentario(
         logging.error("Error en 'harmony_introd_comprobantes_anexar_documento': %s", e, exc_info=True)
         # Manejo adicional de errores si fuera necesario
 
-
-def harmony_introd_comprobantes_pagos(driver, fecha_factura):
+def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, porcentaje_retencion):
     """
-    1. Volver a default_content, cambiar al iframe "ptifrmtgtframe".
-    2. Localizar el <a id="ICTAB_1"> (la pestaña 'Pagos') y hacer scroll.
-    3. Intentar clic normal con Selenium y, si no funciona, clic por JavaScript.
-    4. Esperar 4s a que cargue la pestaña de 'Pagos'.
-    5. Calcular fecha de pago (viernes después de +30 días).
-    6. Ingresar la fecha en "PYMNT_VCHR_XREF_SCHEDULED_PAY_DT$0".
-    7. Regresar a la pestaña anterior (ID="ICTAB_0").
-    8. Esperar 3s.
-    9. Clic en "Retención" (ID="VCHR_HDR_WRK_XFR_WTHD_PB") para cargar nueva vista.
+    1. Cambiar al iframe "ptifrmtgtframe".
+    2. Localizar la pestaña 'Pagos' (id=ICTAB_1), hacer scroll y dar clic.
+    3. Esperar 4s a que cargue la pestaña.
+    4. Calcular fecha de pago (viernes a partir de +30 días).
+    5. Ingresar la fecha en 'PYMNT_VCHR_XREF_SCHEDULED_PAY_DT$0'.
+    6. Volver a la pestaña 'Información sobre Factura' (id=ICTAB_0), esperar 3s.
+    7. Clic en 'Retención' (id=VCHR_HDR_WRK_XFR_WTHD_PB) => Carga la vista de retención.
+    8. LEER "X de Y" en '//*[@id="win0div$ICField$4$GP$0"]/table/tbody/tr/td[2]/span[2]' 
+       y, para cada página i en [0..(Y-1)]:
+         - Completar 2 inputs (VCHR_LINE_WTHD_WTHD_RULE$0 y $1) con 2 valores de 'porcentaje_retencion'
+         - Si i < Y-1 => clic en "Siguiente" ($ICField$4$$hdown$0) y espera 3s
+    9. Clic en "Volver a Factura" (id=VCHR_PANELS_WRK_GOTO_VCHR_HDR) y esperar 3s.
     """
 
     try:
-        logging.info("Iniciando 'harmony_introd_comprobantes_pagos'...")
+        logging.info("Iniciando 'harmony_introd_comprobantes_pagos_y_retencion'...")
 
-        #
-        # [1] Asegurarse de estar en el iframe principal
-        #
+        # [1] Cambiar al iframe principal
         driver.switch_to.default_content()
         logging.info("Cambiando al iframe principal 'ptifrmtgtframe'.")
         WebDriverWait(driver, 10).until(
@@ -430,42 +448,30 @@ def harmony_introd_comprobantes_pagos(driver, fecha_factura):
         )
         time.sleep(2)
 
-        #
         # [2] Localizar la pestaña 'Pagos' (a#ICTAB_1)
-        #
-        logging.info("Localizando la pestaña 'Pagos' (id=ICTAB_1).")
+        logging.info("Localizando la pestaña 'Pagos' (a#ICTAB_1).")
         pagos_link = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.ID, "ICTAB_1"))
         )
-
-        # Scroll
-        logging.info("Haciendo scroll hasta la pestaña 'Pagos'.")
         driver.execute_script("arguments[0].scrollIntoView(true);", pagos_link)
         time.sleep(2)
 
-        #
-        # [3] Clic normal, fallback JS
-        #
+        # Clic normal / fallback JS
         try:
-            logging.info("Intentando clic normal con Selenium en 'Pagos' (a#ICTAB_1).")
+            logging.info("Intentando clic Selenium en 'Pagos'.")
             pagos_link.click()
             time.sleep(1)
         except (ElementClickInterceptedException, TimeoutException) as e:
-            logging.warning(f"El clic normal en 'Pagos' falló: {e}")
-            logging.info("Intentando clic JS en 'Pagos' (a#ICTAB_1).")
+            logging.warning(f"Clic normal en 'Pagos' falló: {e}")
+            logging.info("Intentando clic JS en 'Pagos'.")
             driver.execute_script("arguments[0].click();", pagos_link)
             time.sleep(1)
 
-        #
-        # [4] Esperar 4s a que cargue la pestaña
-        #
+        # [3] Esperar 4s para cargar la pestaña
         logging.info("Esperando 4 segundos para que se cargue la pestaña 'Pagos'.")
         time.sleep(4)
 
-        #
-        # [5] Calcular fecha de pago (viernes)
-        #
-        logging.info(f"Calculando fecha de pago a partir de la factura: {fecha_factura}")
+        # [4] Calcular fecha de pago (viernes)
         parsed_date = datetime.strptime(fecha_factura, "%d/%m/%Y")
         nueva_fecha = parsed_date + timedelta(days=30)
         while nueva_fecha.weekday() != 4:  # Friday=4
@@ -473,10 +479,7 @@ def harmony_introd_comprobantes_pagos(driver, fecha_factura):
         fecha_pago = nueva_fecha.strftime("%d/%m/%Y")
         logging.info(f"Fecha de pago calculada (viernes): {fecha_pago}")
 
-        #
-        # [6] Ingresar fecha en "PYMNT_VCHR_XREF_SCHEDULED_PAY_DT$0"
-        #
-        logging.info("Localizando e ingresando la fecha de pago en 'PYMNT_VCHR_XREF_SCHEDULED_PAY_DT$0'.")
+        # [5] Ingresar la fecha en 'PYMNT_VCHR_XREF_SCHEDULED_PAY_DT$0'
         fecha_input = WebDriverWait(driver, 15).until(
             EC.element_to_be_clickable((By.ID, "PYMNT_VCHR_XREF_SCHEDULED_PAY_DT$0"))
         )
@@ -484,60 +487,359 @@ def harmony_introd_comprobantes_pagos(driver, fecha_factura):
         fecha_input.send_keys(fecha_pago)
         time.sleep(1)
 
-        #
-        # [7] Regresar a la pestaña anterior: "ICTAB_0" (Información sobre Factura)
-        #
-        logging.info("Regresando a la pestaña anterior 'Información sobre Factura' (id=ICTAB_0).")
-        info_factura_link = WebDriverWait(driver, 15).until(
+        # [6] Volver a 'Información sobre Factura' (a#ICTAB_0)
+        factura_tab = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.ID, "ICTAB_0"))
         )
-
-        # Scroll y clic
-        logging.info("Haciendo scroll hasta la pestaña 'Información sobre Factura'.")
-        driver.execute_script("arguments[0].scrollIntoView(true);", info_factura_link)
-        time.sleep(2)
-
+        driver.execute_script("arguments[0].scrollIntoView(true);", factura_tab)
+        time.sleep(1)
         try:
-            logging.info("Intentando clic normal con Selenium en 'Información sobre Factura' (a#ICTAB_0).")
-            info_factura_link.click()
+            factura_tab.click()
             time.sleep(1)
         except (ElementClickInterceptedException, TimeoutException) as e:
-            logging.warning(f"El clic normal en 'Información sobre Factura' falló: {e}")
-            logging.info("Intentando clic JS en 'Información sobre Factura' (a#ICTAB_0).")
-            driver.execute_script("arguments[0].click();", info_factura_link)
+            driver.execute_script("arguments[0].click();", factura_tab)
             time.sleep(1)
 
-        #
-        # [8] Esperar 3s
-        #
-        logging.info("Esperando 3 segundos para que la pestaña 'Información sobre Factura' se cargue.")
+        logging.info("Esperando 3 segundos para que se cargue la pestaña 'Información sobre Factura'.")
         time.sleep(3)
 
-        #
-        # [9] Clic en "Retención" (ID="VCHR_HDR_WRK_XFR_WTHD_PB")
-        #
-        logging.info("Dando clic en 'Retención' (VCHR_HDR_WRK_XFR_WTHD_PB).")
-        retencion_link = WebDriverWait(driver, 10).until(
+        # [7] Clic en 'Retención' (id=VCHR_HDR_WRK_XFR_WTHD_PB)
+        retencion_link = WebDriverWait(driver, 15).until(
             EC.presence_of_element_located((By.ID, "VCHR_HDR_WRK_XFR_WTHD_PB"))
         )
-
-        # Scroll y clic
-        logging.info("Haciendo scroll hasta el link 'Retención'.")
-        driver.execute_script("arguments[0].scrollIntoView(true);", retencion_link)
-        time.sleep(1)
-
         try:
-            logging.info("Intentando clic normal con Selenium en 'Retención'.")
             retencion_link.click()
             time.sleep(1)
         except (ElementClickInterceptedException, TimeoutException) as e:
-            logging.warning(f"El clic normal en 'Retención' falló: {e}")
-            logging.info("Intentando clic JS en 'Retención'.")
             driver.execute_script("arguments[0].click();", retencion_link)
             time.sleep(1)
+
+        logging.info("Vista de Retención cargada (dentro del mismo iframe principal).")
+
+        # [8] ITERAR páginas de Retención
+        #     1) Leer "X de Y" en '//*[@id="win0div$ICField$4$GP$0"]/table/tbody/tr/td[2]/span[2]'
+        #        => Y = total de páginas
+        #     2) Para i en [0..Y-1], llenar los 2 inputs de la tabla con 2 valores
+        #        de la lista porcentaje_retencion, y luego si i<Y-1 => "Siguiente"
+
+        # 8a) Leer "X de Y" => Y
+        logging.info("Leyendo cantidad de páginas de retención en 'win0div$ICField$4$GP$0'...")
+        try:
+            txt_pages = WebDriverWait(driver, 5).until(
+                EC.presence_of_element_located((By.XPATH, '//*[@id="win0div$ICField$4$GP$0"]/table/tbody/tr/td[2]/span[2]'))
+            ).text  # Ej: "1 de 3"
+        except TimeoutException:
+            logging.warning("No se encontró '1 de X' en retención. Asumimos 1 de 1.")
+            txt_pages = "1 de 1"
+
+        # Parsear Y
+        try:
+            partes = txt_pages.split(" de ")
+            total_pages = int(partes[1])
+        except (IndexError, ValueError):
+            logging.warning(f"No se pudo parsear '{txt_pages}'. Asumimos 1 de 1.")
+            total_pages = 1
+
+        logging.info(f"Hay {total_pages} página(s) de retención. La lista de retenciones tiene {len(porcentaje_retencion)} elementos.")
+
+        # 8b) Por cada página i: llenar 2 inputs con porcentaje_retencion[i*2] y [i*2+1]
+        #     y si i<total_pages-1 => clic en "Siguiente"
+        ret_index = 0
+        for i in range(total_pages):
+            logging.info(f"== Retención - Página {i+1} de {total_pages} ==")
+
+            # Llenar 2 inputs: VCHR_LINE_WTHD_WTHD_RULE$0, VCHR_LINE_WTHD_WTHD_RULE$1
+            # Ojo que cada vez que se cambia de página, se "reinician" los index a $0 y $1
+            for sub_idx in range(2):  # 0..1
+                input_id = f"VCHR_LINE_WTHD_WTHD_RULE${sub_idx}"
+                try:
+                    fila_input = WebDriverWait(driver, 5).until(
+                        EC.element_to_be_clickable((By.ID, input_id))
+                    )
+                    fila_input.clear()
+                    fila_input.send_keys(porcentaje_retencion[ret_index])
+                    logging.info(f"Asignado '{porcentaje_retencion[ret_index]}' en {input_id}.")
+                    ret_index += 1
+                except TimeoutException:
+                    logging.warning(f"No se encontró el campo '{input_id}'. No se pudo ingresar retención.")
+                    break
+
+            # Si no es la última página => clic en Siguiente
+            if i < (total_pages - 1):
+                logging.info(f"Página {i+1} completada. Avanzando a la página {i+2} de retención.")
+                try:
+                    btn_siguiente = WebDriverWait(driver, 5).until(
+                        EC.element_to_be_clickable((By.XPATH, '//*[@id="$ICField$4$$hdown$0"]'))
+                    )
+                    btn_siguiente.click()
+                    time.sleep(3)
+                except TimeoutException:
+                    logging.warning("No se encontró el botón 'Siguiente' en retención. Abortando.")
+                    break
+
+        # [9] Clic en "Volver a Factura" (id=VCHR_PANELS_WRK_GOTO_VCHR_HDR)
+        logging.info("Presionando 'Volver a Factura' para regresar a la pantalla anterior.")
+        volver_factura_link = WebDriverWait(driver, 15).until(
+            EC.presence_of_element_located((By.ID, "VCHR_PANELS_WRK_GOTO_VCHR_HDR"))
+        )
+        try:
+            volver_factura_link.click()
+            time.sleep(1)
+        except (ElementClickInterceptedException, TimeoutException) as e:
+            logging.warning(f"Clic en 'Volver a Factura' falló: {e}")
+            driver.execute_script("arguments[0].click();", volver_factura_link)
+            time.sleep(1)
+
+        logging.info("Esperando 3 segundos para que se cargue la pantalla anterior...")
+        time.sleep(3)
 
         logging.info("Función 'harmony_introd_comprobantes_pagos' finalizada correctamente.")
 
     except Exception as e:
         logging.error("Error en 'harmony_introd_comprobantes_pagos': %s", e, exc_info=True)
         # Manejo adicional de errores si fuera necesario
+
+
+def harmony_introd_comprobantes_descripcion_e_iva(driver, descripciones, ivas):
+    """
+    Ingreso de descripciones e IVA para cada artículo de la factura.
+    Se replica la forma de acceder a ventanas emergentes,
+    igual que en la función de anexar documentos y comentarios.
+
+    Pasos:
+      1) Lee "X de Y" (ej. "1 de 3") para saber cuántos artículos hay (Y).
+      2) Para i en [0..Y-1] (o hasta min(Y, len(descripciones), len(ivas))):
+         a) Escribe descripciones[i] en VOUCHER_LINE_DESCR$0
+         b) Clic en "IVA Línea Factura" -> abre ventana emergente
+            - Esperar 3s
+            - switch_to.default_content()
+            - Cambiar al iframe emergente con XPATH '/html/body/div[8]/div[2]/div/div[2]/iframe'
+            - **Clic en "Contraer Todas Secciones"** (nuevo)
+            - Clic en la flecha "VAT_LABEL_WRK_VAT_DETAILS" para (des)plegar la sección
+            - Espera 2s
+            - Escribe ivas[i] en 'VAT_FIELDS_WRK_TAX_CD_VAT'
+            - Clic en "Ir a Línea Factura" -> cierra la ventana
+            - Regresar a default_content() -> ptifrmtgtframe
+         c) Si i < último, clic en "Siguiente" y esperar 3s
+    """
+
+    logging.info("Iniciando 'harmony_introd_comprobantes_descripcion_e_iva'...")
+
+    # --- Paso previo: Ir a la primera página ---
+    try:
+        # Localizar el botón "Primero"
+        primero_btn = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="$ICField1$htop$0"]'))
+        )
+        # Hacer scroll
+        driver.execute_script("arguments[0].scrollIntoView(true);", primero_btn)
+        time.sleep(1)
+
+        # Clic en "Primero"
+        primero_btn.click()
+        logging.info("Clic en 'Primero' para regresar a la primera página de artículos.")
+    except TimeoutException:
+        logging.warning("No se encontró el botón 'Primero'. Continuamos de todas formas.")
+
+    # Esperar 2s tras presionar "Primero"
+    time.sleep(2)
+
+    # 1) Leer "X de Y" (ej. "1 de 3")
+    try:
+        texto_items = WebDriverWait(driver, 5).until(
+            EC.presence_of_element_located(
+                (By.XPATH, '//*[@id="win0div$ICField1GP$0"]/table/tbody/tr/td[2]/span[2]')
+            )
+        ).text  # Ej. "1 de 3"
+    except TimeoutException:
+        logging.warning("No se encontró 'X de Y' al inicio. Se asume '1 de 1'.")
+        texto_items = "1 de 1"
+
+    # Parsear Y
+    try:
+        partes = texto_items.split(" de ")
+        Y = int(partes[1])
+    except (IndexError, ValueError):
+        logging.warning(f"No se pudo parsear '{texto_items}'. Se asume 1 de 1.")
+        Y = 1
+
+    n_desc = len(descripciones)
+    n_ivas = len(ivas)
+    max_articulos = min(Y, n_desc, n_ivas)
+
+    logging.info(
+        f"La página indica {Y} artículo(s). Hay {n_desc} descripciones y {n_ivas} IVAs. "
+        f"Se llenarán {max_articulos} artículo(s)."
+    )
+
+    if max_articulos == 0:
+        logging.info("max_articulos = 0. Nada por llenar. Terminando función.")
+        return
+
+    # 2) Iterar sobre cada artículo
+    for i in range(max_articulos):
+        desc = descripciones[i]
+        iva_val = ivas[i]
+        logging.info(f"== ARTÍCULO {i+1} de {max_articulos} ==")
+
+        # 2.a) Ingresar la descripción en VOUCHER_LINE_DESCR$0
+        try:
+            desc_input = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.ID, "VOUCHER_LINE_DESCR$0"))
+            )
+            driver.execute_script("arguments[0].scrollIntoView(true);", desc_input)
+            time.sleep(1)
+            desc_input.clear()
+            desc_input.send_keys(desc)
+            logging.info(f"Descripción '{desc}' ingresada en VOUCHER_LINE_DESCR$0.")
+        except TimeoutException:
+            logging.error("No se encontró el campo 'VOUCHER_LINE_DESCR$0'. Terminando.")
+            break
+
+        # 2.b) Clic en "IVA Línea Factura"
+        try:
+            iva_linea_link = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="VCHR_PANELS_WK1_VAT_PB$0"]'))
+            )
+            iva_linea_link.click()
+            logging.info("Clic en 'IVA Línea Factura'. Se abre ventana emergente.")
+        except (TimeoutException, ElementClickInterceptedException) as e:
+            logging.warning(f"No se pudo hacer clic en 'IVA Línea Factura': {e}")
+            break
+
+        # Esperar 3s a que aparezca la ventana emergente
+        time.sleep(3)
+
+        # Salir al contenido principal
+        driver.switch_to.default_content()
+
+        # Cambiar al iframe emergente con la ruta
+        try:
+            WebDriverWait(driver, 10).until(
+                EC.frame_to_be_available_and_switch_to_it(
+                    (By.XPATH, '/html/body/div[8]/div[2]/div/div[2]/iframe')
+                )
+            )
+            logging.info("Dentro del iframe emergente para Detalles IVA.")
+        except TimeoutException:
+            logging.error("No se pudo cambiar al iframe emergente. Terminando.")
+            break
+
+        # (Nuevo) Clic en "Contraer Todas Secciones"
+        # XPATH: '//*[@id="win0divVAT_SUBPAGE_WRK_COLLAPSE_SECTIONS"]/a'
+        try:
+            contraer_secciones_btn = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="win0divVAT_SUBPAGE_WRK_COLLAPSE_SECTIONS"]/a'))
+            )
+            contraer_secciones_btn.click()
+            logging.info("Clic en 'Contraer Todas Secciones'.")
+        except TimeoutException:
+            logging.warning("No se encontró el botón 'Contraer Todas Secciones'. Continuamos de todas formas.")
+
+        time.sleep(1)  # Breve espera tras contraer secciones
+
+        # Flecha "VAT_LABEL_WRK_VAT_DETAILS"
+        try:
+            detalles_iva_btn = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.ID, "VAT_LABEL_WRK_VAT_DETAILS"))
+            )
+            detalles_iva_btn.click()
+            logging.info("Clic en la flecha 'VAT_LABEL_WRK_VAT_DETAILS' (Detalles IVA).")
+        except TimeoutException:
+            logging.warning("No se encontró 'VAT_LABEL_WRK_VAT_DETAILS'.")
+        time.sleep(2)
+
+        # Ingresar el IVA en "VAT_FIELDS_WRK_TAX_CD_VAT"
+        try:
+            iva_input = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="VAT_FIELDS_WRK_TAX_CD_VAT"]'))
+            )
+            iva_input.clear()
+            iva_input.send_keys(str(iva_val))
+            logging.info(f"IVA '{iva_val}' ingresado en 'VAT_FIELDS_WRK_TAX_CD_VAT'.")
+        except TimeoutException:
+            logging.warning("No se encontró 'VAT_FIELDS_WRK_TAX_CD_VAT'. No se pudo ingresar el IVA.")
+
+        # Clic en "Ir a Línea Factura"
+        try:
+            volver_linea_btn = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.XPATH, '//*[@id="VCHR_PANELS_WK1_GOTO_VCHRLN"]'))
+            )
+            volver_linea_btn.click()
+            logging.info("Clic en 'Ir a Línea Factura' para regresar al iframe principal.")
+        except TimeoutException:
+            logging.warning("No se encontró 'Ir a Línea Factura'. No se pudo regresar.")
+            break
+
+        # Regresamos a default_content y luego al iframe principal
+        driver.switch_to.default_content()
+        # ... luego de "Ir a Línea Factura" y driver.switch_to.default_content()
+
+        try:
+            WebDriverWait(driver, 10).until(
+                EC.frame_to_be_available_and_switch_to_it((By.ID, "ptifrmtgtframe"))
+            )
+            logging.info("Regresando al iframe principal 'ptifrmtgtframe'.")
+        except TimeoutException:
+            logging.error("No se pudo volver al iframe principal. Terminando.")
+            break
+
+        # Espera extra para que PeopleSoft termine de dibujar la página
+        time.sleep(2)
+
+        if i < max_articulos - 1:
+            logging.info(f"Artículo {i+1} completado. Avanzando al siguiente (i={i+1}).")
+            
+            # Localizar el botón “Siguiente” con WebDriverWait
+            try:
+                btn_siguiente = WebDriverWait(driver, 5).until(
+                    EC.element_to_be_clickable((By.XPATH, '//*[@id="$ICField1$hdown$0"]'))
+                )
+                btn_siguiente.click()
+                logging.info("Botón 'Siguiente' presionado. Esperando 3s...")
+                time.sleep(3)
+            except TimeoutException:
+                logging.warning("No se encontró el botón 'Siguiente'. No se puede avanzar.")
+                break
+
+
+    logging.info("Función 'harmony_introd_comprobantes_descripcion_e_iva' finalizada correctamente.")
+
+def harmony_introd_comprobantes_guardar(driver):
+    """
+    1) Scroll al botón 'Guardar' (//*[@id="win0divVCHR_PANELS_WRK_VCHR_SAVE_PB"]/a) y clic.
+    2) Espera 3s.
+    3) Clic en el botón final 'Guardar' (#ICSave).
+    """
+
+    logging.info("Iniciando 'harmony_introd_comprobantes_guardar'...")
+
+    try:
+        # 1) Ubicar y hacer scroll al botón "Guardar" (VCHR_PANELS_WRK_VCHR_SAVE_PB)
+        primer_guardar_btn = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.XPATH, '//*[@id="win0divVCHR_PANELS_WRK_VCHR_SAVE_PB"]/a'))
+        )
+        driver.execute_script("arguments[0].scrollIntoView(true);", primer_guardar_btn)
+        time.sleep(1)
+        primer_guardar_btn.click()
+        logging.info("Clic en el primer botón 'Guardar' (VCHR_PANELS_WRK_VCHR_SAVE_PB).")
+
+    except TimeoutException:
+        logging.warning("No se encontró el primer botón 'Guardar' (VCHR_PANELS_WRK_VCHR_SAVE_PB). Continuamos sin él.")
+
+    # 2) Esperar 3s tras presionar el primer botón
+    logging.info("Esperando 3 segundos tras el primer 'Guardar'...")
+    time.sleep(3)
+
+    try:
+        # 3) Clic en el botón final 'Guardar' (#ICSave)
+        guardar_final_btn = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, "#ICSave"))
+        )
+        guardar_final_btn.click()
+        logging.info("Clic en el botón final 'Guardar' (#ICSave).")
+
+    except TimeoutException:
+        logging.warning("No se encontró el botón final '#ICSave'. No se pudo guardar definitivamente.")
+
+    logging.info("Función 'harmony_introd_comprobantes_guardar' finalizada correctamente.")
