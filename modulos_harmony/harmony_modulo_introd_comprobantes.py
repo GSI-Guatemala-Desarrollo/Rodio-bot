@@ -10,6 +10,7 @@ from selenium.webdriver import ActionChains
 from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
 from datetime import datetime, timedelta
 
+# Paso 2
 def harmony_introd_comprobantes_agregar_factura(driver, proveedor_id, no_factura, fecha_factura):
     """
     Ingresa al iframe principal (ptifrmtgtframe), llena los 3 campos
@@ -73,6 +74,7 @@ def harmony_introd_comprobantes_agregar_factura(driver, proveedor_id, no_factura
         logging.error("Error al agregar la factura: %s", e, exc_info=True)
         # Manejo adicional de errores si fuera necesario
 
+# Pasos 3-6
 def harmony_introd_comprobantes_copiar_documento(
     driver,
     uni_po,
@@ -110,7 +112,7 @@ def harmony_introd_comprobantes_copiar_documento(
         while True:
             if (time.time() - start_time) > timeout_segundos:
                 logging.critical("No apareció 'win0divVOUCHER_BUSINESS_UNIT' antes de timeout. Abortando flujo.")
-                return  # O podrías lanzar una excepción si lo deseas
+                return 
             
             try:
                 driver.find_element(By.ID, "win0divVOUCHER_BUSINESS_UNIT")
@@ -159,7 +161,7 @@ def harmony_introd_comprobantes_copiar_documento(
         input_no_pedido.clear()
         time.sleep(1)
         input_no_pedido.send_keys(no_pedido)
-
+        time.sleep(1)
         # 6. Clic en el botón 'Buscar'
         logging.info("Dando clic en el botón 'Buscar'.")
         btn_buscar = WebDriverWait(driver, 10).until(
@@ -192,7 +194,7 @@ def harmony_introd_comprobantes_copiar_documento(
         logging.info("Esperando 2 segundos mientras carga la página anterior...")
         time.sleep(2)
 
-        # 11. Copiar el total de la factura (VOUCHER_GROSS_AMT)
+                # 11. Copiar el total de la factura (VOUCHER_GROSS_AMT)
         logging.info("Obteniendo el total de la factura (VOUCHER_GROSS_AMT).")
         gross_amount_element = WebDriverWait(driver, 10).until(
             EC.presence_of_element_located((By.ID, "VOUCHER_GROSS_AMT"))
@@ -220,7 +222,19 @@ def harmony_introd_comprobantes_copiar_documento(
         vat_amount_element.send_keys(f"{iva_calculado:,.2f}")
         time.sleep(1)
 
-        # 14. Ingresar número de factura y número de serie
+        # 14. Sumar total + IVA y ponerlo de nuevo en 'VOUCHER_GROSS_AMT'
+        suma_total_iva = gross_amount_float + iva_calculado
+        logging.info(f"Suma del total + IVA = {suma_total_iva:.2f}")
+        logging.info("Reingresando la suma en 'VOUCHER_GROSS_AMT'.")
+        # Volvemos a tomar el elemento (o reubicarlo) para asegurar que esté interactuable
+        new_gross_element = WebDriverWait(driver, 10).until(
+            EC.element_to_be_clickable((By.ID, "VOUCHER_GROSS_AMT"))
+        )
+        new_gross_element.clear()
+        new_gross_element.send_keys(f"{suma_total_iva:,.2f}")
+        time.sleep(1)
+
+        # 15. Ingresar número de factura y número de serie
         logging.info(f"Ingresando número de factura: {factura_num}")
         factura_num_element = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, "VCHR_UUID_SBF_UUID_AC_SBF"))
@@ -237,12 +251,14 @@ def harmony_introd_comprobantes_copiar_documento(
         factura_serie_element.send_keys(factura_serie)
 
         logging.info("Función 'harmony_introd_comprobantes_copiar_documento' finalizada correctamente.")
-
+        
+        return suma_total_iva
+        
     except Exception as e:
         logging.error("Error en 'harmony_introd_comprobantes_copiar_documento': %s", e, exc_info=True)
         # Manejo adicional de errores si fuera necesario
 
-
+# Pasos 7-8
 def harmony_introd_comprobantes_anexar_documento_y_comentario(
     driver, 
     pdf_dir, 
@@ -421,7 +437,8 @@ def harmony_introd_comprobantes_anexar_documento_y_comentario(
         logging.error("Error en 'harmony_introd_comprobantes_anexar_documento': %s", e, exc_info=True)
         # Manejo adicional de errores si fuera necesario
 
-def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, porcentaje_retencion):
+# Pasos 9-10
+def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_retencion_por_articulo, porcentaje_retencion):
     """
     1. Cambiar al iframe "ptifrmtgtframe".
     2. Localizar la pestaña 'Pagos' (id=ICTAB_1), hacer scroll y dar clic.
@@ -519,15 +536,15 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, porcent
         # [8] ITERAR páginas de Retención
         #     1) Leer "X de Y" en '//*[@id="win0div$ICField$4$GP$0"]/table/tbody/tr/td[2]/span[2]'
         #        => Y = total de páginas
-        #     2) Para i en [0..Y-1], llenar los 2 inputs de la tabla con 2 valores
-        #        de la lista porcentaje_retencion, y luego si i<Y-1 => "Siguiente"
+        #     2) Para i en [0..Y-1], llenar 2 inputs de "porcentaje_retencion" (VCHR_LINE_WTHD_WTHD_RULE$0/$1)
+        #        y 2 inputs de "total_retencion_por_articulo" (VCHR_LINE_WTHD_WTHD_BASIS_AMT$0/$1).
+        #        Luego, si i < Y-1 => clic en "Siguiente".
 
-        # 8a) Leer "X de Y" => Y
         logging.info("Leyendo cantidad de páginas de retención en 'win0div$ICField$4$GP$0'...")
         try:
             txt_pages = WebDriverWait(driver, 5).until(
                 EC.presence_of_element_located((By.XPATH, '//*[@id="win0div$ICField$4$GP$0"]/table/tbody/tr/td[2]/span[2]'))
-            ).text  # Ej: "1 de 3"
+            ).text  # Ej. "1 de 3"
         except TimeoutException:
             logging.warning("No se encontró '1 de X' en retención. Asumimos 1 de 1.")
             txt_pages = "1 de 1"
@@ -540,29 +557,68 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, porcent
             logging.warning(f"No se pudo parsear '{txt_pages}'. Asumimos 1 de 1.")
             total_pages = 1
 
-        logging.info(f"Hay {total_pages} página(s) de retención. La lista de retenciones tiene {len(porcentaje_retencion)} elementos.")
+        logging.info(
+            f"Hay {total_pages} página(s) de retención. "
+            f"La lista de retenciones tiene {len(porcentaje_retencion)} elementos. "
+            f"La lista de totales tiene {len(total_retencion_por_articulo)} elementos."
+        )
 
         # 8b) Por cada página i: llenar 2 inputs con porcentaje_retencion[i*2] y [i*2+1]
-        #     y si i<total_pages-1 => clic en "Siguiente"
+        #                       y también 2 inputs con total_retencion_por_articulo[i*2] y [i*2+1].
+        #     Luego, si i < total_pages-1 => clic en "Siguiente".
+
         ret_index = 0
         for i in range(total_pages):
             logging.info(f"== Retención - Página {i+1} de {total_pages} ==")
 
-            # Llenar 2 inputs: VCHR_LINE_WTHD_WTHD_RULE$0, VCHR_LINE_WTHD_WTHD_RULE$1
-            # Ojo que cada vez que se cambia de página, se "reinician" los index a $0 y $1
             for sub_idx in range(2):  # 0..1
-                input_id = f"VCHR_LINE_WTHD_WTHD_RULE${sub_idx}"
+                # 1) Porcentaje de retención
+                rule_input_id = f"VCHR_LINE_WTHD_WTHD_RULE${sub_idx}"
                 try:
-                    fila_input = WebDriverWait(driver, 5).until(
-                        EC.element_to_be_clickable((By.ID, input_id))
+                    rule_input = WebDriverWait(driver, 5).until(
+                        EC.element_to_be_clickable((By.ID, rule_input_id))
                     )
-                    fila_input.clear()
-                    fila_input.send_keys(porcentaje_retencion[ret_index])
-                    logging.info(f"Asignado '{porcentaje_retencion[ret_index]}' en {input_id}.")
-                    ret_index += 1
+                    rule_input.clear()
+                    time.sleep(1.5)
+
+                    if ret_index < len(porcentaje_retencion):
+                        rule_input.send_keys(porcentaje_retencion[ret_index])
+                        logging.info(f"Asignado '{porcentaje_retencion[ret_index]}' en {rule_input_id}.")
+                    else:
+                        logging.info(f"No hay más elementos en porcentaje_retencion. "
+                                     f"Dejando en blanco '{rule_input_id}'.")
                 except TimeoutException:
-                    logging.warning(f"No se encontró el campo '{input_id}'. No se pudo ingresar retención.")
+                    logging.warning(f"No se encontró el campo '{rule_input_id}'. No se pudo ingresar retención.")
                     break
+
+                # 2) Total retención por artículo
+                basis_input_id = f"VCHR_LINE_WTHD_WTHD_BASIS_AMT${sub_idx}"
+                try:
+                    basis_input = WebDriverWait(driver, 5).until(
+                        EC.element_to_be_clickable((By.ID, basis_input_id))
+                    )
+                    # Forzamos scroll al elemento
+                    driver.execute_script("arguments[0].scrollIntoView(true);", basis_input)
+                    time.sleep(1)
+
+                    basis_input.click()
+                    time.sleep(1)
+                    basis_input.clear()
+                    time.sleep(1)
+
+                    if ret_index < len(total_retencion_por_articulo):
+                        basis_input.send_keys(total_retencion_por_articulo[ret_index])
+                        logging.info(f"Asignado '{total_retencion_por_articulo[ret_index]}' en {basis_input_id}.")
+                    else:
+                        logging.info(f"No hay más elementos en total_retencion_por_articulo. "
+                                     f"Dejando en blanco '{basis_input_id}'.")
+                except TimeoutException:
+                    logging.warning(f"No se encontró el campo '{basis_input_id}'. No se pudo ingresar el total.")
+                    break
+
+                # Avanzar al siguiente índice (en ambas listas)
+                ret_index += 1
+                time.sleep(1)
 
             # Si no es la última página => clic en Siguiente
             if i < (total_pages - 1):
@@ -595,11 +651,12 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, porcent
 
         logging.info("Función 'harmony_introd_comprobantes_pagos' finalizada correctamente.")
 
+
     except Exception as e:
         logging.error("Error en 'harmony_introd_comprobantes_pagos': %s", e, exc_info=True)
         # Manejo adicional de errores si fuera necesario
 
-
+# Pasos 11-12
 def harmony_introd_comprobantes_descripcion_e_iva(driver, descripciones, ivas):
     """
     Ingreso de descripciones e IVA para cada artículo de la factura.
@@ -805,6 +862,7 @@ def harmony_introd_comprobantes_descripcion_e_iva(driver, descripciones, ivas):
 
     logging.info("Función 'harmony_introd_comprobantes_descripcion_e_iva' finalizada correctamente.")
 
+# Paso 13
 def harmony_introd_comprobantes_guardar(driver):
     """
     1) Scroll al botón 'Guardar' (//*[@id="win0divVCHR_PANELS_WRK_VCHR_SAVE_PB"]/a) y clic.
@@ -843,3 +901,4 @@ def harmony_introd_comprobantes_guardar(driver):
         logging.warning("No se encontró el botón final '#ICSave'. No se pudo guardar definitivamente.")
 
     logging.info("Función 'harmony_introd_comprobantes_guardar' finalizada correctamente.")
+

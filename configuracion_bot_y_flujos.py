@@ -77,6 +77,7 @@ def caso_1_reten_IVA_GEN (
     h_introd_comprobantes_comentario,
     
     h_introd_comprobantes_lista_porcentaje_retencion,
+    h_introd_comprobantes_lista_impt_base_retencion_sust,
     
     h_introd_comprobantes_lista_descripciones,
     h_introd_comprobantes_lista_iva,
@@ -108,11 +109,13 @@ def caso_1_reten_IVA_GEN (
     # Pasos 7-8
     harmony_introd_comprobantes_anexar_documento_y_comentario(driver, h_introd_comprobantes_pdf_path, h_introd_comprobantes_nombre_pdf, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_nombre_proveedor, h_introd_comprobantes_comentario)
     # Pasos 9-10
-    harmony_introd_comprobantes_pagos_y_retencion(driver, h_introd_comprobantes_fecha_factura, h_introd_comprobantes_lista_porcentaje_retencion)
+    harmony_introd_comprobantes_pagos_y_retencion(driver, h_introd_comprobantes_fecha_factura, h_introd_comprobantes_lista_impt_base_retencion_sust, h_introd_comprobantes_lista_porcentaje_retencion)
     # Pasos 11-12
     harmony_introd_comprobantes_descripcion_e_iva(driver, h_introd_comprobantes_lista_descripciones, h_introd_comprobantes_lista_iva)
     # Paso 13
     # harmony_introd_comprobantes_guardar(driver) # Comentar la llamada a esta funcion en caso de pruebas para que no realice los cambios en harmony.
+
+
 # --------------------- Caso 1 - Funciones Cami ---------------------
     # Pasos
     # cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
@@ -209,6 +212,25 @@ def caso_3_reten_IVA_PEQ (
     emision_constancias_nombre_proveedor,
     emision_constancias_fecha_factura,
     # Valores Harmony
+    h_introd_comprobantes_id_proveedor,
+    h_introd_comprobantes_no_de_factura,
+    h_introd_comprobantes_fecha_factura,
+    
+    h_introd_comprobantes_uni_po,
+    h_introd_comprobantes_no_pedido,
+    h_introd_comprobantes_iva,
+    h_introd_comprobantes_no_serie,
+    
+    h_introd_comprobantes_pdf_path,
+    h_introd_comprobantes_nombre_pdf,
+    h_introd_comprobantes_nombre_proveedor,
+    h_introd_comprobantes_comentario,
+    
+    h_introd_comprobantes_lista_porcentaje_retencion,
+    h_introd_comprobantes_lista_impt_base_retencion_sust,
+    
+    h_introd_comprobantes_lista_descripciones,
+    h_introd_comprobantes_lista_iva,
     # Valores Cami
     cami_nombre_empresa
     ):
@@ -224,9 +246,25 @@ def caso_3_reten_IVA_PEQ (
     sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, emision_constancias_directorio_descargas, emision_constancias_directorio_facturas_iva, emision_constancias_nombre_proveedor, emision_constancias_no_de_factura, emision_constancias_fecha_factura)
 
 # --------------------- Caso 3 - Funciones Harmony ---------------------
-    # Pasos
+    # Paso 1
     harmony_dirigir_a_pagina_y_verificar_estado_login(driver)
-    # Pasos
+    # Paso 1
+    harmony_navegar_a_modulo(driver, indices=(13, 1, 1, 1))
+    # Paso 2
+    harmony_introd_comprobantes_agregar_factura(driver, h_introd_comprobantes_id_proveedor, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_fecha_factura)
+    # Pasos 3-6
+    suma_total_iva = () # Paso exclusivo del caso 3, recibe el total de la factura y lo guarda en el primer indice de una lista para la funcion "harmony_introd_comprobantes_pagos_y_retencion"
+    suma_total_iva.insert(0, harmony_introd_comprobantes_copiar_documento(driver, h_introd_comprobantes_uni_po, h_introd_comprobantes_no_pedido, h_introd_comprobantes_iva, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_no_serie))
+    # Pasos 7-8
+    harmony_introd_comprobantes_anexar_documento_y_comentario(driver, h_introd_comprobantes_pdf_path, h_introd_comprobantes_nombre_pdf, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_nombre_proveedor, h_introd_comprobantes_comentario)
+    # Pasos 9-10
+    # Se utiliza "suma_total_iva" en lugar de "h_introd_comprobantes_lista_impt_base_retencion_sust"
+    harmony_introd_comprobantes_pagos_y_retencion(driver, h_introd_comprobantes_fecha_factura, suma_total_iva, h_introd_comprobantes_lista_porcentaje_retencion)
+    # Pasos 11-12
+    harmony_introd_comprobantes_descripcion_e_iva(driver, h_introd_comprobantes_lista_descripciones, h_introd_comprobantes_lista_iva)
+    # Paso 13
+    # harmony_introd_comprobantes_guardar(driver) # Comentar la llamada a esta funcion en caso de pruebas para que no realice los cambios en harmony.
+
     
 # --------------------- Caso 3 - Funciones Cami ---------------------
 
