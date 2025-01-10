@@ -47,19 +47,19 @@ from modulos_cami.cami_navegar_a_modulo import cami_navegar_a_modulo
 def caso_1_reten_IVA_GEN (     
     # Valores SAT            
     driver,
-    emision_constancias_emision_del,
-    emision_constancias_emision_al,
-    emision_constancias_retenciones_que_declara_iva,
-    emision_constancias_regimen_gen,
-    emision_constancias_tipo_documento,
-    emision_constancias_nit_retenido,
-    emision_constancias_no_autorizacion_fel,
-    emision_constancias_serie_de_factura,
-    emision_constancias_no_de_factura, 
-    emision_constancias_directorio_descargas,
-    emision_constancias_directorio_facturas_iva,
-    emision_constancias_nombre_proveedor,
-    emision_constancias_fecha_factura,
+    s_emision_constancias_emision_del,
+    s_emision_constancias_emision_al,
+    s_emision_constancias_retenciones_que_declara_iva,
+    s_emision_constancias_regimen_gen,
+    s_emision_constancias_tipo_documento,
+    s_emision_constancias_nit_retenido,
+    s_emision_constancias_no_autorizacion_fel,
+    s_emision_constancias_serie_de_factura,
+    s_emision_constancias_no_de_factura, 
+    s_emision_constancias_directorio_descargas,
+    s_emision_constancias_directorio_facturas_iva,
+    s_emision_constancias_nombre_proveedor,
+    s_emision_constancias_fecha_factura,
     
     # Valores Harmony
     h_introd_comprobantes_id_proveedor,
@@ -92,9 +92,9 @@ def caso_1_reten_IVA_GEN (
     # Pasos 4-7
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")
     # Pasos 8-10
-    sat_emision_constancias_de_retencion_busqueda_parametros(driver, emision_constancias_emision_del, emision_constancias_emision_al, emision_constancias_retenciones_que_declara_iva, emision_constancias_regimen_gen, emision_constancias_tipo_documento, emision_constancias_nit_retenido, emision_constancias_no_autorizacion_fel, emision_constancias_serie_de_factura, emision_constancias_no_de_factura)
+    sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, emision_constancias_directorio_descargas, emision_constancias_directorio_facturas_iva, emision_constancias_nombre_proveedor, emision_constancias_no_de_factura, emision_constancias_fecha_factura)
+    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
     """
     
 # --------------------- Caso 1 - Funciones Harmony ---------------------
@@ -127,19 +127,20 @@ def caso_1_reten_IVA_GEN (
 def caso_2_reten_IVA_e_ISR (
     driver,
     # Variables pasos 1-18
-    emision_constancias_emision_del,
-    emision_constancias_emision_al,
-    emision_constancias_retenciones_que_declara_iva,
-    emision_constancias_regimen_gen,
-    emision_constancias_tipo_documento,
-    emision_constancias_nit_retenido,
-    emision_constancias_no_autorizacion_fel,
-    emision_constancias_serie_de_factura,
-    emision_constancias_no_de_factura, 
-    emision_constancias_directorio_descargas,
-    emision_constancias_directorio_facturas_iva,
-    emision_constancias_nombre_proveedor,
-    emision_constancias_fecha_factura,
+    s_emision_constancias_emision_del,
+    s_emision_constancias_emision_al,
+    s_emision_constancias_retenciones_que_declara_iva,
+    s_emision_constancias_regimen_gen,
+    s_emision_constancias_tipo_documento,
+    s_emision_constancias_nit_retenido,
+    s_emision_constancias_no_autorizacion_fel,
+    s_emision_constancias_serie_de_factura,
+    s_emision_constancias_no_de_factura, 
+    s_emision_constancias_directorio_descargas,
+    s_emision_constancias_directorio_facturas_iva,
+    s_emision_constancias_nombre_proveedor,
+    s_emision_constancias_fecha_factura,
+    
     # Variables pasos 19-29
     categoria_de_rentas_nit_retenido,
     categoria_de_rentas_periodo_del,
@@ -148,10 +149,32 @@ def caso_2_reten_IVA_e_ISR (
     categoria_de_rentas_no_de_factura,
     categoria_de_rentas_opcion_categoria_de_renta,
     categoria_de_rentas_opcion_regimen,
+    
     # Variables pasos 30-...
-    emision_constancias_retenciones_que_declara_isr,
-    emision_constancias_directorio_facturas_isr,
+    s_emision_constancias_retenciones_que_declara_isr,
+    s_emision_constancias_directorio_facturas_isr,
+    
     # Valores Harmony
+    h_introd_comprobantes_id_proveedor,
+    h_introd_comprobantes_no_de_factura,
+    h_introd_comprobantes_fecha_factura,
+    
+    h_introd_comprobantes_uni_po,
+    h_introd_comprobantes_no_pedido,
+    h_introd_comprobantes_iva,
+    h_introd_comprobantes_no_serie,
+    
+    h_introd_comprobantes_pdf_path,
+    h_introd_comprobantes_nombre_pdf,
+    h_introd_comprobantes_nombre_proveedor,
+    h_introd_comprobantes_comentario,
+    
+    h_introd_comprobantes_lista_porcentaje_retencion,
+    h_introd_comprobantes_lista_impt_base_retencion_sust,
+    
+    h_introd_comprobantes_lista_descripciones,
+    h_introd_comprobantes_lista_iva,
+    
     # Valores Cami
     cami_nombre_empresa
     ):
@@ -162,9 +185,9 @@ def caso_2_reten_IVA_e_ISR (
     # Pasos 4-7
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")
     # Pasos 8-10
-    sat_emision_constancias_de_retencion_busqueda_parametros(driver, emision_constancias_emision_del, emision_constancias_emision_al, emision_constancias_retenciones_que_declara_iva, emision_constancias_regimen_gen, emision_constancias_tipo_documento, emision_constancias_nit_retenido, emision_constancias_no_autorizacion_fel, emision_constancias_serie_de_factura, emision_constancias_no_de_factura)
+    sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, emision_constancias_directorio_descargas, emision_constancias_directorio_facturas_iva, emision_constancias_nombre_proveedor, emision_constancias_no_de_factura, emision_constancias_fecha_factura)
+    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
 
 
     # Pasos 19-22
@@ -175,42 +198,60 @@ def caso_2_reten_IVA_e_ISR (
     sat_categoria_de_rentas_buscar_en_tabla(driver, categoria_de_rentas_no_de_factura)
     # Pasos 27-29
     sat_categoria_de_rentas_asignar_categoria_y_regimen(driver, categoria_de_rentas_opcion_categoria_de_renta, categoria_de_rentas_opcion_regimen)
- 
-        
+
+
     # (se repiten pasos 1-18 con datos de ISR)
     # Pasos 30-33 (4-7)
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")
     # Paso 34 (8-10)
-    sat_emision_constancias_de_retencion_busqueda_parametros(driver, emision_constancias_emision_del, emision_constancias_emision_al, emision_constancias_retenciones_que_declara_isr, emision_constancias_regimen_gen, emision_constancias_tipo_documento, emision_constancias_nit_retenido, emision_constancias_no_autorizacion_fel, emision_constancias_serie_de_factura, emision_constancias_no_de_factura)
+    sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_isr, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, emision_constancias_directorio_descargas, emision_constancias_directorio_facturas_isr, emision_constancias_nombre_proveedor, emision_constancias_no_de_factura, emision_constancias_fecha_factura)
+    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_isr, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
 
 # --------------------- Caso 2 - Funciones Harmony ---------------------
-    # Pasos
+    # Paso 1
     harmony_dirigir_a_pagina_y_verificar_estado_login(driver)
-    # Pasos
+    # Paso 1
+    harmony_navegar_a_modulo(driver, indices=(13, 1, 1, 1))
+    # Paso 2
+    harmony_introd_comprobantes_agregar_factura(driver, h_introd_comprobantes_id_proveedor, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_fecha_factura)
+    # Pasos 3-6
+    harmony_introd_comprobantes_copiar_documento(driver, h_introd_comprobantes_uni_po, h_introd_comprobantes_no_pedido, h_introd_comprobantes_iva, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_no_serie)
+    # Pasos 7-8
+    harmony_introd_comprobantes_anexar_documento_y_comentario(driver, h_introd_comprobantes_pdf_path, h_introd_comprobantes_nombre_pdf, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_nombre_proveedor, h_introd_comprobantes_comentario)
+    # Pasos 9-10
+    harmony_introd_comprobantes_pagos_y_retencion(driver, h_introd_comprobantes_fecha_factura, h_introd_comprobantes_lista_impt_base_retencion_sust, h_introd_comprobantes_lista_porcentaje_retencion)
+    # Pasos 11-12
+    harmony_introd_comprobantes_descripcion_e_iva(driver, h_introd_comprobantes_lista_descripciones, h_introd_comprobantes_lista_iva)
+    # Paso 13
+    # harmony_introd_comprobantes_guardar(driver) # Comentar la llamada a esta funcion en caso de pruebas para que no realice los cambios en harmony.
+
+
     
 # --------------------- Caso 2 - Funciones Cami ---------------------
-
+    # Pasos
+    # cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
+    # Pasos
+    # cami_navegar_a_modulo(driver, "Relaciones Comerciales")
 
 
 
 
 def caso_3_reten_IVA_PEQ (
     driver,
-    emision_constancias_emision_del,
-    emision_constancias_emision_al,
-    emision_constancias_retenciones_que_declara_iva,
-    emision_constancias_regimen_peq,
-    emision_constancias_tipo_documento,
-    emision_constancias_nit_retenido,
-    emision_constancias_no_autorizacion_fel,
-    emision_constancias_serie_de_factura,
-    emision_constancias_no_de_factura, 
-    emision_constancias_directorio_descargas,
-    emision_constancias_directorio_facturas_iva,
-    emision_constancias_nombre_proveedor,
-    emision_constancias_fecha_factura,
+    s_emision_constancias_emision_del,
+    s_emision_constancias_emision_al,
+    s_emision_constancias_retenciones_que_declara_iva,
+    s_emision_constancias_regimen_peq,
+    s_emision_constancias_tipo_documento,
+    s_emision_constancias_nit_retenido,
+    s_emision_constancias_no_autorizacion_fel,
+    s_emision_constancias_serie_de_factura,
+    s_emision_constancias_no_de_factura, 
+    s_emision_constancias_directorio_descargas,
+    s_emision_constancias_directorio_facturas_iva,
+    s_emision_constancias_nombre_proveedor,
+    s_emision_constancias_fecha_factura,
     # Valores Harmony
     h_introd_comprobantes_id_proveedor,
     h_introd_comprobantes_no_de_factura,
@@ -241,9 +282,9 @@ def caso_3_reten_IVA_PEQ (
     # Pasos 4-7
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")
     # Pasos 8-10 (Cambiar gen por peq en constantes antes de ejecutar caso 3 completo)
-    sat_emision_constancias_de_retencion_busqueda_parametros(driver, emision_constancias_emision_del, emision_constancias_emision_al, emision_constancias_retenciones_que_declara_iva, emision_constancias_regimen_peq, emision_constancias_tipo_documento, emision_constancias_nit_retenido, emision_constancias_no_autorizacion_fel, emision_constancias_serie_de_factura, emision_constancias_no_de_factura)
+    sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_peq, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, emision_constancias_directorio_descargas, emision_constancias_directorio_facturas_iva, emision_constancias_nombre_proveedor, emision_constancias_no_de_factura, emision_constancias_fecha_factura)
+    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
 
 # --------------------- Caso 3 - Funciones Harmony ---------------------
     # Paso 1
@@ -267,7 +308,10 @@ def caso_3_reten_IVA_PEQ (
 
     
 # --------------------- Caso 3 - Funciones Cami ---------------------
-
+    # Pasos
+    # cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
+    # Pasos
+    # cami_navegar_a_modulo(driver, "Relaciones Comerciales")
 
 
 

@@ -186,6 +186,7 @@ def sat_categoria_de_rentas_buscar_en_tabla(driver, numero_factura):
     except Exception as e:
         logging.error(f"Error al buscar el número de factura y presionar los botones: {e}")
 
+
 def sat_categoria_de_rentas_asignar_categoria_y_regimen(driver, CATEGORIA_DE_RENTAS_OPCION_CATEGORIA_DE_RENTA, CATEGORIA_DE_RENTAS_OPCION_REGIMEN):
     """
     Selecciona la opción de categoría y régimen según los valores recibidos, y luego presiona los botones necesarios.

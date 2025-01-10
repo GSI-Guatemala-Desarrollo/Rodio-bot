@@ -18,6 +18,7 @@ def harmony_introd_comprobantes_agregar_factura(driver, proveedor_id, no_factura
     """
 
     try:
+        logging.info("\n\n\n-x-x-x- (PASO 2) harmony_introd_comprobantes_agregar_factura -x-x-x-\n")
         # 1. Cambiar al iframe principal donde están los inputs
         logging.info("Cambiando al iframe principal (ptifrmtgtframe).")
         WebDriverWait(driver, 15).until(
@@ -101,7 +102,7 @@ def harmony_introd_comprobantes_copiar_documento(
     """
 
     try:
-        logging.info("Iniciando 'harmony_introd_comprobantes_copiar_documento'...")
+        logging.info("\n\n\n-x-x-x- (PASOS 3-6) harmony_introd_comprobantes_copiar_documento -x-x-x-\n")
 
         # --- Nuevo Paso: Esperar a que aparezca el componente
         #     <div id="win0divVOUCHER_BUSINESS_UNIT">, que indica que la siguiente página ya cargó ---
@@ -280,7 +281,7 @@ def harmony_introd_comprobantes_anexar_documento_y_comentario(
     """
 
     try:
-        logging.info("Iniciando 'harmony_introd_comprobantes_anexar_documento'...")
+        logging.info("\n\n\n-x-x-x- (PASOS 7-8) harmony_introd_comprobantes_anexar_documento_y_comentario -x-x-x-\n")
 
         # Ruta completa del PDF
         pdf_path = os.path.join(pdf_dir, pdf_filename)
@@ -455,7 +456,7 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_r
     """
 
     try:
-        logging.info("Iniciando 'harmony_introd_comprobantes_pagos_y_retencion'...")
+        logging.info("\n\n\n-x-x-x- (PASOS 9-10) harmony_introd_comprobantes_pagos_y_retencion -x-x-x-\n")
 
         # [1] Cambiar al iframe principal
         driver.switch_to.default_content()
@@ -680,7 +681,7 @@ def harmony_introd_comprobantes_descripcion_e_iva(driver, descripciones, ivas):
          c) Si i < último, clic en "Siguiente" y esperar 3s
     """
 
-    logging.info("Iniciando 'harmony_introd_comprobantes_descripcion_e_iva'...")
+    logging.info("\n\n\n-x-x-x- (PASOS 11-12) harmony_introd_comprobantes_descripcion_e_iva -x-x-x-\n")
 
     # --- Paso previo: Ir a la primera página ---
     try:
@@ -870,9 +871,8 @@ def harmony_introd_comprobantes_guardar(driver):
     3) Clic en el botón final 'Guardar' (#ICSave).
     """
 
-    logging.info("Iniciando 'harmony_introd_comprobantes_guardar'...")
-
     try:
+        logging.info("\n\n\n-x-x-x- (PASO 13) harmony_introd_comprobantes_comprobantes_guardar -x-x-x-\n")
         # 1) Ubicar y hacer scroll al botón "Guardar" (VCHR_PANELS_WRK_VCHR_SAVE_PB)
         primer_guardar_btn = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.XPATH, '//*[@id="win0divVCHR_PANELS_WRK_VCHR_SAVE_PB"]/a'))
