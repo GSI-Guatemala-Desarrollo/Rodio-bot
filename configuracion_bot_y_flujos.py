@@ -19,6 +19,7 @@ from modulos_harmony.harmony_modulo_introd_comprobantes import (
     harmony_introd_comprobantes_guardar,
     harmony_introd_comprobantes_pagos_y_retencion,
     )
+from modulos_harmony.harmony_modulo_recepciones import harmony_recepciones_agregar_valor_y_busqueda_oc, harmony_recepciones_guardar
 from modulos_sat.sat_login import sat_dirigir_a_pagina_y_verificar_estado_login
 from modulos_sat.sat_navegar_a_modulo import sat_navegar_por_busqueda
 from modulos_sat.sat_modulo_emision_constancias_de_retencion import (
@@ -44,6 +45,28 @@ from modulos_cami.cami_navegar_a_modulo import cami_navegar_a_modulo
 
 #          -x-x- FLUJOS -x-x-
 
+
+# Flujo Ordenes de compra: Harmony
+def recepcion_OC (
+    # Valores Harmony
+    driver,
+    h_recepciones_uni_po,
+    h_recepciones_id_oc,
+    
+    h_recepciones_comentario
+    
+):
+    # --------------------- Caso 1 - Funciones Harmony ---------------------
+    # Paso 1
+    harmony_dirigir_a_pagina_y_verificar_estado_login(driver)
+    # Paso 2
+    harmony_navegar_a_modulo(driver, indices=(7, 2, 3))
+    # Pasos (a)-(d)
+    harmony_recepciones_agregar_valor_y_busqueda_oc(driver, h_recepciones_uni_po, h_recepciones_id_oc)
+    # Paso (e)
+    # harmony_recepciones_guardar(driver, h_recepciones_comentario)
+
+# Flujo Caso 1: SAT-Harmony-CAMI
 def caso_1_reten_IVA_GEN (     
     # Valores SAT            
     driver,
@@ -118,12 +141,12 @@ def caso_1_reten_IVA_GEN (
 
 # --------------------- Caso 1 - Funciones Cami ---------------------
     # Pasos
-    # cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
+    cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
     # Pasos
-    # cami_navegar_a_modulo(driver, "Relaciones Comerciales")
+    cami_navegar_a_modulo(driver, "Relaciones Comerciales")
 
 
-
+# Flujo Caso 2: SAT-Harmony-CAMI
 def caso_2_reten_IVA_e_ISR (
     driver,
     # Variables pasos 1-18
@@ -230,13 +253,12 @@ def caso_2_reten_IVA_e_ISR (
     
 # --------------------- Caso 2 - Funciones Cami ---------------------
     # Pasos
-    # cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
+    cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
     # Pasos
-    # cami_navegar_a_modulo(driver, "Relaciones Comerciales")
+    cami_navegar_a_modulo(driver, "Relaciones Comerciales")
 
 
-
-
+# Flujo Caso 3: SAT-Harmony-CAMI
 def caso_3_reten_IVA_PEQ (
     driver,
     s_emision_constancias_emision_del,
@@ -309,9 +331,9 @@ def caso_3_reten_IVA_PEQ (
     
 # --------------------- Caso 3 - Funciones Cami ---------------------
     # Pasos
-    # cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
+    cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
     # Pasos
-    # cami_navegar_a_modulo(driver, "Relaciones Comerciales")
+    cami_navegar_a_modulo(driver, "Relaciones Comerciales")
 
 
 

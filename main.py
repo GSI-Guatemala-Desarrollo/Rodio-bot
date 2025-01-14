@@ -5,7 +5,8 @@ from configuracion_bot_y_flujos import (
     configurar_logging,
     caso_1_reten_IVA_GEN,
     caso_2_reten_IVA_e_ISR,
-    caso_3_reten_IVA_PEQ
+    caso_3_reten_IVA_PEQ,
+    recepcion_OC
 )
 
 # Valores de las variables ya definidos, solo se utilizan para comprobar que el bot funcione correctamente. En casos reales se ingresan los valores en las funciones de los casos.
@@ -46,6 +47,11 @@ from constantes import (
     
     
     # Harmony
+    # OC
+    H_RECEPCIONES_UNI_PO,
+    H_RECEPCIONES_ID_OC,
+    H_RECEPCIONES_COMENTARIO,
+    # Facturas
     H_INTROD_COMPROBANTES_ID_PROVEEDOR,
     H_INTROD_COMPROBANTES_NO_DE_FACTURA,
     H_INTROD_COMPROBANTES_FECHA_FACTURA,
@@ -84,7 +90,24 @@ configurar_logging(driver)  # Pasar el driver al CriticalHandler
 
 # -x-x-x- INICIO AUTOMATIZACIÓN -x-x-x-
 
+# Órdenes de compra
 #"""
+try:
+    logging.info("INICIO DEL FLUJO: Órdenes de compra")
+    recepcion_OC(driver,
+                # Valores Harmony
+                H_RECEPCIONES_UNI_PO,
+                H_RECEPCIONES_ID_OC,
+                H_RECEPCIONES_COMENTARIO
+                )
+    logging.info("FLUJO COMPLETADO: Órdenes de compra")
+except Exception as e:
+    logging.critical(f"Error crítico en el flujo 'Órdenes de compra': {e}")
+
+#"""
+
+# Facturas - Caso 1
+"""
 try:
     logging.info("INICIO DEL FLUJO: Caso 1 - Reten IVA GEN")
     caso_1_reten_IVA_GEN(driver,
@@ -128,9 +151,9 @@ try:
     logging.info("FLUJO COMPLETADO: Caso 1 - Reten IVA GEN")
 except Exception as e:
     logging.critical(f"Error crítico en el flujo 'Caso 1 - Reten IVA GEN': {e}")
-#"""
+"""
 
-
+# Facturas - Caso 2
 """
 try:
     logging.info("INICIO DEL FLUJO: Caso 2 - Reten IVA e ISR")
@@ -187,7 +210,7 @@ except Exception as e:
     logging.critical(f"Error crítico en el flujo 'Caso 2 - Reten IVA e ISR': {e}")
 """
 
-
+# Facturas - Caso 3
 """
 try:
     logging.info("INICIO DEL FLUJO: Caso 3 - Reten IVA PEQ")

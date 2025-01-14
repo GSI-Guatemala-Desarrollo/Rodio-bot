@@ -98,6 +98,13 @@ HARMONY_USER_PASSWORD = os.getenv("HARMONY_PASSWORD", "")
 # URL de la APP (aqui se cambia de test a app si es necesario)
 HARMONY_URL = "https://dailyprd.soletanchefreyssinet.net/psp/DAILYPRD/?&cmd=login&languageCd=ESP&"
 
+
+# -x- harmony_modulo_recepciones.py -x-
+
+H_RECEPCIONES_UNI_PO = "23796"
+H_RECEPCIONES_ID_OC = "7962407212"
+
+
 # -x- harmony_modulo_introd_comprobantes.py -x-
 H_INTROD_COMPROBANTES_ID_PROVEEDOR = "0000000246"
 H_INTROD_COMPROBANTES_NO_DE_FACTURA = "1744130018"
