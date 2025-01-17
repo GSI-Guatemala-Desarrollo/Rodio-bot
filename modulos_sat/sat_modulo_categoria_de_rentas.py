@@ -28,10 +28,58 @@ def sat_categoria_de_rentas_busqueda_parametros(driver, CATEGORIA_DE_RENTAS_NIT_
             logging.warning(f"No se encontró el elemento en ningún iframe. Error: {e}")
 
         # Seleccionar PERIODO_DEL
-        seleccionar_fecha(driver,"//*[@id='formContent:itPer_input']", CATEGORIA_DE_RENTAS_PERIODO_DEL)
+        if CATEGORIA_DE_RENTAS_PERIODO_DEL.strip():
+            try:
+                xpath_periodo_del = "//*[@id='formContent:itPer_input']"
+                element_del = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located((By.XPATH, xpath_periodo_del))
+                )
+                driver.execute_script("arguments[0].scrollIntoView(true);", element_del)
+                time.sleep(1)
+
+                # Quitar los slashes de la fecha
+                fecha_sin_slash = CATEGORIA_DE_RENTAS_PERIODO_DEL.replace("/", "")
+
+                # Asignar por JavaScript y forzar eventos de cambio
+                driver.execute_script("""
+                    arguments[0].value = arguments[1];
+                    arguments[0].dispatchEvent(new Event('change'));
+                    arguments[0].dispatchEvent(new Event('blur'));
+                """, element_del, fecha_sin_slash)
+
+                logging.info(f"PERIODO_DEL '{CATEGORIA_DE_RENTAS_PERIODO_DEL}' (sin '/') asignado como '{fecha_sin_slash}'.")
+                time.sleep(1)
+
+            except Exception as e:
+                logging.error(f"Error al asignar PERIODO_DEL: {e}")
+        else:
+            logging.info("CATEGORIA_DE_RENTAS_PERIODO_DEL está vacío, se omite la asignación de fecha.")
 
         # Seleccionar PERIODO_AL
-        seleccionar_fecha(driver,"//*[@id='formContent:itAl_input']", CATEGORIA_DE_RENTAS_PERIODO_AL)
+        if CATEGORIA_DE_RENTAS_PERIODO_AL.strip():
+            try:
+                xpath_periodo_al = "//*[@id='formContent:itAl_input']"
+                element_al = WebDriverWait(driver, 5).until(
+                    EC.presence_of_element_located((By.XPATH, xpath_periodo_al))
+                )
+                driver.execute_script("arguments[0].scrollIntoView(true);", element_al)
+                time.sleep(1)
+
+                fecha_sin_slash = CATEGORIA_DE_RENTAS_PERIODO_AL.replace("/", "")
+
+                driver.execute_script("""
+                    arguments[0].value = arguments[1];
+                    arguments[0].dispatchEvent(new Event('change'));
+                    arguments[0].dispatchEvent(new Event('blur'));
+                """, element_al, fecha_sin_slash)
+
+                logging.info(f"PERIODO_AL '{CATEGORIA_DE_RENTAS_PERIODO_AL}' (sin '/') asignado como '{fecha_sin_slash}'.")
+                time.sleep(1)
+
+            except Exception as e:
+                logging.error(f"Error al asignar PERIODO_AL: {e}")
+        else:
+            logging.info("CATEGORIA_DE_RENTAS_PERIODO_AL está vacío, se omite la asignación de fecha.")
 
         # Ingresar NIT_RETENIDO
         try:

@@ -24,68 +24,89 @@ CHROMEDRIVER_PATH = r"C:\Users\ads_edgar.menendez\Desktop\RPA\auto-SAT\drivers\c
 BRAVE_BINARY_PATH = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
 
 
-# -x- modulo_emision_constancias_de_retencion.py -x-
+# -x- modulo_emision_constancias_de_retencion.py (Facturas) -x-
 
-S_EMISION_CONSTANCIAS_EMISION_DEL = "04/12/2024" # Opcional
-S_EMISION_CONSTANCIAS_EMISION_AL = "20/12/2024" # Opcional
+S_EMISION_CONSTANCIAS_EMISION_DEL = "" # Opcional
+S_EMISION_CONSTANCIAS_EMISION_AL = "" # Opcional
 S_EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA_IVA = 1
 S_EMISION_CONSTANCIAS_REGIMEN_GEN = 1
 S_EMISION_CONSTANCIAS_TIPO_DOCUMENTO = 1
-S_EMISION_CONSTANCIAS_NIT_RETENIDO = "12345678"
+S_EMISION_CONSTANCIAS_NIT_RETENIDO = "96190183"
 S_EMISION_CONSTANCIAS_NO_AUTORIZACION_FEL = "" # Opcional
 S_EMISION_CONSTANCIAS_SERIE_DE_FACTURA = "" # Opcional
-S_EMISION_CONSTANCIAS_NO_DE_FACTURA = "1234567890"
+S_EMISION_CONSTANCIAS_NO_DE_FACTURA = "2361476901"
 S_EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS = r"C:\Users\ads_edgar.menendez\Downloads"
-S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_IVA = r"C:\Users\ads_edgar.menendez\Documents"
-S_EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR = "Kevin"
-S_EMISION_CONSTANCIAS_FECHA_FACTURA = "20/12/2024"
+S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_IVA = r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_iva" # Constancia IVA
+S_EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR = "DISTRIBUIDORA LA SEVILLANITA S.A."
+S_EMISION_CONSTANCIAS_FECHA_FACTURA = "09/01/2025" # Formato español: dd/mm/yyyy
 
 # Datos de prueba que cambian luego para el caso 2, despúes de terminar la asignación de categoría se vuelve a generar la retención pero del ISR en lugar del IVA.
 S_EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA_ISR = 2
-S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_ISR = "/home/diego/Music"
+S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_ISR = r"C:\Users\ads_edgar.menendez\Pictures" # Constancia ISR
 
 # Datos de prueba que cambian luego para el caso 3 (pequeño contribuyente).
 S_EMISION_CONSTANCIAS_REGIMEN_PEQ = 2
 
-# Variables de impresión (función pendiente):
-S_EMISION_CONSTANCIAS_NOMBRE_IMPRESORA = "RICOH_MP_C307_002673EBD502"
-S_EMISION_CONSTANCIAS_CANTIDAD_COPIAS = 3
 
+# -x- modulo_categoria_de_rentas.py (ISR) -x-
 
-
-# -x- modulo_categoria_de_rentas.py -x-
-
-S_CATEGORIA_DE_RENTAS_PERIODO_DEL = "03/12/2024" # Opcional
-S_CATEGORIA_DE_RENTAS_PERIODO_AL = "19/12/2024" # Opcional
-S_CATEGORIA_DE_RENTAS_NIT_RETENIDO = "12723770"
+S_CATEGORIA_DE_RENTAS_PERIODO_DEL = "" # Opcional
+S_CATEGORIA_DE_RENTAS_PERIODO_AL = "" # Opcional
+S_CATEGORIA_DE_RENTAS_NIT_RETENIDO = "96190183"
 S_CATEGORIA_DE_RENTAS_ESTADO_DE_ASIGNACION = 1
 S_CATEGORIA_DE_RENTAS_NO_DE_FACTURA = "1234567890"
 S_CATEGORIA_DE_RENTAS_OPCION_CATEGORIA_DE_RENTA = 1
 S_CATEGORIA_DE_RENTAS_OPCION_REGIMEN = 9
 
+# opciones de S_CATEGORIA_DE_RENTAS_OPCION_CATEGORIA_DE_RENTA, colocar en la variable el numero correspondiente.
+"""
+1. RÉGIMEN OPCIONAL SIMPLIFICADO SOBRE INGRESOS DE ACTIVIDADES LUCRATIVAS  
+2. RENTAS DE CAPITAL INMOBILIARIO  
+3. RENTAS DE CAPITAL MOBILIARIO  
+"""
+
 # opciones de CATEGORIA_DE_RENTAS_OPCION_REGIMEN, colocar en la variable el numero correspondiente.
 """
-1.Compras o Servicios Gravados, adquiridos de Entidades Exentas
-2.Materias Primas
-3.Productos Terminados
-4.Transporte de carga y de personas dentro o fuera del territorio
-5.Telecomunicaciones
-6.Servicios Bancarios, Seguros y Financieros
-7.Servicios Informáticos
-8.Suministro de Energía Eléctrica y Agua
-9.Servicios Técnicos
-10. Arrendamiento y Subarrendamiento de Bienes Muebles
-11. Arrendamiento y Subarrendamiento de Bienes Inmuebles
-12.Servicios Profesionales
-13.Dietas a asistentes eventuales a consejos y otros órganos directivos
-14.Espectáculos Públicos, Culturales y Deportivos
-15.Subsidios Públicos
-16.Subsidios Privados
-17.Otros Bienes y/o Servicios
-18.Películas Cinematográficas, TV y similares
-19.Dietas
-20.Otras Remuneraciones (Viáticos no comprobables, comisiones, Gastos de Representación
+1. RÉGIMEN OPCIONAL SIMPLIFICADO SOBRE INGRESOS DE ACTIVIDADES LUCRATIVAS 
+    1. Compras o Servicios Gravados, adquiridos de Entidades Exentas
+    2. Materias Primas
+    3. Productos Terminados
+    4. Transporte de carga y de personas dentro o fuera del territorio
+    5. Telecomunicaciones
+    6. Servicios Bancarios, Seguros y Financieros
+    7. Servicios Informáticos
+    8. Suministro de Energía Eléctrica y Agua
+    9. Servicios Técnicos
+    10. Arrendamiento y Subarrendamiento de Bienes Muebles
+    11. Arrendamiento y Subarrendamiento de Bienes Inmuebles
+    12. Servicios Profesionales
+    13. Dietas a asistentes eventuales a consejos y otros órganos directivos
+    14. Espectáculos Públicos, Culturales y Deportivos
+    15. Subsidios Públicos
+    16. Subsidios Privados
+    17. Otros Bienes y/o Servicios
+    18. Películas Cinematográficas, TV y similares
+    19. Dietas
+    20. Otras Remuneraciones (Viáticos no comprobables, comisiones, Gastos de Representación
+
+
+2. RENTAS DE CAPITAL INMOBILIARIO  
+    1. Arrendamiento y Subarrendamientos de Bienes Inmuebles  
+    2. Constitución Cesión de Derechos o Facultades de Uso o Goce de Bienes Inmuebles
+
+
+3. RENTAS DE CAPITAL MOBILIARIO 
+    1. Intereses y Rentas de Dinero o en Especie Provenientes de Créditos de Cualquier Naturaleza
+    2. Arrendamiento y Subarrendamientos de Bienes Muebles
+    3. Constitución o Cesión de derechos, facultades de uso o goce de bienes tangibles
+    4. Constitución o Cesión de derechos, facultades de uso o goce de bienes intangibles
+    5. Rentas derivadas de contratos de seguros
+    6. Rentas Vitalicias o temporales originadas de inversión de capital
+    7. Rentas Originadas en donaciones condicionadas
+    8. Distribución de dividendos, ganancias y utilidades
 """
+
+
 
 
 
@@ -99,28 +120,41 @@ HARMONY_USER_PASSWORD = os.getenv("HARMONY_PASSWORD", "")
 HARMONY_URL = "https://dailyprd.soletanchefreyssinet.net/psp/DAILYPRD/?&cmd=login&languageCd=ESP&"
 
 
-# -x- harmony_modulo_recepciones.py -x-
+# -x- harmony_modulo_recepciones.py (Recepción OC) -x-
 
 H_RECEPCIONES_UNI_PO = "23796"
-H_RECEPCIONES_ID_OC = "7962407212"
+H_RECEPCIONES_ID_OC = "7962406531"
 
 
-# -x- harmony_modulo_introd_comprobantes.py -x-
-H_INTROD_COMPROBANTES_ID_PROVEEDOR = "0000000246"
-H_INTROD_COMPROBANTES_NO_DE_FACTURA = "1744130018"
-H_INTROD_COMPROBANTES_FECHA_FACTURA = "04/11/2024"
+# -x- harmony_modulo_introd_comprobantes.py (Facturas) -x-
+H_INTROD_COMPROBANTES_ID_PROVEEDOR = "0000000042"
+H_INTROD_COMPROBANTES_NO_DE_FACTURA = "2361476901"
+H_INTROD_COMPROBANTES_FECHA_FACTURA = "01/09/2025" # Formato ingles: mm/dd/yyyy
 
 H_INTROD_COMPROBANTES_UNI_PO = "23796"
-H_INTROD_COMPROBANTES_NO_PEDIDO = "7962401726"
-H_INTROD_COMPROBANTES_IVA = 12
-H_INTROD_COMPROBANTES_NO_DE_SERIE = "16dcc25da"
+H_INTROD_COMPROBANTES_NO_PEDIDO = "7962406531"
+H_INTROD_COMPROBANTES_IVA = 15
+H_INTROD_COMPROBANTES_NO_DE_SERIE = "B7A94B64"
 
-H_INTROD_COMPROBANTES_PDF_PATH = r"C:\Users\ads_edgar.menendez\Desktop"
-H_INTROD_COMPROBANTES_NOMBRE_PDF = "test 1.pdf"
-H_INTROD_COMPROBANTES_NOMBRE_PROVEEDOR = "Nombre Proveedor"
+H_INTROD_COMPROBANTES_PDF_PATH = (
+    r"C:\Users\ads_edgar.menendez\Desktop\docs\comprobante",
+    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr",
+    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_iva",
+    r"C:\Users\ads_edgar.menendez\Desktop\docs\facturas",
+    r"C:\Users\ads_edgar.menendez\Desktop\docs\oc"
+    )
+
+H_INTROD_COMPROBANTES_NOMBRE_PDF = (
+    "comprobante test.pdf",
+    "f-2361476901 DISTRIBUIDORA LA SEVILLANITA S.A. ISR.pdf",
+    "f-2361476901 DISTRIBUIDORA LA SEVILLANITA S.A..pdf",
+    "factura test.pdf",
+    "oc test.pdf"
+    )
+H_INTROD_COMPROBANTES_NOMBRE_PROVEEDOR = "DISTRIBUIDORA LA SEVILLANITA S.A."
 H_INTROD_COMPROBANTES_COMENTARIO = "Comentario"
 
-# Dato exclusivo del caso 2, usan la misma funcion pero se pasa vacio en el caso 1 y 2.
+# Dato exclusivo del caso 2, usan la misma funcion pero se pasa la lista vacía en los casos 1 y 3.
 H_INTROD_COMPROBANTES_LISTA_IMPT_BASE_RETENCION_SUST_CASO_1y3 = (" ")
 H_INTROD_COMPROBANTES_LISTA_IMPT_BASE_RETENCION_SUST_CASO_2 = ("1111", "2222", "3333", "4444", "5555", "6666")
 

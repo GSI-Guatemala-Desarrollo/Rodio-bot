@@ -9,7 +9,7 @@ def harmony_recepciones_agregar_valor_y_busqueda_oc(driver, h_recepciones_uni_po
     1. Cambia al iframe principal 'ptifrmtgtframe'.
     2. Ingresa el UNI PO en 'RECV_PO_ADD_BUSINESS_UNIT'.
     3. Presiona el botón 'Añadir' (#ICSearch) y espera 2s.
-    4. Ingresa el ID de la OC en 'PO_PICK_ORD_WRK_ORDER_ID'.
+    4. (Con bucle 30s): Ingresa el ID de la OC en 'PO_PICK_ORD_WRK_ORDER_ID'.
     5. Presiona el botón 'Buscar' (PO_PICK_ORD_WRK_PB_FETCH_PO) y espera 2s.
     6. Realiza scroll y hace clic en 'Selec Todo' (PO_PICK_ORD_WRK_SELECT_ALL_BTN).
     7. Espera 1s y luego presiona el botón 'Aceptar' (#ICSave).
@@ -40,15 +40,38 @@ def harmony_recepciones_agregar_valor_y_busqueda_oc(driver, h_recepciones_uni_po
         )
         btn_anadir.click()
         logging.info("Botón 'Añadir' presionado. Esperando 2s...")
-        time.sleep(3)
+        time.sleep(2)
 
-        # 4) Ingresar el ID de la OC en 'PO_PICK_ORD_WRK_ORDER_ID'
+        # 4) Intentar localizar 'PO_PICK_ORD_WRK_ORDER_ID' con bucle hasta 30s
         logging.info(f"Ingresando ID de la OC: {h_recepciones_id_oc}")
-        id_oc_input = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "PO_PICK_ORD_WRK_ORDER_ID"))
-        )
-        id_oc_input.clear()
-        id_oc_input.send_keys(h_recepciones_id_oc)
+        start_time = time.time()
+        found_input = False
+        while True:
+            if time.time() - start_time > 30:
+                logging.critical(
+                    "No se encontró el campo 'PO_PICK_ORD_WRK_ORDER_ID' antes de 30s. Abortando flujo."
+                )
+                return
+
+            try:
+                id_oc_input = driver.find_element(By.ID, "PO_PICK_ORD_WRK_ORDER_ID")
+                if id_oc_input.is_enabled() and id_oc_input.is_displayed():
+                    id_oc_input.clear()
+                    id_oc_input.send_keys(h_recepciones_id_oc)
+                    found_input = True
+                    logging.info("Campo 'PO_PICK_ORD_WRK_ORDER_ID' localizado y llenado correctamente.")
+                    break
+            except Exception:
+                pass
+
+            time.sleep(1)
+
+        # Continúa solo si se encontró el input
+        if not found_input:
+            logging.critical(
+                "No se pudo llenar el campo 'PO_PICK_ORD_WRK_ORDER_ID'. Se detiene la ejecución."
+            )
+            return
 
         # 5) Presionar el botón 'Buscar' (PO_PICK_ORD_WRK_PB_FETCH_PO)
         logging.info("Haciendo clic en el botón 'Buscar' (PO_PICK_ORD_WRK_PB_FETCH_PO).")
@@ -80,21 +103,20 @@ def harmony_recepciones_agregar_valor_y_busqueda_oc(driver, h_recepciones_uni_po
         logging.error(f"Error en 'harmony_recepciones_agregar_valor_y_busqueda_oc': {e}", exc_info=True)
 
 
-def harmony_recepciones_guardar(driver, h_recepciones_comentario):
+def harmony_recepciones_guardar(driver):
     """
     1) Localiza el botón 'Guardar' (#ICSave).
     2) Hace clic en el botón para confirmar y guardar la información.
-    (La lógica referente a 'h_recepciones_comentario' se implementará en el futuro).
     """
     
     logging.info("\n\n\n-x-x-x- (OC) harmony_recepciones_guardar -x-x-x-\n")
-
+    time.sleep(2)
     try:
         guardar_btn = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, "#ICSave"))
         )
         guardar_btn.click()
         logging.info("Botón 'Guardar' presionado con éxito. Recepciones guardadas.")
-
+        time.sleep(7) # Espera a que se guarden los cambios
     except Exception as e:
         logging.error(f"Error en 'harmony_recepciones_guardar': {e}", exc_info=True)

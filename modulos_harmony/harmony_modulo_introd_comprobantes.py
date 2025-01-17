@@ -262,8 +262,8 @@ def harmony_introd_comprobantes_copiar_documento(
 # Pasos 7-8
 def harmony_introd_comprobantes_anexar_documento_y_comentario(
     driver, 
-    pdf_dir, 
-    pdf_filename, 
+    pdf_dirs, 
+    pdf_filenames, 
     numero_factura, 
     nombre_proveedor, 
     comentario
@@ -283,9 +283,14 @@ def harmony_introd_comprobantes_anexar_documento_y_comentario(
     try:
         logging.info("\n\n\n-x-x-x- (PASOS 7-8) harmony_introd_comprobantes_anexar_documento_y_comentario -x-x-x-\n")
 
-        # Ruta completa del PDF
-        pdf_path = os.path.join(pdf_dir, pdf_filename)
-        logging.info(f"PDF path: {pdf_path}")
+        #
+        # == Construir las rutas completas para múltiples PDFs ==
+        #
+        pdf_paths = []
+        for i in range(len(pdf_dirs)):
+            ruta_pdf = os.path.join(pdf_dirs[i], pdf_filenames[i])
+            pdf_paths.append(ruta_pdf)
+            logging.info(f"PDF path #{i+1}: {ruta_pdf}")
 
         #
         # == 1) Clic en "Anexos (0)" (main page/iframe principal) ==
@@ -308,45 +313,84 @@ def harmony_introd_comprobantes_anexar_documento_y_comentario(
             )
         )
 
-        #
-        # == 2) "Añadir Anexo" (1ra ventana emergente) ==
-        #
-        logging.info("Haciendo clic en el botón 'Añadir Anexo'.")
-        anadir_anexo_btn = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "VCHR_HDR_WRK_ATTACHADD"))
-        )
-        anadir_anexo_btn.click()
-        time.sleep(1)
 
-        #
-        # == B) Cambiar al iframe de la segunda ventana emergente ==
-        #
-        logging.info("Cambiando al iframe de la segunda ventana emergente (Subir archivo).")
-        driver.switch_to.default_content()
-        WebDriverWait(driver, 10).until(
-            EC.frame_to_be_available_and_switch_to_it(
-                (By.XPATH, '/html/body/div[8]/div[3]/div/div[2]/iframe')
+        cantidad_archivos = len(pdf_dirs)
+        start_index = 0
+
+        while start_index < cantidad_archivos:
+            # 1) Determinar cuántos quedan por subir
+            archivos_restantes = cantidad_archivos - start_index
+            # 2) Definir bloque de 4 archivos máximo
+            bloque_size = min(archivos_restantes, 4)
+
+            logging.info(f"Subiendo bloque de {bloque_size} archivos, desde índice {start_index}.")
+
+            # 3) Clic en "Añadir Anexo" para abrir la segunda ventana (si ya no está abierta)
+            logging.info("Haciendo clic en el botón 'Añadir Anexo'.")
+            anadir_anexo_btn = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.ID, "VCHR_HDR_WRK_ATTACHADD"))
             )
-        )
+            anadir_anexo_btn.click()
+            time.sleep(1)
 
-        #
-        # == 3) Subir el PDF y "Cargar" ==
-        #
-        logging.info("Localizando <input type='file'> y enviando la ruta del PDF.")
-        file_input = WebDriverWait(driver, 10).until(
-            EC.presence_of_element_located((By.XPATH, '//*[@id="win0divPSTOOLSHIDDENS"]/input[1]'))
-        )
-        file_input.send_keys(pdf_path)
+            # 4) Cambiar al iframe de la segunda ventana emergente
+            logging.info("Cambiando al iframe de la segunda ventana emergente (Subir archivo).")
+            driver.switch_to.default_content()
+            WebDriverWait(driver, 10).until(
+                EC.frame_to_be_available_and_switch_to_it(
+                    (By.XPATH, '/html/body/div[8]/div[3]/div/div[2]/iframe')
+                )
+            )
 
-        logging.info("Haciendo clic en el botón 'Cargar'.")
-        cargar_btn = WebDriverWait(driver, 10).until(
-            EC.element_to_be_clickable((By.ID, "Upload"))
-        )
-        cargar_btn.click()
+            logging.info("Subiendo múltiples PDFs en esta ventana emergente.")
 
-        logging.info("Esperando 3 seg a que finalice la subida y se cierre la ventana.")
-        time.sleep(3)
+            # Definir nombres de los inputs de archivo
+            file_input_names = [
+                "#ICOrigFileName",
+                "#ICOrigFileName1",
+                "#ICOrigFileName2",
+                "#ICOrigFileName3"
+            ]
 
+            # Para este bloque, subimos hasta 'bloque_size' archivos
+            for i in range(bloque_size):
+                idx = start_index + i
+                pdf_path = os.path.join(pdf_dirs[idx], pdf_filenames[idx])
+                logging.info(f"Archivo #{idx+1} => {pdf_path}")
+
+                try:
+                    input_name = file_input_names[i]  # 0..3
+                    file_input = WebDriverWait(driver, 10).until(
+                        EC.presence_of_element_located((By.NAME, input_name))
+                    )
+                    file_input.send_keys(pdf_path)
+                    logging.info(f"Archivo '{pdf_path}' asignado al input '{input_name}'.")
+                except Exception as e:
+                    logging.warning(f"No se pudo asignar archivo #{idx+1}: {e}")
+
+            # 5) Clic en el botón "Cargar"
+            logging.info("Haciendo clic en el botón 'Cargar'.")
+            cargar_btn = WebDriverWait(driver, 10).until(
+                EC.element_to_be_clickable((By.ID, "Upload"))
+            )
+            cargar_btn.click()
+
+            logging.info("Esperando a que finalice la subida de archivos y se cierre la ventana.")
+            time.sleep(8)
+
+            # 6) Volver al primer iframe de "Anexos" para, en caso de que
+            #    queden más archivos, repetir el bucle
+            driver.switch_to.default_content()
+            WebDriverWait(driver, 10).until(
+                EC.frame_to_be_available_and_switch_to_it(
+                    (By.XPATH, '/html/body/div[8]/div[2]/div/div[2]/iframe')
+                )
+            )
+
+            # Avanzar para el siguiente bloque de archivos
+            start_index += bloque_size
+
+        logging.info("Se completó la carga de TODOS los PDFs exitosamente.")
         #
         # == C) Volver a la 1ra ventana emergente para ingresar descripción y Aceptar ==
         #
@@ -358,31 +402,38 @@ def harmony_introd_comprobantes_anexar_documento_y_comentario(
             )
         )
 
-        # 4) Ingresar texto f"-({numero_factura}) {nombre_proveedor}" en PV_ATTACH_WRK_ATTACH_DESCR$0 (si existe)
-        logging.info("Ingresando la descripción del anexo (factura y proveedor).")
-        try:
-            desc_anexo_input = WebDriverWait(driver, 5).until(
-                EC.element_to_be_clickable((By.ID, "PV_ATTACH_WRK_ATTACH_DESCR$0"))
-            )
-            texto_anexo = f"f-{numero_factura} {nombre_proveedor}"
-            logging.info(f"Texto a ingresar en anexo: {texto_anexo}")
-            desc_anexo_input.clear()
-            desc_anexo_input.send_keys(texto_anexo)
-            time.sleep(1)
-        except TimeoutException:
-            logging.info("No se encontró el campo 'PV_ATTACH_WRK_ATTACH_DESCR$0'. "
-                         "La ventana podría tener otra configuración.")
+        # Construir la descripción para cada archivo
+        texto_anexo = f"f-{numero_factura} {nombre_proveedor}"
+        logging.info(f"Texto a ingresar en cada anexo: {texto_anexo}")
 
-        # Clic en "#ICSave"
+        # Supongamos que conoces cuántos anexos (líneas) hay que rellenar.
+        # Por ejemplo, si subiste 'n_archivos' con "Añadir Anexo", lo normal es
+        # que existan 'n_archivos' líneas. Hasta 5 si son 5 archivos.
+        num_lineas = 5  # Ajusta la lógica o determina en función del número real de archivos
+
+        for i in range(num_lineas):
+            desc_id = f"PV_ATTACH_WRK_ATTACH_DESCR${i}"
+            try:
+                logging.info(f"Ingresando descripción en el campo '{desc_id}'...")
+                desc_input = WebDriverWait(driver, 5).until(
+                    EC.element_to_be_clickable((By.ID, desc_id))
+                )
+                desc_input.clear()
+                desc_input.send_keys(texto_anexo)
+                time.sleep(1)
+            except TimeoutException:
+                logging.info(f"No se encontró el campo '{desc_id}'. "
+                            "La ventana podría tener otra configuración.")
+            except Exception as e:
+                logging.warning(f"Error asignando descripción en '{desc_id}': {e}")
+
+        # Finalmente, clic en "#ICSave"
         logging.info("Haciendo clic en el botón 'Aceptar' (#ICSave).")
         aceptar_btn = WebDriverWait(driver, 10).until(
             EC.element_to_be_clickable((By.ID, "#ICSave"))
         )
         aceptar_btn.click()
 
-        #
-        # == Esperar 3s para permitir que la ventana regrese a la página principal ==
-        #
         logging.info("Esperando 3 segundos para que se procese el Aceptar.")
         time.sleep(3)
 
@@ -489,12 +540,12 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_r
         logging.info("Esperando 4 segundos para que se cargue la pestaña 'Pagos'.")
         time.sleep(4)
 
-        # [4] Calcular fecha de pago (viernes)
-        parsed_date = datetime.strptime(fecha_factura, "%d/%m/%Y")
+        # [4] Calcular fecha de pago (+30 dias +viernes)
+        parsed_date = datetime.strptime(fecha_factura, "%m/%d/%Y") # Lectura de la fecha con formato en inglés
         nueva_fecha = parsed_date + timedelta(days=30)
         while nueva_fecha.weekday() != 4:  # Friday=4
             nueva_fecha += timedelta(days=1)
-        fecha_pago = nueva_fecha.strftime("%d/%m/%Y")
+        fecha_pago = nueva_fecha.strftime("%d/%m/%Y") # Fecha nueva con formato en español
         logging.info(f"Fecha de pago calculada (viernes): {fecha_pago}")
 
         # [5] Ingresar la fecha en 'PYMNT_VCHR_XREF_SCHEDULED_PAY_DT$0'
@@ -504,6 +555,7 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_r
         fecha_input.clear()
         fecha_input.send_keys(fecha_pago)
         time.sleep(1)
+
 
         # [6] Volver a 'Información sobre Factura' (a#ICTAB_0)
         factura_tab = WebDriverWait(driver, 15).until(

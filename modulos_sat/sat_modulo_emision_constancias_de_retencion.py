@@ -21,132 +21,139 @@ def sat_emision_constancias_de_retencion_busqueda_parametros(
     EMISION_CONSTANCIAS_NO_DE_FACTURA,
 ):
 
-    # EMISION DEL:
+    logging.info(f"\n\n\n-x-x-x- (PASOS 8-10) sat_emision_constancias_de_retencion_busqueda_parametros -x-x-x-\n")
+    # Esperar a que cargue la tabla.
+    time.sleep(4)
+    EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA = EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA - 1
+    EMISION_CONSTANCIAS_REGIMEN = EMISION_CONSTANCIAS_REGIMEN - 1
+    EMISION_CONSTANCIAS_TIPO_DOCUMENTO = EMISION_CONSTANCIAS_TIPO_DOCUMENTO - 1
+            
+    # Verificar si el elemento está dentro de un iframe
     try:
-        logging.info(f"\n\n\n-x-x-x- (PASOS 8-10) sat_emision_constancias_de_retencion_busqueda_parametros -x-x-x-\n")
-        # Esperar a que cargue la tabla.
-        time.sleep(2)
-        EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA = (
-            EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA - 1
-        )
-        EMISION_CONSTANCIAS_REGIMEN = EMISION_CONSTANCIAS_REGIMEN - 1
-        EMISION_CONSTANCIAS_TIPO_DOCUMENTO = EMISION_CONSTANCIAS_TIPO_DOCUMENTO - 1
-
-        # Verificar si el elemento está dentro de un iframe
-        try:
+        driver.switch_to.default_content()
+        iframes = driver.find_elements(By.TAG_NAME, "iframe")
+        for iframe in iframes:
+            driver.switch_to.frame(iframe)
+            if driver.find_elements(
+                By.XPATH, "//input[contains(@id, 'itDel_input')]"
+            ):
+                logging.info(
+                    "Elemento encontrado dentro del iframe, cambiando de contexto."
+                )
+                break
             driver.switch_to.default_content()
-            iframes = driver.find_elements(By.TAG_NAME, "iframe")
-            for iframe in iframes:
-                driver.switch_to.frame(iframe)
-                if driver.find_elements(
-                    By.XPATH, "//input[contains(@id, 'itDel_input')]"
-                ):
-                    logging.info(
-                        "Elemento encontrado dentro del iframe, cambiando de contexto."
-                    )
-                    break
-                driver.switch_to.default_content()
-        except Exception as e:
-            logging.warning(f"No se encontró el elemento en ningún iframe. Error: {e}")
-
-        # Intentar localizar y hacer click en el input usando XPath relativo
-        input_xpath_relativo = "//span/input[contains(@id, 'itDel_input')]"
-        boton_xpath_relativo = (
-            "//span/button[contains(@class, 'ui-datepicker-trigger')]"
-        )
-
-        elementos_encontrados = driver.find_elements(By.XPATH, input_xpath_relativo)
-
-        fecha_input = None
+    except Exception as e:
+        logging.warning(f"No se encontró el elemento en ningún iframe. Error: {e}")
+    
+    # EMISION DEL:
+    if EMISION_CONSTANCIAS_EMISION_DEL.strip():
         try:
-            fecha_input = WebDriverWait(driver, 3).until(
-                EC.element_to_be_clickable((By.XPATH, input_xpath_relativo))
-            )
-            driver.execute_script("arguments[0].scrollIntoView(true);", fecha_input)
-            time.sleep(1)  # Pausa para asegurar visibilidad
-            fecha_input.click()
-        except Exception as e:
-            logging.warning(
-                f"No se pudo hacer click en el input. Intentando con el botón. Error: {e}"
+
+            # Intentar localizar y hacer click en el input usando XPath relativo
+            input_xpath_relativo = "//span/input[contains(@id, 'itDel_input')]"
+            boton_xpath_relativo = (
+                "//span/button[contains(@class, 'ui-datepicker-trigger')]"
             )
 
-        # Intentar localizar y hacer click en el botón usando XPath relativo
-        if fecha_input is None:
+            elementos_encontrados = driver.find_elements(By.XPATH, input_xpath_relativo)
+
+            fecha_input = None
             try:
-                boton_calendario = WebDriverWait(driver, 3).until(
-                    EC.element_to_be_clickable((By.XPATH, boton_xpath_relativo))
+                fecha_input = WebDriverWait(driver, 3).until(
+                    EC.element_to_be_clickable((By.XPATH, input_xpath_relativo))
                 )
-                driver.execute_script(
-                    "arguments[0].scrollIntoView(true);", boton_calendario
-                )
+                driver.execute_script("arguments[0].scrollIntoView(true);", fecha_input)
                 time.sleep(1)  # Pausa para asegurar visibilidad
-                boton_calendario.click()
+                fecha_input.click()
             except Exception as e:
                 logging.warning(
-                    f"No se pudo hacer click en el botón con XPath relativo. Error: {e}"
+                    f"No se pudo hacer click en el input. Intentando con el botón. Error: {e}"
                 )
 
-        # Dividir la fecha en día, mes y año
-        dia, mes, anio = EMISION_CONSTANCIAS_EMISION_DEL.split("/")
+            # Intentar localizar y hacer click en el botón usando XPath relativo
+            if fecha_input is None:
+                try:
+                    boton_calendario = WebDriverWait(driver, 3).until(
+                        EC.element_to_be_clickable((By.XPATH, boton_xpath_relativo))
+                    )
+                    driver.execute_script(
+                        "arguments[0].scrollIntoView(true);", boton_calendario
+                    )
+                    time.sleep(1)  # Pausa para asegurar visibilidad
+                    boton_calendario.click()
+                except Exception as e:
+                    logging.warning(
+                        f"No se pudo hacer click en el botón con XPath relativo. Error: {e}"
+                    )
 
-        if dia.startswith("0"):
-            dia = dia[1:]
+            # Dividir la fecha en día, mes y año
+            dia, mes, anio = EMISION_CONSTANCIAS_EMISION_DEL.split("/")
 
-        # Seleccionar el año en el desplegable
-        select_anio = WebDriverWait(driver, 3).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-year"))
-        )
-        Select(select_anio).select_by_visible_text(anio)
-        # logging.info(f"Año {anio} seleccionado correctamente.")
+            if dia.startswith("0"):
+                dia = dia[1:]
 
-        # Seleccionar el mes en el desplegable
-        select_mes = WebDriverWait(driver, 3).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-month"))
-        )
-        Select(select_mes).select_by_index(int(mes) - 1)
-        # logging.info(f"Mes {mes} seleccionado correctamente.")
+            # Seleccionar año
+            select_anio = WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-year"))
+            )
+            Select(select_anio).select_by_visible_text(anio)
 
-        # Seleccionar el día en la tabla del calendario
-        calendario_tabla = WebDriverWait(driver, 3).until(
-            EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-calendar"))
-        )
-        dias = calendario_tabla.find_elements(By.TAG_NAME, "td")
-        for dia_elemento in dias:
-            if dia_elemento.text == dia and dia_elemento.is_enabled():
-                dia_elemento.click()
-                # logging.info(f"Día {dia} seleccionado correctamente en el calendario.")
-                break
-        else:
-            logging.warning(f"No se encontró el día {dia} en la tabla del calendario.")
+            # Seleccionar mes
+            select_mes = WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-month"))
+            )
+            Select(select_mes).select_by_index(int(mes) - 1)
 
-        logging.info(
-            f"Fecha {EMISION_CONSTANCIAS_EMISION_DEL} seleccionada correctamente."
-        )
-        time.sleep(1)
-        
-    except Exception as e:
-        logging.error(f"Error al seleccionar la fecha: {e}")
+            # Seleccionar día
+            calendario_tabla = WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located((By.CLASS_NAME, "ui-datepicker-calendar"))
+            )
+            dias = calendario_tabla.find_elements(By.TAG_NAME, "td")
+            for dia_elemento in dias:
+                if dia_elemento.text == dia and dia_elemento.is_enabled():
+                    dia_elemento.click()
+                    break
 
-    # EMISION AL:
-    try:
+            logging.info(f"Fecha EMISIÓN DEL '{EMISION_CONSTANCIAS_EMISION_DEL}' seleccionada correctamente.")
+            time.sleep(1)
 
-        input_al_xpath_relativo = "//span/input[contains(@id, 'itAl_input')]"
+        except Exception as e:
+            logging.error(f"Error al seleccionar la fecha EMISIÓN DEL: {e}")
+    else:
+        logging.info("La variable EMISION_CONSTANCIAS_EMISION_DEL está vacía, se omite la selección de fecha DEL.")
 
-        fecha_input_al = WebDriverWait(driver, 3).until(
-            EC.presence_of_element_located((By.XPATH, input_al_xpath_relativo))
-        )
+    # EMISION AL (opcional)
+    if EMISION_CONSTANCIAS_EMISION_AL.strip():
+        try:
+            input_al_xpath_relativo = "//span/input[contains(@id, 'itAl_input')]"
+            fecha_input_al = WebDriverWait(driver, 3).until(
+                EC.presence_of_element_located((By.XPATH, input_al_xpath_relativo))
+            )
 
-        driver.execute_script("arguments[0].scrollIntoView(true);", fecha_input_al)
-        time.sleep(1)  # Asegurar visibilidad
+            # Desplazamos el elemento a la vista si es necesario
+            driver.execute_script("arguments[0].scrollIntoView(true);", fecha_input_al)
+            time.sleep(1)  # Pequeña espera para estabilidad
 
-        fecha_input_al.clear()
-        fecha_input_al.send_keys(EMISION_CONSTANCIAS_EMISION_AL)
-        logging.info(
-            f"Fecha {EMISION_CONSTANCIAS_EMISION_AL} ingresada correctamente en el input de EMISION AL."
-        )
+            # Eliminamos los '/' de la fecha
+            fecha_sin_slash = EMISION_CONSTANCIAS_EMISION_AL.replace("/", "")
 
-    except Exception as e:
-        logging.error(f"Error al ingresar la fecha de EMISION AL: {e}")
+            # Asignamos la fecha directamente por JavaScript y forzamos eventos de cambio
+            driver.execute_script("""
+                arguments[0].value = arguments[1];
+                arguments[0].dispatchEvent(new Event('change'));
+                arguments[0].dispatchEvent(new Event('blur'));
+            """, fecha_input_al, fecha_sin_slash)
+
+            logging.info(
+                f"Fecha EMISIÓN AL '{EMISION_CONSTANCIAS_EMISION_AL}' transformada a '{fecha_sin_slash}' e ingresada vía JavaScript."
+            )
+            time.sleep(1)
+
+        except Exception as e:
+            logging.error(f"Error al ingresar la fecha EMISIÓN AL: {e}")
+    else:
+        logging.info("La variable EMISION_CONSTANCIAS_EMISION_AL está vacía, se omite la selección de fecha AL.")
+
 
     # RETENCIONES QUE DECLARA:
     try:

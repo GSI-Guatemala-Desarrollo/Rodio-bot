@@ -1,6 +1,6 @@
 import logging
 import time
-from configuracion_bot_y_flujos import (
+from flujos import (
     configurar_driver,
     configurar_logging,
     caso_1_reten_IVA_GEN,
@@ -50,7 +50,6 @@ from constantes import (
     # OC
     H_RECEPCIONES_UNI_PO,
     H_RECEPCIONES_ID_OC,
-    H_RECEPCIONES_COMENTARIO,
     # Facturas
     H_INTROD_COMPROBANTES_ID_PROVEEDOR,
     H_INTROD_COMPROBANTES_NO_DE_FACTURA,
@@ -82,8 +81,8 @@ from constantes import (
 
 # -x-x-x- CONFIGURACIÓN LOGGING Y DRIVER -x-x-x-
 
-driver = configurar_driver()  # Configurar el driver primero
-configurar_logging(driver)  # Pasar el driver al CriticalHandler
+#driver = configurar_driver()  # Configurar el driver primero
+#configurar_logging(driver)  # Pasar el driver al CriticalHandler
 
 
 
@@ -91,26 +90,25 @@ configurar_logging(driver)  # Pasar el driver al CriticalHandler
 # -x-x-x- INICIO AUTOMATIZACIÓN -x-x-x-
 
 # Órdenes de compra
-#"""
+"""
 try:
     logging.info("INICIO DEL FLUJO: Órdenes de compra")
-    recepcion_OC(driver,
+    recepcion_OC(
                 # Valores Harmony
                 H_RECEPCIONES_UNI_PO,
                 H_RECEPCIONES_ID_OC,
-                H_RECEPCIONES_COMENTARIO
                 )
     logging.info("FLUJO COMPLETADO: Órdenes de compra")
 except Exception as e:
     logging.critical(f"Error crítico en el flujo 'Órdenes de compra': {e}")
 
-#"""
+"""
 
 # Facturas - Caso 1
-"""
+#"""
 try:
     logging.info("INICIO DEL FLUJO: Caso 1 - Reten IVA GEN")
-    caso_1_reten_IVA_GEN(driver,
+    caso_1_reten_IVA_GEN(
                          # SAT
                         S_EMISION_CONSTANCIAS_EMISION_DEL,
                         S_EMISION_CONSTANCIAS_EMISION_AL,
@@ -151,13 +149,13 @@ try:
     logging.info("FLUJO COMPLETADO: Caso 1 - Reten IVA GEN")
 except Exception as e:
     logging.critical(f"Error crítico en el flujo 'Caso 1 - Reten IVA GEN': {e}")
-"""
+#"""
 
 # Facturas - Caso 2
 """
 try:
     logging.info("INICIO DEL FLUJO: Caso 2 - Reten IVA e ISR")
-    caso_2_reten_IVA_e_ISR(driver,
+    caso_2_reten_IVA_e_ISR(
                            # SAT
                            S_EMISION_CONSTANCIAS_EMISION_DEL,
                            S_EMISION_CONSTANCIAS_EMISION_AL,
@@ -256,17 +254,3 @@ try:
 except Exception as e:
     logging.critical(f"Error crítico en el flujo 'Caso 3 - Reten IVA PEQ': {e}")
 """
-
-
-
-
-# -x-x-x- FIN AUTOMATIZACIÓN -x-x-x-
-
-# Eliminar la instancia
-try:
-    time.sleep(5)
-    driver.close()
-    driver.quit()
-    logging.info("Automatización finalizada y navegador cerrado.")
-except Exception as e:
-    logging.error(f"Error al cerrar el navegador: {e}")
