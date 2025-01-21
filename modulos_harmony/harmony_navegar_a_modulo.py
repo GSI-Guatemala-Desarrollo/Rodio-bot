@@ -14,7 +14,35 @@ def harmony_navegar_a_modulo(driver, indices):
         indices (tuple): Lista de índices (por nivel) para navegar por las listas.
     """
     logging.info("\n\n\n-x-x-x- harmony_navegar_a_modulo -x-x-x-\n")
-    logging.info(f"Navegando por los módulos con índices: {indices}")
+    logging.info("Verificando si cargó la página.")
+
+    start_time = time.time()
+    found_menu_header = False
+
+    while True:
+        if time.time() - start_time > 30:
+            logging.critical(
+                "No se encontró el h2 'ptpgltlbl_MENU' antes de 30s. Abortando flujo."
+            )
+            return  # o raise, según tu manejo de errores
+        try:
+            menu_header = driver.find_element(By.ID, "ptpgltlbl_MENU")
+            # Verificamos que el elemento esté visible
+            if menu_header.is_displayed():
+                found_menu_header = True
+                logging.info("h2 'ptpgltlbl_MENU' encontrado. Continuando el flujo.")
+                break
+        except Exception:
+            # No hace nada, reintenta
+            pass
+
+        time.sleep(1)
+
+    if not found_menu_header:
+        logging.critical(
+            "No se encontró el h2 'ptpgltlbl_MENU'. Se detiene la ejecución."
+        )
+        return
 
     try:
         # Verificar si estamos en la página de inicio y si es necesario hacer clic en el botón de regreso
@@ -26,6 +54,7 @@ def harmony_navegar_a_modulo(driver, indices):
         except:
             logging.info("Ya estamos en la página de inicio.")
 
+        logging.info(f"Navegando por los módulos con índices: {indices}")
         # Ahora que estamos en la página de inicio, empezamos la navegación por los módulos
         ul_xpath = '//*[@id="ptnav2tree"]'
         current_ul = WebDriverWait(driver, 10).until(

@@ -113,7 +113,6 @@ def caso_1_reten_IVA_GEN (
     driver = configurar_driver()  # Configurar el driver primero
     configurar_logging(driver)  # Pasar el driver al CriticalHandler
 
-    
 # --------------------- Caso 1 - Funciones SAT ---------------------
     # Pasos 1-3
     sat_dirigir_a_pagina_y_verificar_estado_login(driver)
@@ -122,13 +121,12 @@ def caso_1_reten_IVA_GEN (
     # Pasos 8-10
     sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
+    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
 # --------------------- Caso 1 - Funciones Harmony ---------------------
     # Paso 1
     harmony_dirigir_a_pagina_y_verificar_estado_login(driver)
     # Paso 1
     harmony_navegar_a_modulo(driver, indices=(13, 1, 1, 1))
-    """
     # Paso 2
     harmony_introd_comprobantes_agregar_factura(driver, h_introd_comprobantes_id_proveedor, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_fecha_factura)
     # Pasos 3-6
@@ -143,6 +141,7 @@ def caso_1_reten_IVA_GEN (
     # harmony_introd_comprobantes_guardar(driver) # Comentar la llamada a esta funcion en caso de pruebas para que no realice los cambios en harmony.
 
 
+    """
 # --------------------- Caso 1 - Funciones Cami ---------------------
     # Pasos
     cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
@@ -222,7 +221,7 @@ def caso_2_reten_IVA_e_ISR (
     # Pasos 8-10
     sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
+    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
     
 
 
@@ -242,8 +241,8 @@ def caso_2_reten_IVA_e_ISR (
     # Paso 34 (8-10)
     sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_isr, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_isr, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
-
+    numero_retencion_isr = sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_isr, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_isr, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
+    h_introd_comprobantes_nombre_pdf = h_introd_comprobantes_nombre_pdf + (numero_retencion_isr,)
 
 # --------------------- Caso 2 - Funciones Harmony ---------------------
     # Paso 1
@@ -327,7 +326,7 @@ def caso_3_reten_IVA_PEQ (
     # Pasos 8-10 (Cambiar gen por peq en constantes antes de ejecutar caso 3 completo)
     sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_peq, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
+    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
 
 
 # --------------------- Caso 3 - Funciones Harmony ---------------------

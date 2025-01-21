@@ -31,18 +31,18 @@ S_EMISION_CONSTANCIAS_EMISION_AL = "" # Opcional
 S_EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA_IVA = 1
 S_EMISION_CONSTANCIAS_REGIMEN_GEN = 1
 S_EMISION_CONSTANCIAS_TIPO_DOCUMENTO = 1
-S_EMISION_CONSTANCIAS_NIT_RETENIDO = "96190183"
+S_EMISION_CONSTANCIAS_NIT_RETENIDO = "17047455"
 S_EMISION_CONSTANCIAS_NO_AUTORIZACION_FEL = "" # Opcional
 S_EMISION_CONSTANCIAS_SERIE_DE_FACTURA = "" # Opcional
-S_EMISION_CONSTANCIAS_NO_DE_FACTURA = "2361476901"
+S_EMISION_CONSTANCIAS_NO_DE_FACTURA = "2076264085"
 S_EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS = r"C:\Users\ads_edgar.menendez\Downloads"
 S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_IVA = r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_iva" # Constancia IVA
-S_EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR = "DISTRIBUIDORA LA SEVILLANITA S.A."
-S_EMISION_CONSTANCIAS_FECHA_FACTURA = "09/01/2025" # Formato español: dd/mm/yyyy
+S_EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR = "JORGE AUGUSTO, RODRIGUEZ GONZALEZ"
+S_EMISION_CONSTANCIAS_FECHA_FACTURA = "14/01/2025" # Formato español: dd/mm/yyyy
 
 # Datos de prueba que cambian luego para el caso 2, despúes de terminar la asignación de categoría se vuelve a generar la retención pero del ISR en lugar del IVA.
 S_EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA_ISR = 2
-S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_ISR = r"C:\Users\ads_edgar.menendez\Pictures" # Constancia ISR
+S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_ISR = r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr" # Constancia ISR
 
 # Datos de prueba que cambian luego para el caso 3 (pequeño contribuyente).
 S_EMISION_CONSTANCIAS_REGIMEN_PEQ = 2
@@ -52,9 +52,9 @@ S_EMISION_CONSTANCIAS_REGIMEN_PEQ = 2
 
 S_CATEGORIA_DE_RENTAS_PERIODO_DEL = "" # Opcional
 S_CATEGORIA_DE_RENTAS_PERIODO_AL = "" # Opcional
-S_CATEGORIA_DE_RENTAS_NIT_RETENIDO = "96190183"
+S_CATEGORIA_DE_RENTAS_NIT_RETENIDO = "17047455"
 S_CATEGORIA_DE_RENTAS_ESTADO_DE_ASIGNACION = 1
-S_CATEGORIA_DE_RENTAS_NO_DE_FACTURA = "1234567890"
+S_CATEGORIA_DE_RENTAS_NO_DE_FACTURA = "2076264085"
 S_CATEGORIA_DE_RENTAS_OPCION_CATEGORIA_DE_RENTA = 1
 S_CATEGORIA_DE_RENTAS_OPCION_REGIMEN = 9
 
@@ -123,45 +123,49 @@ HARMONY_URL = "https://dailyprd.soletanchefreyssinet.net/psp/DAILYPRD/?&cmd=logi
 # -x- harmony_modulo_recepciones.py (Recepción OC) -x-
 
 H_RECEPCIONES_UNI_PO = "23796"
-H_RECEPCIONES_ID_OC = "7962406531"
+H_RECEPCIONES_ID_OC = "7962407338"
 
 
 # -x- harmony_modulo_introd_comprobantes.py (Facturas) -x-
-H_INTROD_COMPROBANTES_ID_PROVEEDOR = "0000000042"
-H_INTROD_COMPROBANTES_NO_DE_FACTURA = "2361476901"
-H_INTROD_COMPROBANTES_FECHA_FACTURA = "01/09/2025" # Formato ingles: mm/dd/yyyy
+H_INTROD_COMPROBANTES_ID_PROVEEDOR = "0000000114"
+H_INTROD_COMPROBANTES_NO_DE_FACTURA = "2076264085"
+H_INTROD_COMPROBANTES_FECHA_FACTURA = "01/14/2025" # Formato ingles: mm/dd/yyyy
 
 H_INTROD_COMPROBANTES_UNI_PO = "23796"
-H_INTROD_COMPROBANTES_NO_PEDIDO = "7962406531"
+H_INTROD_COMPROBANTES_NO_PEDIDO = "7962407338"
 H_INTROD_COMPROBANTES_IVA = 15
-H_INTROD_COMPROBANTES_NO_DE_SERIE = "B7A94B64"
+H_INTROD_COMPROBANTES_NO_DE_SERIE = "F48E8E98"
+
 
 H_INTROD_COMPROBANTES_PDF_PATH = (
     r"C:\Users\ads_edgar.menendez\Desktop\docs\comprobante",
-    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr",
-    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_iva",
     r"C:\Users\ads_edgar.menendez\Desktop\docs\facturas",
-    r"C:\Users\ads_edgar.menendez\Desktop\docs\oc"
+    r"C:\Users\ads_edgar.menendez\Desktop\docs\oc",
+    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_iva",
+    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr", # Esta linea solo se utiliza en el caso 2.
     )
 
 H_INTROD_COMPROBANTES_NOMBRE_PDF = (
     "comprobante test.pdf",
-    "f-2361476901 DISTRIBUIDORA LA SEVILLANITA S.A. ISR.pdf",
-    "f-2361476901 DISTRIBUIDORA LA SEVILLANITA S.A..pdf",
     "factura test.pdf",
-    "oc test.pdf"
+    "oc test.pdf",
+    "f-2076264085 JORGE AUGUSTO, RODRIGUEZ GONZALEZ.pdf",
     )
-H_INTROD_COMPROBANTES_NOMBRE_PROVEEDOR = "DISTRIBUIDORA LA SEVILLANITA S.A."
+
+H_INTROD_COMPROBANTES_NOMBRE_PROVEEDOR = "JORGE AUGUSTO, RODRIGUEZ GONZALEZ"
 H_INTROD_COMPROBANTES_COMENTARIO = "Comentario"
 
 # Dato exclusivo del caso 2, usan la misma funcion pero se pasa la lista vacía en los casos 1 y 3.
-H_INTROD_COMPROBANTES_LISTA_IMPT_BASE_RETENCION_SUST_CASO_1y3 = (" ")
-H_INTROD_COMPROBANTES_LISTA_IMPT_BASE_RETENCION_SUST_CASO_2 = ("1111", "2222", "3333", "4444", "5555", "6666")
+H_INTROD_COMPROBANTES_LISTA_IMPT_BASE_RETENCION_SUST_CASO_1y3 = ("")
 
-H_INTROD_COMPROBANTES_LISTA_PORCENTAJE_RETENCION = ("TVA15", "GT050", "TVA15", "GT070", "TVA15", "GT070")
+# en caso 1 y 3, cada línea de la OC es un dato en cada lista (IVA)
+# en caso 2, cada línea de la OC son dos datos en cada lista (IVA e ISR)
+H_INTROD_COMPROBANTES_LISTA_IMPT_BASE_RETENCION_SUST_CASO_2 = ("1111", "2222")
+H_INTROD_COMPROBANTES_LISTA_PORCENTAJE_RETENCION = ("TVA15", "GT050")
 
-H_INTROD_COMPROBANTES_LISTA_DESCRIPCIONES = ("Desc 1", "Desc 2", "Desc 3")
-H_INTROD_COMPROBANTES_LISTA_IVA = ("12.00", "12.00", "12.00")
+# en estas listas siempre es un dato por línea sin importar el caso.
+H_INTROD_COMPROBANTES_LISTA_DESCRIPCIONES = ("Desc 1")
+H_INTROD_COMPROBANTES_LISTA_IVA = ("15.00")
 
 
 

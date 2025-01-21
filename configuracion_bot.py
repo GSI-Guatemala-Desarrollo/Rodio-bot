@@ -131,7 +131,7 @@ def finalizar_automatizacion(driver):
 
     # Eliminar la instancia
     try:
-        time.sleep(10)
+        time.sleep(5)
         driver.close()
         driver.quit()
         logging.info("Automatización finalizada y navegador cerrado.")

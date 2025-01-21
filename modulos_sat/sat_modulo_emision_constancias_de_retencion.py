@@ -371,6 +371,7 @@ def sat_emision_constancias_de_retencion_busqueda_parametros(
 
 def sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(
     driver,
+    EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA,
     EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS,
     EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS,
     EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR,
@@ -469,8 +470,10 @@ def sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_
         logging.info("Botón 'Cerrar' presionado. Ventana emergente cerrada.")
 
         # Llamar a la función para cambiar el nombre y directorio del PDF
-        cambiar_nombre_y_directorio_pdf(
+        
+        numero_retencion = cambiar_nombre_y_directorio_pdf(
             driver,
+            EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA,
             EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS,
             EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS,
             EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR,
@@ -478,35 +481,64 @@ def sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_
             numero_constancia_de_retencion_y_nombre_pdf,
             numero_de_factura_retenida
         )
-
+        
+        return numero_retencion  # Regresar el nombre final (con .pdf)
+    
     except Exception as e:
         logging.error(f"Error en el proceso de generar retención y descargar PDF: {e}")
-
+        return None
 
 # Función auxiliar de la anterior, no se encuentra en la configuración de los flujos porque necesita el numero de constancia que se genera en la anterior función
 # solamente existe para simplificar y separar los procesos de descargar pdf y de cambiar directorio y nombre. (Pasos 16-17)
-def cambiar_nombre_y_directorio_pdf(driver, EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS, EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS, EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR, EMISION_CONSTANCIAS_FECHA_FACTURA, numero_constancia_de_retencion_y_nombre_pdf, numero_de_factura_retenida):
+def cambiar_nombre_y_directorio_pdf(
+    driver,
+    EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA,
+    EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS,
+    EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS,
+    EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR,
+    EMISION_CONSTANCIAS_FECHA_FACTURA,
+    numero_constancia_de_retencion_y_nombre_pdf,
+    numero_de_factura_retenida
+):
+    """
+    Si EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA == 1 => renombra el PDF.
+    Si EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA != 1 => mantiene el nombre original.
+    Retorna el nombre final del archivo (incluyendo '.pdf').
+    """
     try:
-        logging.info(f"\n\n\n-x-x-x- (PASOS 15-18) cambiar_nombre_y_directorio_pdf -x-x-x-\n")
-        # Construir la ruta del archivo PDF descargado
+        logging.info("\n\n\n-x-x-x- (PASOS 15-18) cambiar_nombre_y_directorio_pdf -x-x-x-\n")
+
+        # Nombre original (el generado al descargar):
         archivo_pdf_nombre = f"{numero_constancia_de_retencion_y_nombre_pdf}.pdf"
         ruta_descargas_pdf = os.path.join(EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS, archivo_pdf_nombre)
 
-        # Verificar si el archivo existe en el directorio de descargas
+        # Verificar si existe el archivo en descargas
         if not os.path.exists(ruta_descargas_pdf):
             logging.error(f"El archivo {archivo_pdf_nombre} no se encontró en el directorio de descargas.")
-            return
+            return None  # o raise Exception, según tu manejo de errores
 
-        # Construir el nuevo nombre y ruta del archivo en el directorio de facturas
-        nuevo_nombre_pdf = f"f-{numero_de_factura_retenida} {EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR}.pdf"
+        # Dependiendo del valor de EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA, renombrar o no
+        if EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA == 1:
+            # Renombrar el PDF
+            nuevo_nombre_pdf = f"f-{numero_de_factura_retenida} {EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR}.pdf"
+            logging.info(f"Renombrando el PDF debido a retenciones_que_declara=1 => {nuevo_nombre_pdf}")
+        else:
+            # Mantener el nombre original
+            nuevo_nombre_pdf = archivo_pdf_nombre
+            logging.info(f"Manteniendo el nombre original => {nuevo_nombre_pdf}")
+
+        # Construir ruta final en el directorio de facturas
         nueva_ruta_pdf = os.path.join(EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS, nuevo_nombre_pdf)
 
-        # Mover y renombrar el archivo
+        # Mover (y renombrar si aplica)
         shutil.move(ruta_descargas_pdf, nueva_ruta_pdf)
-        logging.info(f"Archivo renombrado y movido a: {nueva_ruta_pdf}")
+        logging.info(f"Archivo movido a: {nueva_ruta_pdf}")
+
+        return nuevo_nombre_pdf  # Regresar el nombre final (con .pdf)
 
     except Exception as e:
-        logging.error(f"Error al cambiar el nombre y mover el archivo PDF: {e}")
+        logging.error(f"Error al cambiar el nombre y mover el archivo PDF: {e}", exc_info=True)
+        return None
 
 
 # SIN TERMINAR: Funcion para abrir el pdf en una nueva pestaña para imprimir, faltan algunos botones por si se quiere implementar más adelante.

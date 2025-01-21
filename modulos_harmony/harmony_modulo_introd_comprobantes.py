@@ -7,7 +7,7 @@ from selenium.webdriver.support.wait import WebDriverWait
 from selenium.webdriver.support.select import Select
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver import ActionChains
-from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException
+from selenium.common.exceptions import TimeoutException, ElementClickInterceptedException, StaleElementReferenceException
 from datetime import datetime, timedelta
 
 # Paso 2
@@ -545,7 +545,7 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_r
         nueva_fecha = parsed_date + timedelta(days=30)
         while nueva_fecha.weekday() != 4:  # Friday=4
             nueva_fecha += timedelta(days=1)
-        fecha_pago = nueva_fecha.strftime("%d/%m/%Y") # Fecha nueva con formato en español
+        fecha_pago = nueva_fecha.strftime("%m/%d/%Y") # Fecha nueva con formato en español
         logging.info(f"Fecha de pago calculada (viernes): {fecha_pago}")
 
         # [5] Ingresar la fecha en 'PYMNT_VCHR_XREF_SCHEDULED_PAY_DT$0'
@@ -594,10 +594,29 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_r
         #        Luego, si i < Y-1 => clic en "Siguiente".
 
         logging.info("Leyendo cantidad de páginas de retención en 'win0div$ICField$4$GP$0'...")
+
+        # --- Asegurar que 'porcentaje_retencion' sea una tupla/lista ---
+        if isinstance(porcentaje_retencion, str):
+            logging.info(f"'porcentaje_retencion' llegó como cadena: '{porcentaje_retencion}'")
+            if porcentaje_retencion.strip():
+                porcentaje_retencion = (porcentaje_retencion,)
+            else:
+                porcentaje_retencion = ()
+
+        # --- Asegurar que 'total_retencion_por_articulo' sea tupla/lista ---
+        if isinstance(total_retencion_por_articulo, str):
+            logging.info(f"'total_retencion_por_articulo' llegó como cadena: '{total_retencion_por_articulo}'")
+            if total_retencion_por_articulo.strip():
+                total_retencion_por_articulo = (total_retencion_por_articulo,)
+            else:
+                total_retencion_por_articulo = ()
+
         try:
             txt_pages = WebDriverWait(driver, 5).until(
-                EC.presence_of_element_located((By.XPATH, '//*[@id="win0div$ICField$4$GP$0"]/table/tbody/tr/td[2]/span[2]'))
-            ).text  # Ej. "1 de 3"
+                EC.presence_of_element_located(
+                    (By.XPATH, '//*[@id="win0div$ICField$4$GP$0"]/table/tbody/tr/td[2]/span[2]')
+                )
+            ).text  # Ejemplo: "1 de 3"
         except TimeoutException:
             logging.warning("No se encontró '1 de X' en retención. Asumimos 1 de 1.")
             txt_pages = "1 de 1"
@@ -616,60 +635,87 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_r
             f"La lista de totales tiene {len(total_retencion_por_articulo)} elementos."
         )
 
-        # 8b) Por cada página i: llenar 2 inputs con porcentaje_retencion[i*2] y [i*2+1]
-        #                       y también 2 inputs con total_retencion_por_articulo[i*2] y [i*2+1].
-        #     Luego, si i < total_pages-1 => clic en "Siguiente".
-
         ret_index = 0
         for i in range(total_pages):
             logging.info(f"== Retención - Página {i+1} de {total_pages} ==")
 
             for sub_idx in range(2):  # 0..1
+                logging.info(f"Procesando sub_idx = {sub_idx}, ret_index = {ret_index}")
+
                 # 1) Porcentaje de retención
                 rule_input_id = f"VCHR_LINE_WTHD_WTHD_RULE${sub_idx}"
                 try:
+                    logging.info(f"Buscando el input de porcentaje '{rule_input_id}'...")
                     rule_input = WebDriverWait(driver, 5).until(
                         EC.element_to_be_clickable((By.ID, rule_input_id))
                     )
+                    logging.info(f"Encontrado '{rule_input_id}'. Haciendo .clear()")
                     rule_input.clear()
                     time.sleep(1.5)
 
                     if ret_index < len(porcentaje_retencion):
-                        rule_input.send_keys(porcentaje_retencion[ret_index])
-                        logging.info(f"Asignado '{porcentaje_retencion[ret_index]}' en {rule_input_id}.")
+                        valor_porcentaje = porcentaje_retencion[ret_index]
+                        logging.info(f"Ingresando valor '{valor_porcentaje}' en '{rule_input_id}'...")
+                        rule_input.send_keys(valor_porcentaje)
+                        logging.info(f"Asignado '{valor_porcentaje}' en {rule_input_id}.")
                     else:
-                        logging.info(f"No hay más elementos en porcentaje_retencion. "
-                                     f"Dejando en blanco '{rule_input_id}'.")
+                        logging.info(f"No hay más elementos en porcentaje_retencion. Dejando '{rule_input_id}' en blanco.")
                 except TimeoutException:
                     logging.warning(f"No se encontró el campo '{rule_input_id}'. No se pudo ingresar retención.")
                     break
+                except StaleElementReferenceException as e:
+                    logging.warning(f"StaleElementReference al interactuar con '{rule_input_id}': {e}")
+                    break
+
+                # Espera un poco tras ingresar la retención (PeopleSoft refresca a veces).
+                time.sleep(2)
 
                 # 2) Total retención por artículo
                 basis_input_id = f"VCHR_LINE_WTHD_WTHD_BASIS_AMT${sub_idx}"
-                try:
-                    basis_input = WebDriverWait(driver, 5).until(
-                        EC.element_to_be_clickable((By.ID, basis_input_id))
-                    )
-                    # Forzamos scroll al elemento
-                    driver.execute_script("arguments[0].scrollIntoView(true);", basis_input)
-                    time.sleep(1)
 
-                    basis_input.click()
-                    time.sleep(1)
-                    basis_input.clear()
-                    time.sleep(1)
+                # Mecanismo de reintento para posible "stale element reference"
+                reintentos = 3
+                while reintentos > 0:
+                    try:
+                        logging.info(f"Intentando localizar '{basis_input_id}' (reintentos={reintentos})")
+                        basis_input = WebDriverWait(driver, 5).until(
+                            EC.element_to_be_clickable((By.ID, basis_input_id))
+                        )
+                        logging.info(f"Encontrado '{basis_input_id}'. Haciendo scrollIntoView...")
+                        driver.execute_script("arguments[0].scrollIntoView(true);", basis_input)
+                        time.sleep(1)
 
-                    if ret_index < len(total_retencion_por_articulo):
-                        basis_input.send_keys(total_retencion_por_articulo[ret_index])
-                        logging.info(f"Asignado '{total_retencion_por_articulo[ret_index]}' en {basis_input_id}.")
-                    else:
-                        logging.info(f"No hay más elementos en total_retencion_por_articulo. "
-                                     f"Dejando en blanco '{basis_input_id}'.")
-                except TimeoutException:
-                    logging.warning(f"No se encontró el campo '{basis_input_id}'. No se pudo ingresar el total.")
-                    break
+                        logging.info("Haciendo click() en basis_input...")
+                        basis_input.click()
+                        time.sleep(1)
 
-                # Avanzar al siguiente índice (en ambas listas)
+                        logging.info("Haciendo clear() en basis_input...")
+                        basis_input.clear()
+                        time.sleep(1)
+
+                        if ret_index < len(total_retencion_por_articulo):
+                            valor_total = total_retencion_por_articulo[ret_index]
+                            logging.info(f"Ingresando valor '{valor_total}' en '{basis_input_id}'...")
+                            basis_input.send_keys(valor_total)
+                            logging.info(f"Asignado '{valor_total}' en {basis_input_id}.")
+                        else:
+                            logging.info(f"No hay más elementos en total_retencion_por_articulo. "
+                                        f"Dejando '{basis_input_id}' en blanco.")
+
+                        # Si todo va bien, rompemos el while
+                        break
+                    except StaleElementReferenceException as e:
+                        logging.warning(f"STALE reference en '{basis_input_id}': {e}. Reintentando...")
+                        reintentos -= 1
+                        time.sleep(2)
+                    except TimeoutException:
+                        logging.warning(f"No se encontró el campo '{basis_input_id}'. No se pudo ingresar el total.")
+                        break
+                    except Exception as ex:
+                        logging.warning(f"Error inesperado con '{basis_input_id}': {ex}")
+                        break
+
+                # Avanzar al siguiente índice en ambas listas
                 ret_index += 1
                 time.sleep(1)
 
@@ -686,6 +732,7 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_r
                     logging.warning("No se encontró el botón 'Siguiente' en retención. Abortando.")
                     break
 
+
         # [9] Clic en "Volver a Factura" (id=VCHR_PANELS_WRK_GOTO_VCHR_HDR)
         logging.info("Presionando 'Volver a Factura' para regresar a la pantalla anterior.")
         volver_factura_link = WebDriverWait(driver, 15).until(
@@ -697,7 +744,6 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_r
         except (ElementClickInterceptedException, TimeoutException) as e:
             logging.warning(f"Clic en 'Volver a Factura' falló: {e}")
             driver.execute_script("arguments[0].click();", volver_factura_link)
-            time.sleep(1)
 
         logging.info("Esperando 3 segundos para que se cargue la pantalla anterior...")
         time.sleep(3)
@@ -735,6 +781,26 @@ def harmony_introd_comprobantes_descripcion_e_iva(driver, descripciones, ivas):
 
     logging.info("\n\n\n-x-x-x- (PASOS 11-12) harmony_introd_comprobantes_descripcion_e_iva -x-x-x-\n")
 
+    # --- Asegurar que 'descripciones' sea tupla/lista ---
+    if isinstance(descripciones, str):
+        logging.info(f"Se recibió 'descripciones' como cadena: '{descripciones}'")
+        if descripciones.strip():
+            descripciones = (descripciones,)
+        else:
+            descripciones = ()
+    else:
+        logging.info(f"'descripciones' es lista/tupla con {len(descripciones)} elemento(s).")
+
+    # --- Asegurar que 'ivas' sea tupla/lista ---
+    if isinstance(ivas, str):
+        logging.info(f"Se recibió 'ivas' como cadena: '{ivas}'")
+        if ivas.strip():
+            ivas = (ivas,)
+        else:
+            ivas = ()
+    else:
+        logging.info(f"'ivas' es lista/tupla con {len(ivas)} elemento(s).")
+        
     # --- Paso previo: Ir a la primera página ---
     try:
         # Localizar el botón "Primero"

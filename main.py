@@ -101,11 +101,10 @@ try:
     logging.info("FLUJO COMPLETADO: Órdenes de compra")
 except Exception as e:
     logging.critical(f"Error crítico en el flujo 'Órdenes de compra': {e}")
-
 """
 
 # Facturas - Caso 1
-#"""
+"""
 try:
     logging.info("INICIO DEL FLUJO: Caso 1 - Reten IVA GEN")
     caso_1_reten_IVA_GEN(
@@ -149,10 +148,10 @@ try:
     logging.info("FLUJO COMPLETADO: Caso 1 - Reten IVA GEN")
 except Exception as e:
     logging.critical(f"Error crítico en el flujo 'Caso 1 - Reten IVA GEN': {e}")
-#"""
+"""
 
 # Facturas - Caso 2
-"""
+#"""
 try:
     logging.info("INICIO DEL FLUJO: Caso 2 - Reten IVA e ISR")
     caso_2_reten_IVA_e_ISR(
@@ -206,7 +205,7 @@ try:
     logging.info("FLUJO COMPLETADO: Caso 2 - Reten IVA e ISR")
 except Exception as e:
     logging.critical(f"Error crítico en el flujo 'Caso 2 - Reten IVA e ISR': {e}")
-"""
+#"""
 
 # Facturas - Caso 3
 """
