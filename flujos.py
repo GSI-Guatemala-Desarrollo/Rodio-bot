@@ -1,5 +1,6 @@
 
 # Imports configuracion
+import logging
 from configuracion_bot import configurar_driver, configurar_logging, finalizar_automatizacion
 
 # Imports SAT
@@ -42,15 +43,16 @@ from modulos_cami.cami_navegar_a_modulo import cami_navegar_a_modulo
 
 # Flujo Ordenes de compra: Harmony
 def recepcion_OC (
+    numero_caso,
     # Valores Harmony
     h_recepciones_uni_po,
     h_recepciones_id_oc,
     
 ):
-    
+
 # --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
     driver = configurar_driver()  # Configurar el driver primero
-    configurar_logging(driver)  # Pasar el driver al CriticalHandler
+    configurar_logging(driver, numero_caso)  # Pasar el driver al CriticalHandler
     
     
 # --------------------- Funciones Harmony ---------------------
@@ -67,8 +69,10 @@ def recepcion_OC (
 # --------------------- Fin Automatización ---------------------
     finalizar_automatizacion(driver)
 
+
 # Flujo Caso 1: SAT-Harmony-CAMI
-def caso_1_reten_IVA_GEN (     
+def caso_1_reten_IVA_GEN (
+    numero_caso, 
     # Valores SAT            
     s_emision_constancias_emision_del,
     s_emision_constancias_emision_al,
@@ -108,19 +112,35 @@ def caso_1_reten_IVA_GEN (
     cami_nombre_empresa
     ):
     
-    
+    MAX_INTENTOS_LOGIN = 3
+    intento_login = 0
+
+    while intento_login < MAX_INTENTOS_LOGIN:
+        intento_login += 1
+
 # --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
-    driver = configurar_driver()  # Configurar el driver primero
-    configurar_logging(driver)  # Pasar el driver al CriticalHandler
+        driver = configurar_driver() # Configurar el driver primero
+        configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
+        logging.info(f"==== Intento de login #{intento_login} para SAT ====")
 
 # --------------------- Caso 1 - Funciones SAT ---------------------
-    # Pasos 1-3
-    sat_dirigir_a_pagina_y_verificar_estado_login(driver)
+        try:
+            # Pasos 1-3
+            sat_dirigir_a_pagina_y_verificar_estado_login(driver)
+            break
+        except Exception as e:
+            logging.warning(f"Error en intento de login #{intento_login}, la página no cargó a tiempo.")
+            finalizar_automatizacion(driver)
+
+            if intento_login == MAX_INTENTOS_LOGIN:
+                logging.error("Se alcanzó el máximo de intentos de login. Abortando el flujo.")
+                return
     # Pasos 4-7
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")
     # Pasos 8-10
     sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
+    """
     sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
 # --------------------- Caso 1 - Funciones Harmony ---------------------
     # Paso 1
@@ -141,7 +161,6 @@ def caso_1_reten_IVA_GEN (
     # harmony_introd_comprobantes_guardar(driver) # Comentar la llamada a esta funcion en caso de pruebas para que no realice los cambios en harmony.
 
 
-    """
 # --------------------- Caso 1 - Funciones Cami ---------------------
     # Pasos
     cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
@@ -153,8 +172,10 @@ def caso_1_reten_IVA_GEN (
 # --------------------- Fin Automatización ---------------------
     finalizar_automatizacion(driver)
 
+
 # Flujo Caso 2: SAT-Harmony-CAMI
 def caso_2_reten_IVA_e_ISR (
+    numero_caso,
     # Variables pasos 1-18
     s_emision_constancias_emision_del,
     s_emision_constancias_emision_al,
@@ -208,14 +229,29 @@ def caso_2_reten_IVA_e_ISR (
     cami_nombre_empresa
     ):
 
+    MAX_INTENTOS_LOGIN = 3
+    intento_login = 0
+
+    while intento_login < MAX_INTENTOS_LOGIN:
+        intento_login += 1
 
 # --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
-    driver = configurar_driver()  # Configurar el driver primero
-    configurar_logging(driver)  # Pasar el driver al CriticalHandler
+        driver = configurar_driver() # Configurar el driver primero
+        configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
+        logging.info(f"==== Intento de login #{intento_login} para SAT ====")
 
-# --------------------- Caso 2 - Funciones SAT ---------------------
-    # Pasos 1-3
-    sat_dirigir_a_pagina_y_verificar_estado_login(driver)
+# --------------------- Caso 1 - Funciones SAT ---------------------
+        try:
+            # Pasos 1-3
+            sat_dirigir_a_pagina_y_verificar_estado_login(driver)
+            break
+        except Exception as e:
+            logging.warning(f"Error en intento de login #{intento_login}, la página no cargó a tiempo.")
+            finalizar_automatizacion(driver)
+
+            if intento_login == MAX_INTENTOS_LOGIN:
+                logging.error("Se alcanzó el máximo de intentos de login. Abortando el flujo.")
+                return
     # Pasos 4-7
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")
     # Pasos 8-10
@@ -273,8 +309,11 @@ def caso_2_reten_IVA_e_ISR (
 # --------------------- Fin Automatización ---------------------
     finalizar_automatizacion(driver)
 
+
 # Flujo Caso 3: SAT-Harmony-CAMI
 def caso_3_reten_IVA_PEQ (
+    numero_caso,
+    # Valores SAT
     s_emision_constancias_emision_del,
     s_emision_constancias_emision_al,
     s_emision_constancias_retenciones_que_declara_iva,
@@ -288,6 +327,7 @@ def caso_3_reten_IVA_PEQ (
     s_emision_constancias_directorio_facturas_iva,
     s_emision_constancias_nombre_proveedor,
     s_emision_constancias_fecha_factura,
+    
     # Valores Harmony
     h_introd_comprobantes_id_proveedor,
     h_introd_comprobantes_no_de_factura,
@@ -308,19 +348,34 @@ def caso_3_reten_IVA_PEQ (
     
     h_introd_comprobantes_lista_descripciones,
     h_introd_comprobantes_lista_iva,
+    
     # Valores Cami
     cami_nombre_empresa
     ):
-    
-    
+
+    MAX_INTENTOS_LOGIN = 3
+    intento_login = 0
+
+    while intento_login < MAX_INTENTOS_LOGIN:
+        intento_login += 1
+
 # --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
-    driver = configurar_driver()  # Configurar el driver primero
-    configurar_logging(driver)  # Pasar el driver al CriticalHandler
-    
-    
-# --------------------- Caso 3 - Funciones SAT ---------------------
-    # Pasos 1-3
-    sat_dirigir_a_pagina_y_verificar_estado_login(driver)
+        driver = configurar_driver() # Configurar el driver primero
+        configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
+        logging.info(f"==== Intento de login #{intento_login} para SAT ====")
+
+# --------------------- Caso 1 - Funciones SAT ---------------------
+        try:
+            # Pasos 1-3
+            sat_dirigir_a_pagina_y_verificar_estado_login(driver)
+            break
+        except Exception as e:
+            logging.warning(f"Error en intento de login #{intento_login}, la página no cargó a tiempo.")
+            finalizar_automatizacion(driver)
+
+            if intento_login == MAX_INTENTOS_LOGIN:
+                logging.error("Se alcanzó el máximo de intentos de login. Abortando el flujo.")
+                return
     # Pasos 4-7
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")
     # Pasos 8-10 (Cambiar gen por peq en constantes antes de ejecutar caso 3 completo)

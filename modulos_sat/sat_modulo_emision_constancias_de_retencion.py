@@ -23,7 +23,7 @@ def sat_emision_constancias_de_retencion_busqueda_parametros(
 
     logging.info(f"\n\n\n-x-x-x- (PASOS 8-10) sat_emision_constancias_de_retencion_busqueda_parametros -x-x-x-\n")
     # Esperar a que cargue la tabla.
-    time.sleep(4)
+    time.sleep(3)
     EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA = EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA - 1
     EMISION_CONSTANCIAS_REGIMEN = EMISION_CONSTANCIAS_REGIMEN - 1
     EMISION_CONSTANCIAS_TIPO_DOCUMENTO = EMISION_CONSTANCIAS_TIPO_DOCUMENTO - 1
@@ -368,6 +368,32 @@ def sat_emision_constancias_de_retencion_busqueda_parametros(
         except Exception as e:
             logging.error(f"Error al hacer clic en el checkbox alternativo: {e}")
 
+
+    # === Esperar hasta 15s a que cargue la tabla ===
+    logging.info("Esperando hasta 15 segundos para que cargue la tabla.")
+    start_time = time.time()
+    found_div = False
+
+    while True:
+        if time.time() - start_time > 15:
+            logging.critical("No se encontró el div 'formContent:pnlFacturas' antes de 15s. Abortando.")
+            return
+        try:
+            # Verificar si el div aparece y está visible
+            div_facturas = driver.find_element(By.ID, "formContent:pnlFacturas")
+            if div_facturas.is_displayed():
+                found_div = True
+                logging.info("Div 'formContent:pnlFacturas' encontrado y visible. Continuando...")
+                break
+        except Exception:
+            # Ignorar para reintentar
+            pass
+        time.sleep(1)
+
+    if not found_div:
+        logging.critical("No se encontró el div 'formContent:pnlFacturas'. Se detiene la ejecución.")
+        return
+    
 
 def sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(
     driver,

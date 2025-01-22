@@ -30,10 +30,11 @@ def sat_dirigir_a_pagina_y_verificar_estado_login(driver):
         logging.info(f"Página de la SAT cargada: {driver.current_url}")
 
     except TimeoutException:
-        logging.critical("La página no cargó dentro del tiempo esperado, revise su conexión y vuelva a intentarlo.")
+        raise TimeoutException
 
     # Restaurar el tiempo de espera original después de la carga
-    driver.set_page_load_timeout(10)
+    finally:
+        driver.set_page_load_timeout(10)
 
     # Verificar si requiere inicio de sesión
     if "login" in driver.current_url:

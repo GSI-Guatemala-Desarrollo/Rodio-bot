@@ -35,11 +35,17 @@ class CriticalHandler(logging.Handler):
                 print("Driver no disponible. Intenta verificar el flujo.")
             sys.exit(1)
 
-def configurar_logging(driver=None):
+def configurar_logging(driver=None, numero_caso="N/A"):
     """
     Configura el logging para registrar mensajes en terminal y archivo.
-    Crea un archivo de log único por ejecución con un nombre basado en la fecha y hora.
-    Los logs se guardan en la carpeta 'logs' en la raíz del proyecto.
+    Crea un archivo de log único por ejecución con un nombre basado en la fecha y hora,
+    e incluye el número de caso en el nombre del log.
+    
+    Args:
+        driver (WebDriver, opcional): Si se proporciona, se utilizará
+            para el CriticalHandler al manejar errores críticos.
+        numero_caso (str, opcional): Número o identificador del caso para
+            incluir en el nombre del archivo de log. Por defecto "N/A".
     """
 
     logger = logging.getLogger()
@@ -55,7 +61,10 @@ def configurar_logging(driver=None):
 
     # Generar nombre único para el archivo de log basado en fecha y hora
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
-    log_filename = os.path.join(logs_directory, f"log_RPA_{timestamp}.log")
+    log_filename = os.path.join(
+        logs_directory,
+        f"log_RPA_{numero_caso}_{timestamp}.log"  # Incluir numero_caso en el nombre
+    )
 
     # Manejador para archivo
     file_handler = logging.FileHandler(log_filename)
@@ -79,6 +88,11 @@ def configurar_logging(driver=None):
     if driver is not None:
         critical_handler = CriticalHandler(driver)
         logger.addHandler(critical_handler)
+
+    # Loguear que se configuró el logging con el número de caso
+    logging.info(f"Logging configurado para caso: {numero_caso}. Log file: {log_filename}")
+    
+        
 def configurar_driver():
     """
     Configura el driver de Selenium para Brave y lo inicializa sin cargar una URL.
@@ -134,7 +148,7 @@ def finalizar_automatizacion(driver):
         time.sleep(5)
         driver.close()
         driver.quit()
-        logging.info("Automatización finalizada y navegador cerrado.")
+        logging.info("Navegador cerrado.")
     except Exception as e:
         logging.error(f"Error al cerrar el navegador: {e}")
 
