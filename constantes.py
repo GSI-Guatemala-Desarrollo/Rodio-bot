@@ -143,7 +143,7 @@ H_INTROD_COMPROBANTES_PDF_PATH = (
     r"C:\Users\ads_edgar.menendez\Desktop\docs\facturas",
     r"C:\Users\ads_edgar.menendez\Desktop\docs\oc",
     r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_iva",
-    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr", # Esta linea solo se utiliza en el caso 2.
+    #r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr", # Esta linea solo se utiliza en el caso 2.
     )
 
 H_INTROD_COMPROBANTES_NOMBRE_PDF = (

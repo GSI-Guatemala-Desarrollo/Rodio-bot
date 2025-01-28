@@ -43,10 +43,10 @@ from modulos_cami.cami_navegar_a_modulo import cami_navegar_a_modulo
 
 # Flujo Ordenes de compra: Harmony
 def recepcion_OC (
-    numero_caso,
+    numero_caso, # Usuario
     # Valores Harmony
     h_recepciones_uni_po,
-    h_recepciones_id_oc,
+    h_recepciones_id_oc, # Usuario
     
 ):
 
@@ -72,42 +72,42 @@ def recepcion_OC (
 
 # Flujo Caso 1: SAT-Harmony-CAMI
 def caso_1_reten_IVA_GEN (
-    numero_caso, 
+    numero_caso, # Usuario
     # Valores SAT            
     s_emision_constancias_emision_del,
     s_emision_constancias_emision_al,
     s_emision_constancias_retenciones_que_declara_iva,
     s_emision_constancias_regimen_gen,
     s_emision_constancias_tipo_documento,
-    s_emision_constancias_nit_retenido,
+    s_emision_constancias_nit_retenido, # Usuario
     s_emision_constancias_no_autorizacion_fel,
-    s_emision_constancias_serie_de_factura,
-    s_emision_constancias_no_de_factura, 
+    s_emision_constancias_serie_de_factura, # Usuario
+    s_emision_constancias_no_de_factura, # Usuario
     s_emision_constancias_directorio_descargas,
     s_emision_constancias_directorio_facturas_iva,
-    s_emision_constancias_nombre_proveedor,
-    s_emision_constancias_fecha_factura,
+    s_emision_constancias_nombre_proveedor, # Usuario
+    s_emision_constancias_fecha_factura, # Usuario
     
     # Valores Harmony
-    h_introd_comprobantes_id_proveedor,
-    h_introd_comprobantes_no_de_factura,
-    h_introd_comprobantes_fecha_factura,
+    h_introd_comprobantes_id_proveedor, # Usuario
+    h_introd_comprobantes_no_de_factura, # Repetido
+    h_introd_comprobantes_fecha_factura, # Repetido
     
     h_introd_comprobantes_uni_po,
-    h_introd_comprobantes_no_pedido,
-    h_introd_comprobantes_iva,
-    h_introd_comprobantes_no_serie,
+    h_introd_comprobantes_no_pedido, # Usuario
+    h_introd_comprobantes_iva, # Usuario
+    h_introd_comprobantes_no_serie, # Repetido
     
     h_introd_comprobantes_pdf_path,
-    h_introd_comprobantes_nombre_pdf,
-    h_introd_comprobantes_nombre_proveedor,
-    h_introd_comprobantes_comentario,
+    h_introd_comprobantes_nombre_pdf, # Usuario (lista)
+    h_introd_comprobantes_nombre_proveedor, # Repetido
+    h_introd_comprobantes_comentario, # Usuario
     
-    h_introd_comprobantes_lista_porcentaje_retencion,
-    h_introd_comprobantes_lista_impt_base_retencion_sust,
+    h_introd_comprobantes_lista_porcentaje_retencion, # Usuario (lista)
+    h_introd_comprobantes_lista_impt_base_retencion_sust, # Usuario (lista)
     
-    h_introd_comprobantes_lista_descripciones,
-    h_introd_comprobantes_lista_iva,
+    h_introd_comprobantes_lista_descripciones, # Usuario (lista)
+    h_introd_comprobantes_lista_iva, # Usuario (lista)
     # Valores Cami
     cami_nombre_empresa
     ):
@@ -124,6 +124,7 @@ def caso_1_reten_IVA_GEN (
         logging.info(f"==== Intento de login #{intento_login} para SAT ====")
 
 # --------------------- Caso 1 - Funciones SAT ---------------------
+    """
         try:
             # Pasos 1-3
             sat_dirigir_a_pagina_y_verificar_estado_login(driver)
@@ -140,8 +141,8 @@ def caso_1_reten_IVA_GEN (
     # Pasos 8-10
     sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
-    """
     sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
+    """
 # --------------------- Caso 1 - Funciones Harmony ---------------------
     # Paso 1
     harmony_dirigir_a_pagina_y_verificar_estado_login(driver)
@@ -154,6 +155,7 @@ def caso_1_reten_IVA_GEN (
     # Pasos 7-8
     harmony_introd_comprobantes_anexar_documento_y_comentario(driver, h_introd_comprobantes_pdf_path, h_introd_comprobantes_nombre_pdf, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_nombre_proveedor, h_introd_comprobantes_comentario)
     # Pasos 9-10
+    """
     harmony_introd_comprobantes_pagos_y_retencion(driver, h_introd_comprobantes_fecha_factura, h_introd_comprobantes_lista_impt_base_retencion_sust, h_introd_comprobantes_lista_porcentaje_retencion)
     # Pasos 11-12
     harmony_introd_comprobantes_descripcion_e_iva(driver, h_introd_comprobantes_lista_descripciones, h_introd_comprobantes_lista_iva)
@@ -175,55 +177,55 @@ def caso_1_reten_IVA_GEN (
 
 # Flujo Caso 2: SAT-Harmony-CAMI
 def caso_2_reten_IVA_e_ISR (
-    numero_caso,
+    numero_caso, # Usuario
     # Variables pasos 1-18
     s_emision_constancias_emision_del,
     s_emision_constancias_emision_al,
     s_emision_constancias_retenciones_que_declara_iva,
     s_emision_constancias_regimen_gen,
     s_emision_constancias_tipo_documento,
-    s_emision_constancias_nit_retenido,
+    s_emision_constancias_nit_retenido, # Usuario
     s_emision_constancias_no_autorizacion_fel,
-    s_emision_constancias_serie_de_factura,
-    s_emision_constancias_no_de_factura, 
+    s_emision_constancias_serie_de_factura, # Usuario
+    s_emision_constancias_no_de_factura, # Usuario
     s_emision_constancias_directorio_descargas,
     s_emision_constancias_directorio_facturas_iva,
-    s_emision_constancias_nombre_proveedor,
-    s_emision_constancias_fecha_factura,
+    s_emision_constancias_nombre_proveedor, # Usuario
+    s_emision_constancias_fecha_factura, # Usuario
     
     # Variables pasos 19-29
-    categoria_de_rentas_nit_retenido,
+    categoria_de_rentas_nit_retenido, # Repetido
     categoria_de_rentas_periodo_del,
     categoria_de_rentas_periodo_al,
     categoria_de_rentas_estado_de_asignacion,
-    categoria_de_rentas_no_de_factura,
-    categoria_de_rentas_opcion_categoria_de_renta,
-    categoria_de_rentas_opcion_regimen,
+    categoria_de_rentas_no_de_factura, # Repetido
+    categoria_de_rentas_opcion_categoria_de_renta, # Usuario (lista)
+    categoria_de_rentas_opcion_regimen, # Usuario
     
     # Variables pasos 30-...
     s_emision_constancias_retenciones_que_declara_isr,
     s_emision_constancias_directorio_facturas_isr,
     
     # Valores Harmony
-    h_introd_comprobantes_id_proveedor,
-    h_introd_comprobantes_no_de_factura,
-    h_introd_comprobantes_fecha_factura,
+    h_introd_comprobantes_id_proveedor, # Usuario
+    h_introd_comprobantes_no_de_factura, # Repetido
+    h_introd_comprobantes_fecha_factura, # Repetido
     
     h_introd_comprobantes_uni_po,
-    h_introd_comprobantes_no_pedido,
-    h_introd_comprobantes_iva,
-    h_introd_comprobantes_no_serie,
+    h_introd_comprobantes_no_pedido, # Usuario
+    h_introd_comprobantes_iva, # Usuario
+    h_introd_comprobantes_no_serie, # Repetido
     
     h_introd_comprobantes_pdf_path,
-    h_introd_comprobantes_nombre_pdf,
-    h_introd_comprobantes_nombre_proveedor,
-    h_introd_comprobantes_comentario,
+    h_introd_comprobantes_nombre_pdf, # Usuario (lista)
+    h_introd_comprobantes_nombre_proveedor, # Repetido
+    h_introd_comprobantes_comentario, # Usuario
     
-    h_introd_comprobantes_lista_porcentaje_retencion,
-    h_introd_comprobantes_lista_impt_base_retencion_sust,
+    h_introd_comprobantes_lista_porcentaje_retencion, # Usuario (lista)
+    h_introd_comprobantes_lista_impt_base_retencion_sust, # Usuario (lista)
     
-    h_introd_comprobantes_lista_descripciones,
-    h_introd_comprobantes_lista_iva,
+    h_introd_comprobantes_lista_descripciones, # Usuario (lista)
+    h_introd_comprobantes_lista_iva, # Usuario (lista)
     
     # Valores Cami
     cami_nombre_empresa
@@ -312,42 +314,42 @@ def caso_2_reten_IVA_e_ISR (
 
 # Flujo Caso 3: SAT-Harmony-CAMI
 def caso_3_reten_IVA_PEQ (
-    numero_caso,
+    numero_caso, # Usuario
     # Valores SAT
     s_emision_constancias_emision_del,
     s_emision_constancias_emision_al,
     s_emision_constancias_retenciones_que_declara_iva,
     s_emision_constancias_regimen_peq,
     s_emision_constancias_tipo_documento,
-    s_emision_constancias_nit_retenido,
+    s_emision_constancias_nit_retenido, # Usuario
     s_emision_constancias_no_autorizacion_fel,
-    s_emision_constancias_serie_de_factura,
-    s_emision_constancias_no_de_factura, 
+    s_emision_constancias_serie_de_factura, # Usuario
+    s_emision_constancias_no_de_factura, # Usuario
     s_emision_constancias_directorio_descargas,
     s_emision_constancias_directorio_facturas_iva,
-    s_emision_constancias_nombre_proveedor,
-    s_emision_constancias_fecha_factura,
+    s_emision_constancias_nombre_proveedor, # Usuario
+    s_emision_constancias_fecha_factura, # Usuario
     
     # Valores Harmony
-    h_introd_comprobantes_id_proveedor,
-    h_introd_comprobantes_no_de_factura,
-    h_introd_comprobantes_fecha_factura,
+    h_introd_comprobantes_id_proveedor, # Usuario
+    h_introd_comprobantes_no_de_factura, # Repetido
+    h_introd_comprobantes_fecha_factura, # Repetido
     
     h_introd_comprobantes_uni_po,
-    h_introd_comprobantes_no_pedido,
-    h_introd_comprobantes_iva,
-    h_introd_comprobantes_no_serie,
+    h_introd_comprobantes_no_pedido, # Usuario
+    h_introd_comprobantes_iva, # Usuario
+    h_introd_comprobantes_no_serie, # Repetido
     
     h_introd_comprobantes_pdf_path,
-    h_introd_comprobantes_nombre_pdf,
-    h_introd_comprobantes_nombre_proveedor,
-    h_introd_comprobantes_comentario,
+    h_introd_comprobantes_nombre_pdf, # Usuario (lista)
+    h_introd_comprobantes_nombre_proveedor, # Repetido
+    h_introd_comprobantes_comentario, # Usuario
     
-    h_introd_comprobantes_lista_porcentaje_retencion,
-    h_introd_comprobantes_lista_impt_base_retencion_sust,
+    h_introd_comprobantes_lista_porcentaje_retencion, # Usuario (lista)
+    h_introd_comprobantes_lista_impt_base_retencion_sust, # Usuario (lista)
     
-    h_introd_comprobantes_lista_descripciones,
-    h_introd_comprobantes_lista_iva,
+    h_introd_comprobantes_lista_descripciones, # Usuario (lista)
+    h_introd_comprobantes_lista_iva, # Usuario (lista)
     
     # Valores Cami
     cami_nombre_empresa
