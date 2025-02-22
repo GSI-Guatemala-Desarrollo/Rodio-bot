@@ -1,0 +1,87 @@
+
+Datos extraídos:
+Numeración Automática: GT00000038 * /
+
+ID Proveedor: 1 * /
+
+Nombre Proveedor: GSI * /
+
+Fecha de Creación: 2025-02-07
+
+Moneda: GTQ
+
+NIT: 123 * /
+
+Categorización de Proveedor: ['0']
+
+Tipo de Contribuyente: ['PEQUEÑO CONTRIBUYENTE'] * /
+
+% Retención IVA: ['5%'] * /
+
+Aplica Retención ISR: ['NO APLICA'] * /
+
+Tipo Retención: ['NA']
+
+Correo Electrónico Proveedor: cosasvariasdelu@gmail.com
+
+Tipo de Documento: ['Orden de Compra']
+
+Número de Orden de compra: 150 * /
+
+Fecha de Orden de compra: 2025-01-31
+
+Monto OC sin IVA: 160
+
+Monto OC con IVA: 179.20000000000002
+
+IVA: 19.200000000000017
+
+Número de Orden de Compra: 150
+
+Tipo de Documento Fiscal: ['Electrónico']
+
+Tipo Documento Tributario: ['Factura']
+
+Número Factura: 123 * /
+
+Serie Factura: 123 * /
+
+Fecha de Factura: 2025-02-05 * /
+
+Monto Factura sin IVA: 160
+
+Monto Factura con IVA: 179.20000000000002
+
+ID proveedor: 1
+
+Cargar Documento: ['https://gsigutemalagroupdiag.blob.core.windows.net/ekrxlusrlrjnf7sohug0/6786c8430fae253008de920f/1738942063/Tarjeta de Circulación Blackie - 2024_182.pdf
+']
+
+Usuario Aprobador: Lourdes Martinez
+
+Fecha validación: 2025-02-07
+
+Correo Notificacion: lmartinez@e-gsi.net
+
+¿Aprobado?: Sí
+
+Comentario: Todo en orden listo para procesar * /
+
+---
+
+
+✅ **Datos extraídos:**
+Numeración Automática: GT00000038
+ID Proveedor: 1
+Nombre Proveedor: GSI
+NIT: 123
+Tipo de Contribuyente: ['PEQUEÑO CONTRIBUYENTE']
+% Retención IVA: ['5%']
+Aplica Retención ISR: ['NO APLICA']
+Número de Orden de compra: 150
+Número Factura: 123
+Serie Factura: 123
+Fecha de Factura: 2025-02-05
+Cargar Documento: ['https://gsigutemalagroupdiag.blob.core.windows.net/ekrxlusrlrjnf7sohug0/6786c8430fae253008de920f/1738942063/Tarjeta de Circulación Blackie - 2024_182.pdf
+']
+Comentario: Todo en orden listo para procesar

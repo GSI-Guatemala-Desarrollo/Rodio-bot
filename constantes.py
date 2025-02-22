@@ -137,20 +137,19 @@ H_INTROD_COMPROBANTES_NO_PEDIDO = "7962407338"
 H_INTROD_COMPROBANTES_IVA = 15
 H_INTROD_COMPROBANTES_NO_DE_SERIE = "F48E8E98"
 
+H_INTROD_COMPROBANTES_NOMBRE_PDF = (
+    "comprobante test.pdf",
+    "factura test.pdf",
+    "oc test.pdf",
+    "f-2076264085 JORGE AUGUSTO, RODRIGUEZ GONZALEZ.pdf",
+    )
 
 H_INTROD_COMPROBANTES_PDF_PATH = (
     r"C:\Users\ads_edgar.menendez\Desktop\docs\comprobante",
     r"C:\Users\ads_edgar.menendez\Desktop\docs\facturas",
     r"C:\Users\ads_edgar.menendez\Desktop\docs\oc",
     r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_iva",
-    #r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr", # Esta linea solo se utiliza en el caso 2.
-    )
-
-H_INTROD_COMPROBANTES_NOMBRE_PDF = (
-    "comprobante test.pdf",
-    "factura test.pdf",
-    "oc test.pdf",
-    "f-2076264085 JORGE AUGUSTO, RODRIGUEZ GONZALEZ.pdf",
+    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr", # Esta linea solo se utiliza en el caso 2.
     )
 
 H_INTROD_COMPROBANTES_NOMBRE_PROVEEDOR = "JORGE AUGUSTO, RODRIGUEZ GONZALEZ"

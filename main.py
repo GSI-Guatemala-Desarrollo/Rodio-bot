@@ -78,16 +78,6 @@ from constantes import (
 )
 
 
-
-
-# -x-x-x- CONFIGURACIÓN LOGGING Y DRIVER -x-x-x-
-
-#driver = configurar_driver()  # Configurar el driver primero
-#configurar_logging(driver)  # Pasar el driver al CriticalHandler
-
-
-
-
 # -x-x-x- INICIO AUTOMATIZACIÓN -x-x-x-
 
 # Órdenes de compra
