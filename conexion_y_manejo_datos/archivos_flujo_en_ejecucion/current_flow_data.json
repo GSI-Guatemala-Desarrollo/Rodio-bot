@@ -1,0 +1,627 @@
+{
+    "code": 0,
+    "data": {
+        "_id": "67a4f4f597d02bd450ba5f66",
+        "name": "Pantalla Resumen Bot",
+        "type": "form",
+        "finishedStages": [
+            {
+                "stageId": "6786c8430fae253008de920f",
+                "name": "Recepci\u00f3n de Facturas",
+                "finishedDate": "2025-04-16T20:22:49.046Z",
+                "type": "form",
+                "data": [
+                    {
+                        "name": "Datos Proveedor",
+                        "metadata": {},
+                        "rows": [
+                            [
+                                {
+                                    "name": "Numeraci\u00f3n Autom\u00e1tica",
+                                    "values": [
+                                        "GT00000206"
+                                    ]
+                                },
+                                {
+                                    "name": "ID Proveedor",
+                                    "values": [
+                                        "34"
+                                    ]
+                                },
+                                {
+                                    "name": "Nombre Proveedor",
+                                    "values": [
+                                        "GBARRERA, S.A."
+                                    ]
+                                },
+                                {
+                                    "name": "Fecha de Creaci\u00f3n",
+                                    "values": [
+                                        "2025-04-16"
+                                    ]
+                                },
+                                {
+                                    "name": "Moneda",
+                                    "values": [
+                                        "GTQ"
+                                    ]
+                                },
+                                {
+                                    "name": "NIT",
+                                    "values": [
+                                        "10504892"
+                                    ]
+                                },
+                                {
+                                    "name": "Aplica Retenci\u00f3n ISR",
+                                    "values": [
+                                        "SI APLICA"
+                                    ]
+                                },
+                                {
+                                    "name": "Categorizaci\u00f3n de Proveedor",
+                                    "values": [
+                                        "1. REGIMEN OPCIONAL SIMPLIFICADO SOBRE INGRESOS DE ACTIVIDADES LUCRATIVAS"
+                                    ]
+                                },
+                                {
+                                    "name": "Clasificaci\u00f3n de Renta",
+                                    "values": [
+                                        "2. Materias Primas"
+                                    ]
+                                },
+                                {
+                                    "name": "% Retenci\u00f3n IVA",
+                                    "values": [
+                                        15
+                                    ]
+                                },
+                                {
+                                    "name": "Tipo de Contribuyente",
+                                    "values": [
+                                        "GEN"
+                                    ]
+                                },
+                                {
+                                    "name": "Tipo Retenci\u00f3n",
+                                    "values": [
+                                        "RETENISR ROSSI"
+                                    ]
+                                },
+                                {
+                                    "name": "Correo Electr\u00f3nico Proveedor",
+                                    "values": [
+                                        "giraheta@ufm.edu"
+                                    ]
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        "name": "Datos de la Orden de Compra",
+                        "metadata": {},
+                        "rows": [
+                            [
+                                {
+                                    "name": "Tipo de Documento",
+                                    "values": [
+                                        "Orden de Compra"
+                                    ]
+                                },
+                                {
+                                    "name": "N\u00famero de Orden de compra",
+                                    "values": [
+                                        "7962502143"
+                                    ]
+                                },
+                                {
+                                    "name": "Fecha de Orden de compra",
+                                    "values": [
+                                        "07-Abr-2025"
+                                    ]
+                                },
+                                {
+                                    "name": "Monto OC sin IVA",
+                                    "values": [
+                                        "4500"
+                                    ]
+                                },
+                                {
+                                    "name": "Monto OC con IVA",
+                                    "values": [
+                                        5040.000000000001
+                                    ]
+                                },
+                                {
+                                    "name": "IVA",
+                                    "values": [
+                                        540
+                                    ]
+                                },
+                                {
+                                    "name": "Documento",
+                                    "values": [
+                                        "du:67f9bc5311ad43c9c5b1a9c9"
+                                    ]
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        "name": "Datos de la Factura",
+                        "metadata": {},
+                        "rows": [
+                            [
+                                {
+                                    "name": "Tipo de Documento Fiscal",
+                                    "values": [
+                                        "Preimpreso"
+                                    ]
+                                },
+                                {
+                                    "name": "Tipo Documento Tributario",
+                                    "values": [
+                                        "Factura"
+                                    ]
+                                },
+                                {
+                                    "name": "N\u00famero Factura",
+                                    "values": [
+                                        "456"
+                                    ]
+                                },
+                                {
+                                    "name": "Serie Factura",
+                                    "values": [
+                                        "123"
+                                    ]
+                                },
+                                {
+                                    "name": "Fecha de Factura",
+                                    "values": [
+                                        "2025-04-15"
+                                    ]
+                                },
+                                {
+                                    "name": "Monto Factura sin IVA",
+                                    "values": [
+                                        "4500"
+                                    ]
+                                },
+                                {
+                                    "name": "Monto Factura con IVA",
+                                    "values": [
+                                        5040.000000000001
+                                    ]
+                                },
+                                {
+                                    "name": "IVA",
+                                    "values": [
+                                        540
+                                    ]
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        "name": "Factura",
+                        "metadata": {
+                            "documenttype": "6776d8276f8936e4102561b1"
+                        },
+                        "rows": [
+                            [
+                                {
+                                    "name": "ID proveedor",
+                                    "values": [
+                                        "34"
+                                    ]
+                                },
+                                {
+                                    "name": "Nombre Proveedor",
+                                    "values": [
+                                        "GBARRERA, S.A."
+                                    ]
+                                },
+                                {
+                                    "name": "Fecha de Factura",
+                                    "values": [
+                                        "2025-04-15"
+                                    ]
+                                },
+                                {
+                                    "name": "Serie Factura",
+                                    "values": [
+                                        "123"
+                                    ]
+                                },
+                                {
+                                    "name": "N\u00famero Factura",
+                                    "values": [
+                                        "456"
+                                    ]
+                                },
+                                {
+                                    "name": "Cargar Documento",
+                                    "values": [
+                                        [
+                                            "https://gsigutemalagroupdiag.blob.core.windows.net/ekrxlusrlrjnf7sohug0/6786c8430fae253008de920f/1744834968/IMG_4488_237.jpeg"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "name": "Numeraci\u00f3n Autom\u00e1tica",
+                                    "values": [
+                                        "GT00000206"
+                                    ]
+                                }
+                            ]
+                        ]
+                    },
+                    {
+                        "name": "Comprobante de Entrega",
+                        "metadata": {
+                            "documenttype": "6786d4bb619359f7cdec72dc"
+                        },
+                        "rows": [
+                            [
+                                {
+                                    "name": "ID proveedor",
+                                    "values": [
+                                        "34"
+                                    ]
+                                },
+                                {
+                                    "name": "Nombre Proveedor",
+                                    "values": [
+                                        "GBARRERA, S.A."
+                                    ]
+                                },
+                                {
+                                    "name": "N\u00famero de Orden de Compra",
+                                    "values": [
+                                        "7962502143"
+                                    ]
+                                },
+                                {
+                                    "name": "N\u00famero Factura",
+                                    "values": [
+                                        "456"
+                                    ]
+                                },
+                                {
+                                    "name": "Serie Factura",
+                                    "values": [
+                                        "123"
+                                    ]
+                                },
+                                {
+                                    "name": "Cargar Documento",
+                                    "values": [
+                                        [
+                                            "https://gsigutemalagroupdiag.blob.core.windows.net/ekrxlusrlrjnf7sohug0/6786c8430fae253008de920f/1744834968/IMG_4491_665.jpeg"
+                                        ]
+                                    ]
+                                },
+                                {
+                                    "name": "Numeraci\u00f3n Autom\u00e1tica",
+                                    "values": [
+                                        "GT00000206"
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            },
+            {
+                "stageId": "67d33a68b64dc6225f6d0558",
+                "name": "Cambio de descripci\u00f3n",
+                "finishedDate": "2025-04-16T20:22:49.066Z",
+                "type": "operation",
+                "data": {}
+            },
+            {
+                "stageId": "6786c8530fae253008de9210",
+                "name": "Decisi\u00f3n OC - FACTURA",
+                "finishedDate": "2025-04-16T20:22:49.087Z",
+                "type": "operation",
+                "data": {}
+            },
+            {
+                "stageId": "67a4e18497d02bd450ba5f53",
+                "name": null,
+                "finishedDate": "2025-04-16T20:23:57.014Z",
+                "type": "form",
+                "data": [
+                    {
+                        "name": "Aprobado para generar Contrase\u00f1a de Pago",
+                        "metadata": {},
+                        "rows": [
+                            [
+                                {
+                                    "name": "Usuario Aprobador",
+                                    "values": [
+                                        "Lourdes Martinez"
+                                    ]
+                                },
+                                {
+                                    "name": "Fecha Recepci\u00f3n",
+                                    "values": [
+                                        "2025-04-16"
+                                    ]
+                                },
+                                {
+                                    "name": "Correo Notificacion",
+                                    "values": [
+                                        "lmartinez@e-gsi.net"
+                                    ]
+                                },
+                                {
+                                    "name": "C\u00f3digo de Obra",
+                                    "values": [
+                                        "G831"
+                                    ]
+                                },
+                                {
+                                    "name": "Empresa que paga",
+                                    "values": [
+                                        "Rodio Swissboring Guatemala, S.A."
+                                    ]
+                                },
+                                {
+                                    "name": "\u00bfAprobado?",
+                                    "values": [
+                                        "S\u00ed"
+                                    ]
+                                },
+                                {
+                                    "name": "Comentario",
+                                    "values": [
+                                        "Todo ok"
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            },
+            {
+                "stageId": "67a4e73a97d02bd450ba5f54",
+                "name": "Regla: Generar Contrase\u00f1a de Pago",
+                "finishedDate": "2025-04-16T20:23:57.032Z",
+                "type": "operation",
+                "data": {}
+            },
+            {
+                "stageId": "67d0bbdbb64dc6225f6d0520",
+                "name": "Confirmar Fecha de Pago",
+                "finishedDate": "2025-04-16T20:24:04.388Z",
+                "type": "form",
+                "data": [
+                    {
+                        "name": "Confirmar Fecha de Pago",
+                        "metadata": {},
+                        "rows": [
+                            [
+                                {
+                                    "name": "Fecha Recepci\u00f3n",
+                                    "values": [
+                                        "2025-04-16"
+                                    ]
+                                },
+                                {
+                                    "name": "Fecha de Pago",
+                                    "values": [
+                                        "2025-05-16"
+                                    ]
+                                }
+                            ]
+                        ]
+                    }
+                ]
+            },
+            {
+                "stageId": "6787ddafd629221621d5fc92",
+                "name": "Generar Contrase\u00f1a de Pago",
+                "finishedDate": "2025-04-16T20:24:05.355Z",
+                "type": "operation",
+                "data": {
+                    "document": "https://gsigutemalagroupdiag.blob.core.windows.net/ekrxlusrlrjnf7sohug0//67993a238a5ca3a85a55a6a0/1744835045/Documento_generado_58.pdf"
+                }
+            },
+            {
+                "stageId": "6787d7b5d629221621d5fc91",
+                "name": "Notificaci\u00f3n de Recepci\u00f3n Manual",
+                "finishedDate": "2025-04-16T20:24:07.276Z",
+                "type": "operation",
+                "data": {
+                    "emails": [
+                        "giraheta@ufm.edu"
+                    ]
+                }
+            },
+            {
+                "stageId": "67a4e11997d02bd450ba5f52",
+                "name": "Regla: Aplica Etapa Bot",
+                "finishedDate": "2025-04-16T20:24:07.301Z",
+                "type": "operation",
+                "data": {}
+            }
+        ],
+        "data": {
+            "sections": [
+                {
+                    "name": "Datos para Ejecuci\u00f3n",
+                    "fields": [
+                        {
+                            "name": "numeracion_automatica",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "GT00000206"
+                        },
+                        {
+                            "name": "  flujo_contribuyente",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "GEN"
+                        },
+                        {
+                            "name": "declara_isr",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "SI APLICA"
+                        },
+                        {
+                            "name": "tipo_retencion",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "RETENISR ROSSI"
+                        },
+                        {
+                            "name": " h_recepciones_id_oc",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "7962502143"
+                        },
+                        {
+                            "name": "s_emision_constancias_nit_retenido",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "10504892"
+                        },
+                        {
+                            "name": "s_emision_constancias_serie_de_factura",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "123"
+                        },
+                        {
+                            "name": " s_emision_constancias_no_de_factura",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "456"
+                        },
+                        {
+                            "name": "s_emision_constancias_nombre_proveedor",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "GBARRERA, S.A."
+                        },
+                        {
+                            "name": "s_emision_constancias_fecha_factura",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "2025-04-15"
+                        },
+                        {
+                            "name": "h_introd_comprobantes_id_proveedor",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "34"
+                        },
+                        {
+                            "name": "h_introd_comprobantes_no_pedido",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "7962502143"
+                        },
+                        {
+                            "name": "h_introd_comprobantes_iva",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": 15
+                        },
+                        {
+                            "name": "h_introd_comprobantes_comentario",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "GT00000206/7962502143/G831/GBARRERA, S.A./"
+                        },
+                        {
+                            "name": "h_introd_comprobantes_lista_descripciones",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "{\"COMENTARIO\":[[\"3.437,50\",\"PARAL DE MADERA DE 2\\\" X 3\\\" X 10'\"],[\"5.125,00\",\"PARAL DE MADERA DE 3\\\" X 3\\\" X 10'\"],[\"5.892,86\",\"TABLON DE MADERA DE 2\\\" X 12\\\" X 10'\"],[\"2.357,14\",\"TABLAS DE MADERA DE 1\\\" X 12\\\" X 10'\"]],\"ORDEN_DE_COMPRA\":\"7962502143\",\"Fecha_OC\":\"07-Abr-2025\",\"PROVEEDOR\":\"DINAEL ERNESTO GONZALEZ ROSARIO\",\"ID_Fiscal\":\"57033730\",\"CODIGO_OBRA\":\"G831\"}"
+                        },
+                        {
+                            "name": "categoria_de_rentas_opcion_categoria_de_renta",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "2. Materias Primas"
+                        },
+                        {
+                            "name": "categoria_de_rentas_opcion_regimen",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "1. REGIMEN OPCIONAL SIMPLIFICADO SOBRE INGRESOS DE ACTIVIDADES LUCRATIVAS"
+                        },
+                        {
+                            "name": "fecha_pago",
+                            "required": true,
+                            "disabled": true,
+                            "props": {
+                                "type": "text"
+                            },
+                            "defaultValue": "2025-05-16"
+                        }
+                    ],
+                    "metadata": {},
+                    "displayType": "form"
+                }
+            ]
+        },
+        "assigned": true,
+        "token": "flow_form_eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZF91c2VyIjoieVZ5UEJ5cTl3OUlxWGJxczBpNzMiLCJmbG93SWQiOiI2ODAwMTE5NTRlOTZmZGIwODE5NzU0YzEiLCJpYXQiOjE3NDUwMDU1MzEsImV4cCI6MTc0NTAwOTEzMX0.eJbhfJ6dsx1WMafQ-3al0-23DN3u0bMNPB6BTLqBg4Q"
+    }
+}

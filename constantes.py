@@ -3,7 +3,12 @@ from dotenv import load_dotenv
 
 # Cargar las variables del archivo .env
 load_dotenv()
-NUMERO_CASO = "TEST"
+NUMERO_CASO = "CT-134055"
+# -x-x-x- DATOS GENERALES -x-x-x-
+# Directorios específicos para cada tipo de documento
+DIRECTORIO_COMPROBANTE = r"C:\Users\Kev\Desktop\docs\comprobante"
+DIRECTORIO_FACTURA = r"C:\Users\Kev\Desktop\docs\facturas"
+DIRECTORIO_LOGS = r"C:\Users\Kev\Desktop\RPA\auto-SAT\logs"
 
 # -x-x-x- DATOS SAT -x-x-x-
 
@@ -21,29 +26,29 @@ SAT_USER_PASSWORD = os.getenv("SAT_PASSWORD", "")
 # BRAVE_BINARY_PATH = "/snap/brave/current/opt/brave.com/brave/brave-browser"
 
 # Windows
-CHROMEDRIVER_PATH = r"C:\Users\ads_edgar.menendez\Desktop\RPA\auto-SAT\drivers\chromedriver.exe"
+CHROMEDRIVER_PATH = r"C:\Users\Kev\Desktop\RPA\auto-SAT\drivers\chromedriver.exe"
 BRAVE_BINARY_PATH = r"C:\Program Files\BraveSoftware\Brave-Browser\Application\brave.exe"
 
 
 # -x- modulo_emision_constancias_de_retencion.py (Facturas) -x-
 
-S_EMISION_CONSTANCIAS_EMISION_DEL = "" # Opcional
+S_EMISION_CONSTANCIAS_EMISION_DEL = "01/02/2025" # Opcional
 S_EMISION_CONSTANCIAS_EMISION_AL = "" # Opcional
 S_EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA_IVA = 1
 S_EMISION_CONSTANCIAS_REGIMEN_GEN = 1
 S_EMISION_CONSTANCIAS_TIPO_DOCUMENTO = 1
-S_EMISION_CONSTANCIAS_NIT_RETENIDO = ""
+S_EMISION_CONSTANCIAS_NIT_RETENIDO = "96502185"
 S_EMISION_CONSTANCIAS_NO_AUTORIZACION_FEL = "" # Opcional
 S_EMISION_CONSTANCIAS_SERIE_DE_FACTURA = "" # Opcional
-S_EMISION_CONSTANCIAS_NO_DE_FACTURA = ""
-S_EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS = r"C:\Users\ads_edgar.menendez\Downloads"
-S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_IVA = r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_iva" # Constancia IVA
-S_EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR = "JORGE AUGUSTO, RODRIGUEZ GONZALEZ"
-S_EMISION_CONSTANCIAS_FECHA_FACTURA = "14/01/2025" # Formato español: dd/mm/yyyy
+S_EMISION_CONSTANCIAS_NO_DE_FACTURA = "2502053371"
+S_EMISION_CONSTANCIAS_DIRECTORIO_DESCARGAS = r"C:\Users\Kev\Downloads"
+S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_IVA = r"C:\Users\Kev\Desktop\docs\constancia_iva" # Constancia IVA
+S_EMISION_CONSTANCIAS_NOMBRE_PROVEEDOR = "TECNOLOGIA INDUSTRIAL DE GUATEMALA"
+S_EMISION_CONSTANCIAS_FECHA_FACTURA = "25/02/2025" # Formato español: dd/mm/yyyy
 
 # Datos de prueba que cambian luego para el caso 2, despúes de terminar la asignación de categoría se vuelve a generar la retención pero del ISR en lugar del IVA.
 S_EMISION_CONSTANCIAS_RETENCIONES_QUE_DECLARA_ISR = 2
-S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_ISR = r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr" # Constancia ISR
+S_EMISION_CONSTANCIAS_DIRECTORIO_FACTURAS_ISR = r"C:\Users\Kev\Desktop\docs\constancia_isr" # Constancia ISR
 
 # Datos de prueba que cambian luego para el caso 3 (pequeño contribuyente).
 S_EMISION_CONSTANCIAS_REGIMEN_PEQ = 2
@@ -53,11 +58,11 @@ S_EMISION_CONSTANCIAS_REGIMEN_PEQ = 2
 
 S_CATEGORIA_DE_RENTAS_PERIODO_DEL = "" # Opcional
 S_CATEGORIA_DE_RENTAS_PERIODO_AL = "" # Opcional
-S_CATEGORIA_DE_RENTAS_NIT_RETENIDO = "17047455"
+S_CATEGORIA_DE_RENTAS_NIT_RETENIDO = "96502185"
 S_CATEGORIA_DE_RENTAS_ESTADO_DE_ASIGNACION = 1
-S_CATEGORIA_DE_RENTAS_NO_DE_FACTURA = "2076264085"
+S_CATEGORIA_DE_RENTAS_NO_DE_FACTURA = "2502053371"
 S_CATEGORIA_DE_RENTAS_OPCION_CATEGORIA_DE_RENTA = 1
-S_CATEGORIA_DE_RENTAS_OPCION_REGIMEN = 9
+S_CATEGORIA_DE_RENTAS_OPCION_REGIMEN = 10
 
 # opciones de S_CATEGORIA_DE_RENTAS_OPCION_CATEGORIA_DE_RENTA, colocar en la variable el numero correspondiente.
 """
@@ -145,11 +150,11 @@ H_INTROD_COMPROBANTES_NOMBRE_PDF = (
     )
 
 H_INTROD_COMPROBANTES_PDF_PATH = (
-    r"C:\Users\ads_edgar.menendez\Desktop\docs\comprobante",
-    r"C:\Users\ads_edgar.menendez\Desktop\docs\facturas",
-    r"C:\Users\ads_edgar.menendez\Desktop\docs\oc",
-    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_iva",
-    r"C:\Users\ads_edgar.menendez\Desktop\docs\constancia_isr", # Esta linea solo se utiliza en el caso 2.
+    r"C:\Users\Kev\Desktop\docs\comprobante",
+    r"C:\Users\Kev\Desktop\docs\facturas",
+    #r"C:\Users\Kev\Desktop\docs\oc",
+    r"C:\Users\Kev\Desktop\docs\constancia_iva",
+    #r"C:\Users\Kev\Desktop\docs\constancia_isr", # Esta linea solo se utiliza en el caso 2.
     )
 
 H_INTROD_COMPROBANTES_NOMBRE_PROVEEDOR = "JORGE AUGUSTO, RODRIGUEZ GONZALEZ"
@@ -176,10 +181,10 @@ CAMI_USER_EMAIL = os.getenv("CAMI_USER", "")
 CAMI_USER_PASSWORD = os.getenv("CAMI_PASSWORD", "")
 
 # URL de la APP (aqui se cambia de test a app si es necesario)
-CAMI_URL = "https://test.camiapp.net/"
+CAMI_URL = "https://next.camiapp.net/"
 
 # Nombre de la empresa a la que se quiere ingresar después del login
-CAMI_NOMBRE_EMPRESA = "QA Cami"
+CAMI_NOMBRE_EMPRESA = "Rodio Swissboring"
 
 
 # -x- TRAB_INSERCION_DOCS -x-

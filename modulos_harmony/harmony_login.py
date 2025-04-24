@@ -37,11 +37,11 @@ def harmony_dirigir_a_pagina_y_verificar_estado_login(driver, max_retries=3):
             logging.error(f"La página no cargó dentro de 6s. Reintento {reintento}/{max_retries}...")
 
             if reintento == max_retries:
-                logging.critical("La página no cargó tras múltiples reintentos. Abortando proceso.")
+                logging.critical("HARMONY - La página no cargó tras múltiples reintentos. Abortando proceso.")
                 return  # o lanzar una excepción, dependiendo de tu flujo
 
     # (Opcional) restaurar un page_load_timeout más largo para pasos posteriores
-    driver.set_page_load_timeout(10)
+    driver.set_page_load_timeout(20)
 
     # Verificar si requiere inicio de sesión
     if "login" in driver.current_url.lower():
@@ -59,7 +59,7 @@ def harmony_login(driver, username, password):
     try:
         logging.info("\n\n\n-x-x-x- (PASOS 2-3) harmony_login -x-x-x-\n")
         logging.info("Realizando inicio de sesión en Harmony...")
-        wait = WebDriverWait(driver, 10)
+        wait = WebDriverWait(driver, 20)
 
         # 1. Esperar a que aparezcan los campos de usuario/contraseña
         username_input = wait.until(
@@ -81,13 +81,7 @@ def harmony_login(driver, username, password):
             )
             logging.info("Inicio de sesión exitoso.")
         except TimeoutException:
-            logging.critical(
-                "Error de inicio de sesión: La página tardó demasiado en redirigir. "
-                "Revise la conexión o las credenciales."
-            )
+            logging.critical("HARMONY - Error de inicio de sesión: La página tardó demasiado en redirigir. Revise la conexión o las credenciales.")
 
     except Exception as e:
-        logging.critical(
-            f"Error inesperado durante el inicio de sesión: {e}", 
-            exc_info=True
-        )
+        logging.critical(f"HARMONY - Error inesperado durante el inicio de sesión: {e}", exc_info=True)

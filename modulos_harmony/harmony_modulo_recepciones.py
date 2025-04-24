@@ -48,8 +48,7 @@ def harmony_recepciones_agregar_valor_y_busqueda_oc(driver, h_recepciones_uni_po
         found_input = False
         while True:
             if time.time() - start_time > 30:
-                logging.critical(
-                    "No se encontró el campo 'PO_PICK_ORD_WRK_ORDER_ID' antes de 30s. Abortando flujo."
+                logging.critical("HARMONY - No se encontró el campo 'PO_PICK_ORD_WRK_ORDER_ID' antes de 30s. Abortando flujo."
                 )
                 return
 
@@ -68,8 +67,7 @@ def harmony_recepciones_agregar_valor_y_busqueda_oc(driver, h_recepciones_uni_po
 
         # Continúa solo si se encontró el input
         if not found_input:
-            logging.critical(
-                "No se pudo llenar el campo 'PO_PICK_ORD_WRK_ORDER_ID'. Se detiene la ejecución."
+            logging.critical("HARMONY - No se pudo llenar el campo 'PO_PICK_ORD_WRK_ORDER_ID'. Se detiene la ejecución."
             )
             return
 

@@ -376,7 +376,7 @@ def sat_emision_constancias_de_retencion_busqueda_parametros(
 
     while True:
         if time.time() - start_time > 15:
-            logging.critical("No se encontró el div 'formContent:pnlFacturas' antes de 15s. Abortando.")
+            logging.critical("SAT - No se encontró el div 'formContent:pnlFacturas' antes de 15s. Finalizando flujo, revise los datos.")
             return
         try:
             # Verificar si el div aparece y está visible
@@ -391,7 +391,7 @@ def sat_emision_constancias_de_retencion_busqueda_parametros(
         time.sleep(1)
 
     if not found_div:
-        logging.critical("No se encontró el div 'formContent:pnlFacturas'. Se detiene la ejecución.")
+        logging.critical("SAT - No se encontró el div 'formContent:pnlFacturas'. Se detiene la ejecución. Revise los datos ingresados.")
         return
     
 
@@ -424,7 +424,7 @@ def sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_
                 )
                 logging.info("Segundo checkbox localizado.")
             except Exception as e:
-                logging.critical("No se pudo localizar ningún checkbox en la tabla, revise que la factura exista para crear una retención o que los parametros ingresados sean correctos para la búsqueda.")
+                logging.critical("SAT - No se pudo localizar ningún checkbox en la tabla, revise que la factura exista para crear una retención o que los parametros ingresados sean correctos para la búsqueda.")
                 raise e  # Detiene el flujo lanzando el error
 
 

@@ -112,7 +112,7 @@ def harmony_introd_comprobantes_copiar_documento(
 
         while True:
             if (time.time() - start_time) > timeout_segundos:
-                logging.critical("No apareció 'win0divVOUCHER_BUSINESS_UNIT' antes de timeout. Abortando flujo.")
+                logging.critical("HARMONY - No apareció 'win0divVOUCHER_BUSINESS_UNIT' antes de timeout. Abortando flujo.")
                 return 
             
             try:

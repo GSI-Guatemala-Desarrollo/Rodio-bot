@@ -34,11 +34,6 @@ from modulos_harmony.harmony_modulo_introd_comprobantes import (
     harmony_introd_comprobantes_pagos_y_retencion,
     )
 
-# Imports Cami
-from modulos_cami.cami_login import cami_dirigir_a_pagina_y_verificar_estado_login
-from modulos_cami.cami_navegar_a_modulo import cami_navegar_a_modulo
-
-
 #          -x-x- FLUJOS -x-x-
 
 # Flujo Ordenes de compra: Harmony
@@ -72,6 +67,7 @@ def recepcion_OC (
 
 # Flujo Caso 1: SAT-Harmony-CAMI
 def caso_1_reten_IVA_GEN (
+    driver,
     numero_caso, # Usuario
     # Valores SAT            
     s_emision_constancias_emision_del,
@@ -119,12 +115,12 @@ def caso_1_reten_IVA_GEN (
         intento_login += 1
 
 # --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
-        driver = configurar_driver() # Configurar el driver primero
-        configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
+       #driver = configurar_driver() # Configurar el driver primero
+        #configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
         logging.info(f"==== Intento de login #{intento_login} para SAT ====")
 
 # --------------------- Caso 1 - Funciones SAT ---------------------
-    """
+    
         try:
             # Pasos 1-3
             sat_dirigir_a_pagina_y_verificar_estado_login(driver)
@@ -134,15 +130,16 @@ def caso_1_reten_IVA_GEN (
             finalizar_automatizacion(driver)
 
             if intento_login == MAX_INTENTOS_LOGIN:
-                logging.error("Se alcanzó el máximo de intentos de login. Abortando el flujo.")
+                logging.error("Se alcanzó el máximo de intentos de login. Abortando el flujo. Revise estado de la página SAT")
                 return
     # Pasos 4-7
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")
     # Pasos 8-10
     sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
-    """
+    numero_retencion_iva = sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
+    h_introd_comprobantes_nombre_pdf = h_introd_comprobantes_nombre_pdf + (numero_retencion_iva,)
+    
 # --------------------- Caso 1 - Funciones Harmony ---------------------
     # Paso 1
     harmony_dirigir_a_pagina_y_verificar_estado_login(driver)
@@ -155,28 +152,21 @@ def caso_1_reten_IVA_GEN (
     # Pasos 7-8
     harmony_introd_comprobantes_anexar_documento_y_comentario(driver, h_introd_comprobantes_pdf_path, h_introd_comprobantes_nombre_pdf, h_introd_comprobantes_no_de_factura, h_introd_comprobantes_nombre_proveedor, h_introd_comprobantes_comentario)
     # Pasos 9-10
-    """
+    
     harmony_introd_comprobantes_pagos_y_retencion(driver, h_introd_comprobantes_fecha_factura, h_introd_comprobantes_lista_impt_base_retencion_sust, h_introd_comprobantes_lista_porcentaje_retencion)
     # Pasos 11-12
     harmony_introd_comprobantes_descripcion_e_iva(driver, h_introd_comprobantes_lista_descripciones, h_introd_comprobantes_lista_iva)
     # Paso 13
     # harmony_introd_comprobantes_guardar(driver) # Comentar la llamada a esta funcion en caso de pruebas para que no realice los cambios en harmony.
-
-
-# --------------------- Caso 1 - Funciones Cami ---------------------
-    # Pasos
-    cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
-    # Pasos
-    cami_navegar_a_modulo(driver, "Relaciones Comerciales")
-    """
-    
     
 # --------------------- Fin Automatización ---------------------
-    finalizar_automatizacion(driver)
+    if driver.service.process is not None:  # Solo cerrar si el proceso sigue activo
+        finalizar_automatizacion(driver)
 
 
 # Flujo Caso 2: SAT-Harmony-CAMI
 def caso_2_reten_IVA_e_ISR (
+    driver,
     numero_caso, # Usuario
     # Variables pasos 1-18
     s_emision_constancias_emision_del,
@@ -199,7 +189,7 @@ def caso_2_reten_IVA_e_ISR (
     categoria_de_rentas_periodo_al,
     categoria_de_rentas_estado_de_asignacion,
     categoria_de_rentas_no_de_factura, # Repetido
-    categoria_de_rentas_opcion_categoria_de_renta, # Usuario (lista)
+    categoria_de_rentas_opcion_categoria_de_renta, # Usuario
     categoria_de_rentas_opcion_regimen, # Usuario
     
     # Variables pasos 30-...
@@ -238,8 +228,8 @@ def caso_2_reten_IVA_e_ISR (
         intento_login += 1
 
 # --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
-        driver = configurar_driver() # Configurar el driver primero
-        configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
+        #driver = configurar_driver() # Configurar el driver primero
+        #configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
         logging.info(f"==== Intento de login #{intento_login} para SAT ====")
 
 # --------------------- Caso 1 - Funciones SAT ---------------------
@@ -259,8 +249,8 @@ def caso_2_reten_IVA_e_ISR (
     # Pasos 8-10
     sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_gen, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18 (Sin impresión)
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
-    
+    numero_retencion_iva = sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
+    h_introd_comprobantes_nombre_pdf = h_introd_comprobantes_nombre_pdf + (numero_retencion_iva,)
 
 
     # Pasos 19-22
@@ -300,20 +290,14 @@ def caso_2_reten_IVA_e_ISR (
     # Paso 13
     # harmony_introd_comprobantes_guardar(driver) # Comentar la llamada a esta funcion en caso de pruebas para que no realice los cambios en harmony.
 
-    
-# --------------------- Caso 2 - Funciones Cami ---------------------
-    # Pasos
-    cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
-    # Pasos
-    cami_navegar_a_modulo(driver, "Relaciones Comerciales")
-
-
 # --------------------- Fin Automatización ---------------------
-    finalizar_automatizacion(driver)
+    if driver.service.process is not None:  # Solo cerrar si el proceso sigue activo
+        finalizar_automatizacion(driver)
 
 
 # Flujo Caso 3: SAT-Harmony-CAMI
 def caso_3_reten_IVA_PEQ (
+    driver,
     numero_caso, # Usuario
     # Valores SAT
     s_emision_constancias_emision_del,
@@ -362,8 +346,8 @@ def caso_3_reten_IVA_PEQ (
         intento_login += 1
 
 # --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
-        driver = configurar_driver() # Configurar el driver primero
-        configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
+        #driver = configurar_driver() # Configurar el driver primero
+        #configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
         logging.info(f"==== Intento de login #{intento_login} para SAT ====")
 
 # --------------------- Caso 1 - Funciones SAT ---------------------
@@ -383,8 +367,8 @@ def caso_3_reten_IVA_PEQ (
     # Pasos 8-10 (Cambiar gen por peq en constantes antes de ejecutar caso 3 completo)
     sat_emision_constancias_de_retencion_busqueda_parametros(driver, s_emision_constancias_emision_del, s_emision_constancias_emision_al, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_regimen_peq, s_emision_constancias_tipo_documento, s_emision_constancias_nit_retenido, s_emision_constancias_no_autorizacion_fel, s_emision_constancias_serie_de_factura, s_emision_constancias_no_de_factura)
     # Pasos 11-18
-    sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
-
+    numero_retencion_iva = sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf(driver, s_emision_constancias_retenciones_que_declara_iva, s_emision_constancias_directorio_descargas, s_emision_constancias_directorio_facturas_iva, s_emision_constancias_nombre_proveedor, s_emision_constancias_no_de_factura, s_emision_constancias_fecha_factura)
+    h_introd_comprobantes_nombre_pdf = h_introd_comprobantes_nombre_pdf + (numero_retencion_iva,)
 
 # --------------------- Caso 3 - Funciones Harmony ---------------------
     # Paso 1
@@ -406,13 +390,6 @@ def caso_3_reten_IVA_PEQ (
     # Paso 13
     # harmony_introd_comprobantes_guardar(driver) # Comentar la llamada a esta funcion en caso de pruebas para que no realice los cambios en harmony.
 
-    
-# --------------------- Caso 3 - Funciones Cami ---------------------
-    # Pasos
-    cami_dirigir_a_pagina_y_verificar_estado_login(driver, cami_nombre_empresa)
-    # Pasos
-    cami_navegar_a_modulo(driver, "Relaciones Comerciales")
-
-
 # --------------------- Fin Automatización ---------------------
-    finalizar_automatizacion(driver)
+    if driver.service.process is not None:  # Solo cerrar si el proceso sigue activo
+        finalizar_automatizacion(driver)

@@ -21,8 +21,7 @@ def harmony_navegar_a_modulo(driver, indices):
 
     while True:
         if time.time() - start_time > 30:
-            logging.critical(
-                "No se encontró el h2 'ptpgltlbl_MENU' antes de 30s. Abortando flujo."
+            logging.critical("HARMONY - No se encontró el h2 'ptpgltlbl_MENU' antes de 30s. Abortando flujo."
             )
             return  # o raise, según tu manejo de errores
         try:
@@ -39,8 +38,7 @@ def harmony_navegar_a_modulo(driver, indices):
         time.sleep(1)
 
     if not found_menu_header:
-        logging.critical(
-            "No se encontró el h2 'ptpgltlbl_MENU'. Se detiene la ejecución."
+        logging.critical("HARMONY - No se encontró el h2 'ptpgltlbl_MENU'. Se detiene la ejecución."
         )
         return
 
@@ -109,4 +107,4 @@ def harmony_navegar_a_modulo(driver, indices):
                     return
 
     except Exception as e:
-        logging.critical(f"Error al navegar por los módulos: {e}")
+        logging.critical(f"HARMONY - Error al navegar por los módulos: {e}")

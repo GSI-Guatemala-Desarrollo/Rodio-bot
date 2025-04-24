@@ -14,8 +14,9 @@ from constantes import (
 
 # -x-x-x- INICIO CONFIGURACIÓN -x-x-x-
 
+"""
 class CriticalHandler(logging.Handler):
-    """Detiene la ejecución al detectar un log CRITICAL para que el bot no pueda continuar (p. e. cuando la factura no existe o no logró iniciar sesión)."""
+    #Detiene la ejecución al detectar un log CRITICAL para que el bot no pueda continuar (p. e. cuando la factura no existe o no logró iniciar sesión).
 
     def __init__(self, driver=None):
         super().__init__()
@@ -34,63 +35,90 @@ class CriticalHandler(logging.Handler):
             else:
                 print("Driver no disponible. Intenta verificar el flujo.")
             sys.exit(1)
+"""
+
+ultimo_mensaje_critico = ""
+
+
+class CriticalFlowError(Exception):
+    """Excepción para indicar que ocurrió un error crítico en el flujo."""
+    pass
+
+class CriticalHandler(logging.Handler):
+    """Maneja errores críticos, cierra el navegador y almacena el mensaje."""
+    def __init__(self, driver=None):
+        super().__init__()
+        self.driver = driver
+        self.closed = False  # Para evitar múltiples cierres
+
+    def emit(self, record):
+        global ultimo_mensaje_critico  # Usamos la variable global
+        if record.levelno == logging.CRITICAL:
+            ultimo_mensaje_critico = record.getMessage()  # Guarda el mensaje crítico
+            print(f"Se detectó un error crítico: {ultimo_mensaje_critico}. Cerrando el navegador...")
+
+            if self.driver and not self.closed:
+                try:
+                    self.driver.close()
+                    self.driver.quit()
+                    print("Navegador cerrado correctamente.")
+                    self.closed = True
+                except Exception as e:
+                    print(f"Error al cerrar el navegador: {e}")
+            
+            # raise CriticalFlowError("Error crítico detectado, flujo abortado.")
 
 def configurar_logging(driver=None, numero_caso="N/A"):
     """
-    Configura el logging para registrar mensajes en terminal y archivo.
-    Crea un archivo de log único por ejecución con un nombre basado en la fecha y hora,
-    e incluye el número de caso en el nombre del log.
-    
-    Args:
-        driver (WebDriver, opcional): Si se proporciona, se utilizará
-            para el CriticalHandler al manejar errores críticos.
-        numero_caso (str, opcional): Número o identificador del caso para
-            incluir en el nombre del archivo de log. Por defecto "N/A".
+    Configura el logging y guarda en ULTIMO_LOG_FILE y ULTIMO_LOG_TIMESTAMP
+    la ruta completa y el timestamp (YYYY-MM-DD_HH-MM) del archivo de log.
     """
+    global ULTIMO_LOG_FILE, ULTIMO_LOG_TIMESTAMP
 
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
 
-    # Formato del log
     formatter = logging.Formatter("%(asctime)s - %(levelname)s - %(message)s")
 
-    # Crear la carpeta 'logs' si no existe
-    logs_directory = "logs"
-    if not os.path.exists(logs_directory):
-        os.makedirs(logs_directory)
+    # Carpeta de logs
+    logs_directory = os.path.join(os.getcwd(), "logs")
+    os.makedirs(logs_directory, exist_ok=True)
 
-    # Generar nombre único para el archivo de log basado en fecha y hora
+    # Timestamp único
     timestamp = datetime.now().strftime("%Y-%m-%d_%H-%M")
+    ULTIMO_LOG_TIMESTAMP = timestamp  # Guardamos
+
+    # Nombre del log
     log_filename = os.path.join(
         logs_directory,
-        f"log_RPA_{numero_caso}_{timestamp}.log"  # Incluir numero_caso en el nombre
+        f"log_RPA_{numero_caso}_{timestamp}.log"
     )
+    ULTIMO_LOG_FILE = log_filename  # Guardamos
 
-    # Manejador para archivo
+    # File handler
     file_handler = logging.FileHandler(log_filename)
     file_handler.setLevel(logging.INFO)
     file_handler.setFormatter(formatter)
 
-    # Manejador para terminal
+    # Stream handler
     stream_handler = logging.StreamHandler()
     stream_handler.setLevel(logging.INFO)
     stream_handler.setFormatter(formatter)
 
-    # Limpiar manejadores existentes (evitar duplicados)
+    # Limpiamos handlers previos
     if logger.hasHandlers():
         logger.handlers.clear()
-
-    # Agregar manejadores
     logger.addHandler(file_handler)
     logger.addHandler(stream_handler)
 
-    # Agregar manejador personalizado para errores críticos
+    # Critical handler, si corresponde
     if driver is not None:
-        critical_handler = CriticalHandler(driver)
-        logger.addHandler(critical_handler)
+        from configuracion_bot import CriticalHandler
+        logger.addHandler(CriticalHandler(driver))
 
-    # Loguear que se configuró el logging con el número de caso
     logging.info(f"Logging configurado para caso: {numero_caso}. Log file: {log_filename}")
+
+    return log_filename  # Opcional, pero a veces útil
     
         
 def configurar_driver():
@@ -121,7 +149,7 @@ def configurar_driver():
 
     # Configurar preferencias de descargas
     prefs = {
-        "download.default_directory": r"C:\Users\ads_edgar.menendez\Downloads",
+        "download.default_directory": r"C:\Users\Kev\Downloads",
         "download.prompt_for_download": False,
         "download.directory_upgrade": True,
         "safebrowsing.enabled": True

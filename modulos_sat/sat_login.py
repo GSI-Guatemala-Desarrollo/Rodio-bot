@@ -73,8 +73,8 @@ def sat_login(driver, username, password):
         # Verificar si el login fue exitoso al redirigir fuera de "login"
         time.sleep(7)  # Breve espera para redirigir
         if "login" in driver.current_url:
-            logging.critical("Error de inicio de sesión: verifique la conexión o las credenciales y vuelva a intentarlo.")
+            logging.critical("SAT -Error de inicio de sesión: verifique la conexión o las credenciales y vuelva a intentarlo.")
 
         logging.info("Inicio de sesión exitoso.")
     except Exception as e:
-        logging.critical(f"Error durante el inicio de sesión: {e}")
+        logging.critical(f"SAT - Error durante el inicio de sesión: {e}")

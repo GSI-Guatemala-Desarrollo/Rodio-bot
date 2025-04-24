@@ -1,0 +1,424 @@
+{
+    "code": 0,
+    "data": [
+        {
+            "_id": "67dc7504b64dc6225f6d05a2",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-03-14T18:28:02.397Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-03-20T20:05:24.720Z",
+            "flowNum": 188,
+            "tag": "Portal Proveedores",
+            "display": {
+                "description": "GT00000188 | Peq Contribuyente",
+                "currentStageName": "RN F1: Bot Funcion\u00f3 SAT?",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-15T21:01:46.981Z"
+            },
+            "creationDate": "2025-03-20T20:05:24.720Z",
+            "currentStageId": "67cf04cdb64dc6225f6d04d9",
+            "assignmentType": "off",
+            "assigned": [
+                "8DF7ruMLqV64Jv192tjd",
+                "yVyPByq9w9IqXbqs0i73"
+            ]
+        },
+        {
+            "_id": "67dc76adb64dc6225f6d05a5",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-03-14T18:28:02.397Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-03-20T20:12:29.020Z",
+            "flowNum": 189,
+            "tag": "Portal Proveedores",
+            "display": {
+                "description": "GT00000189 | ISR con OC",
+                "currentStageName": "RN F1: Bot Funcion\u00f3 SAT?",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-10T21:58:23.807Z"
+            },
+            "creationDate": "2025-03-20T20:12:29.020Z",
+            "currentStageId": "67cf04cdb64dc6225f6d04d9",
+            "assignmentType": "off",
+            "assigned": [
+                "8DF7ruMLqV64Jv192tjd",
+                "yVyPByq9w9IqXbqs0i73"
+            ]
+        },
+        {
+            "_id": "67dd8794b64dc6225f6d05ac",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-03-14T18:28:02.397Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-03-21T15:36:52.787Z",
+            "flowNum": 192,
+            "tag": "Portal Proveedores",
+            "display": {
+                "description": "GT00000192 | GBARRERA, S.A.",
+                "currentStageName": "Carga de Retenci\u00f3n IVA",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-03-21T15:41:52.244Z"
+            },
+            "creationDate": "2025-03-21T15:36:52.787Z",
+            "currentStageId": "67a50abf97d02bd450ba5f6d",
+            "assignmentType": "off",
+            "assigned": null
+        },
+        {
+            "_id": "67f6ee534e96fdb0819754a3",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "67c6043daf72dcbd2bbdd835",
+            "template": {
+                "_id": "67c6043daf72dcbd2bbdd835",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Entrega Orden de compra v.2",
+                "firstStage": "67c6045eaf72dcbd2bbdd836",
+                "updateDate": "2025-04-08T16:15:08.087Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-09T22:01:55.489Z",
+            "flowNum": 24,
+            "tag": "",
+            "display": {
+                "description": "",
+                "currentStageName": "Envio de Orden de Compra",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-09T22:01:55.489Z"
+            },
+            "creationDate": "2025-04-09T22:01:55.489Z",
+            "currentStageId": "67c6045eaf72dcbd2bbdd836",
+            "assignmentType": "off",
+            "assigned": null
+        },
+        {
+            "_id": "67f6ee834e96fdb0819754a5",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-03-25T21:20:33.210Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-09T22:02:43.460Z",
+            "flowNum": 196,
+            "tag": "",
+            "display": {
+                "description": "",
+                "currentStageName": "Recepci\u00f3n de Facturas",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-09T22:02:43.460Z"
+            },
+            "creationDate": "2025-04-09T22:02:43.460Z",
+            "currentStageId": "6786c8430fae253008de920f",
+            "assignmentType": "self_assignment",
+            "assigned": null
+        },
+        {
+            "_id": "67f7cf634e96fdb0819754a7",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "67c6043daf72dcbd2bbdd835",
+            "template": {
+                "_id": "67c6043daf72dcbd2bbdd835",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Entrega Orden de compra v.2",
+                "firstStage": "67c6045eaf72dcbd2bbdd836",
+                "updateDate": "2025-04-08T16:15:08.087Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-10T14:02:11.335Z",
+            "flowNum": 26,
+            "tag": "",
+            "display": {
+                "description": "",
+                "currentStageName": "Envio de Orden de Compra",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-10T14:02:11.335Z"
+            },
+            "creationDate": "2025-04-10T14:02:11.335Z",
+            "currentStageId": "67c6045eaf72dcbd2bbdd836",
+            "assignmentType": "off",
+            "assigned": null
+        },
+        {
+            "_id": "67f7d0974e96fdb0819754aa",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-03-25T21:20:33.210Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-10T14:07:19.815Z",
+            "flowNum": 197,
+            "tag": "Portal Proveedores",
+            "display": {
+                "description": "2025-04-10 - Proveedor 1",
+                "currentStageName": "Recepci\u00f3n de Facturas",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-10T14:07:19.815Z"
+            },
+            "creationDate": "2025-04-10T14:07:19.815Z",
+            "currentStageId": "6786c8430fae253008de920f",
+            "assignmentType": "self_assignment",
+            "assigned": null
+        },
+        {
+            "_id": "67f7d4d74e96fdb0819754ad",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "67c6043daf72dcbd2bbdd835",
+            "template": {
+                "_id": "67c6043daf72dcbd2bbdd835",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Entrega Orden de compra v.2",
+                "firstStage": "67c6045eaf72dcbd2bbdd836",
+                "updateDate": "2025-04-08T16:15:08.087Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-10T14:25:27.340Z",
+            "flowNum": 28,
+            "tag": "",
+            "display": {
+                "description": "",
+                "currentStageName": "Envio de Orden de Compra",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-10T14:25:27.340Z"
+            },
+            "creationDate": "2025-04-10T14:25:27.340Z",
+            "currentStageId": "67c6045eaf72dcbd2bbdd836",
+            "assignmentType": "off",
+            "assigned": null
+        },
+        {
+            "_id": "67f7e5f34e96fdb0819754b1",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-03-25T21:20:33.210Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-10T15:38:27.540Z",
+            "flowNum": 199,
+            "tag": "Portal Proveedores",
+            "display": {
+                "description": "2025-04-10 - Proveedor 1",
+                "currentStageName": "Recepci\u00f3n de Facturas",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-10T15:38:27.540Z"
+            },
+            "creationDate": "2025-04-10T15:38:27.540Z",
+            "currentStageId": "6786c8430fae253008de920f",
+            "assignmentType": "self_assignment",
+            "assigned": null
+        },
+        {
+            "_id": "67f7e6d04e96fdb0819754b3",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-03-25T21:20:33.210Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-10T15:42:08.989Z",
+            "flowNum": 200,
+            "tag": "Portal Proveedores",
+            "display": {
+                "description": "2025-04-10 - Proveedor 1",
+                "currentStageName": "Recepci\u00f3n de Facturas",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-10T15:42:08.989Z"
+            },
+            "creationDate": "2025-04-10T15:42:08.989Z",
+            "currentStageId": "6786c8430fae253008de920f",
+            "assignmentType": "self_assignment",
+            "assigned": null
+        },
+        {
+            "_id": "67f83e954e96fdb0819754b5",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-03-25T21:20:33.210Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-10T21:56:37.172Z",
+            "flowNum": 201,
+            "tag": "Portal Proveedores",
+            "display": {
+                "description": "2025-04-10 - Proveedor 1",
+                "currentStageName": "Recepci\u00f3n de Facturas",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-10T21:56:37.172Z"
+            },
+            "creationDate": "2025-04-10T21:56:37.172Z",
+            "currentStageId": "6786c8430fae253008de920f",
+            "assignmentType": "self_assignment",
+            "assigned": null
+        },
+        {
+            "_id": "67f9bcab4e96fdb0819754b9",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-04-11T21:00:37.508Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-12T01:06:51.872Z",
+            "flowNum": 202,
+            "tag": "Portal Proveedores",
+            "display": {
+                "description": "GT00000202 | GBARRERA, S.A.",
+                "currentStageName": "Etapa Validaci\u00f3n Interna RODIO",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-12T01:06:53.723Z"
+            },
+            "creationDate": "2025-04-12T01:06:51.872Z",
+            "currentStageId": "67a4e18497d02bd450ba5f53",
+            "assignmentType": "off",
+            "assigned": null
+        },
+        {
+            "_id": "680011954e96fdb0819754c1",
+            "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+            "templateId": "677707350fae253008de917c",
+            "template": {
+                "_id": "677707350fae253008de917c",
+                "id_empresa": "EkRxlUsRLRJNf7Sohug0",
+                "name": "Recepci\u00f3n de Facturas",
+                "firstStage": "6786c8430fae253008de920f",
+                "updateDate": "2025-04-11T21:00:37.508Z",
+                "permissions": {
+                    "createFlow": [
+                        "8DF7ruMLqV64Jv192tjd",
+                        "Bc0DN61WBrUJCi55JfAh",
+                        "yVyPByq9w9IqXbqs0i73"
+                    ]
+                }
+            },
+            "lastTemplateUpdateDate": "2025-04-16T20:22:45.872Z",
+            "flowNum": 206,
+            "tag": "Portal Proveedores",
+            "display": {
+                "description": "GT00000206 | GBARRERA, S.A.",
+                "currentStageName": "Pantalla Resumen Bot",
+                "currentStageType": "form",
+                "lastFinishedStageDate": "2025-04-16T20:24:07.301Z"
+            },
+            "creationDate": "2025-04-16T20:22:45.872Z",
+            "currentStageId": "67a4f4f597d02bd450ba5f66",
+            "assignmentType": "off",
+            "assigned": null
+        }
+    ]
+}
