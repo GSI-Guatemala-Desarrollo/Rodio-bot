@@ -1,9 +1,0 @@
-Formato datos OC  (punto y coma) *
-siguiente flujo al encontrar error *
-obtencion error para cami *
-otros casos 2/3
-error espera login pagina harmony
-condicion reten_isr
-API tipo doc para OC
-Proceso subir archivos cami con fecha
-
