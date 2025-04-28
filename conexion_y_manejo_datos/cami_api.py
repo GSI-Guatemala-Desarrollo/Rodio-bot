@@ -25,8 +25,8 @@ FLOW_LIST_URL = f"https://apitest.camiapp.net//flow/v2/flow/list/{ID_EMPRESA}/{I
 CURRENT_FLOW_URL = f"https://apitest.camiapp.net/flow/v2/flow/current/{ID_EMPRESA}"
 
 # Rutas de archivos json
-JSON_ASSIGNED_PATH = r"C:\Users\Kev\Desktop\RPA\auto-SAT\conexion_y_manejo_datos\archivos_flujo_en_ejecucion\lista_de_flujos.json"
-JSON_CURRENT_PATH = r"C:\Users\Kev\Desktop\RPA\auto-SAT\conexion_y_manejo_datos\archivos_flujo_en_ejecucion\current_flow_data.json"
+JSON_ASSIGNED_PATH = r"C:\Users\ads_kevin.gonzalez\Desktop\RPA\auto-SAT\conexion_y_manejo_datos\archivos_flujo_en_ejecucion\lista_de_flujos.json"
+JSON_CURRENT_PATH = r"C:\Users\ads_kevin.gonzalez\Desktop\RPA\auto-SAT\conexion_y_manejo_datos\archivos_flujo_en_ejecucion\current_flow_data.json"
 # JSON_ASSIGNED_PATH = r"C:\Users\ads_edgar.menendez\Desktop\RPA\auto-SAT\conexion_y_manejo_datos\archivos_flujo_en_ejecucion\lista_de_flujos.json"
 # JSON_CURRENT_PATH = r"C:\Users\ads_edgar.menendez\Desktop\RPA\auto-SAT\conexion_y_manejo_datos\archivos_flujo_en_ejecucion\current_flow_data.json"
 
@@ -36,8 +36,8 @@ expiration_time = None
 """
 
 # Token de prueba (no se obtiene de la API)
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwic3ViIjoieVZ5UEJ5cTl3OUlxWGJxczBpNzMiLCJhcHBfYWNjZXNzX2tleSI6bnVsbCwiZXhwIjoxNzQ1MTA2MzI1fQ.NMur6GBMtfcXMD1Jkl9c9_-ltf3Ik1_6zU3dshyJqBs"
-expiration_time = datetime.strptime("2025-04-19T23:45:25.774766+00:00", "%Y-%m-%dT%H:%M:%S.%f%z").replace(tzinfo=None)
+token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwic3ViIjoieVZ5UEJ5cTl3OUlxWGJxczBpNzMiLCJhcHBfYWNjZXNzX2tleSI6bnVsbCwiZXhwIjoxNzQ1OTY3MTg5fQ.Gq8NRulRtKD2STqwDuyLdnu7MFfEIGXQZOfNYErwd7c"
+expiration_time = datetime.strptime("2025-04-29T22:53:09.883998+00:00", "%Y-%m-%dT%H:%M:%S.%f%z").replace(tzinfo=None)
 
 GUATEMALA_OFFSET = timedelta(hours=-6)  # GMT-6
 
@@ -62,7 +62,8 @@ def get_token():
 def authenticate():
     """Obtiene un nuevo token de autenticación y actualiza la expiración."""
     global token, expiration_time
-    response = requests.post(LOGIN_URL, json={"email": CAMI_USER, "password": CAMI_PASSWORD})
+    response = requests.post(LOGIN_URL, json={"email": CAMI_USER, "password": CAMI_PASSWORD}, verify=False)
+
 
     print(f"🔍 Respuesta de autenticación (status {response.status_code})")  # <-- Ver qué devuelve la API
 
@@ -96,7 +97,8 @@ def get_assigned_flows():
         return None
 
     headers = {"X-Access-Token": token}
-    response = requests.get(FLOW_ASSIGNED_URL, headers=headers)
+    response = requests.get(FLOW_ASSIGNED_URL, headers=headers, verify=False)
+
 
     print(f"\n📡 Respuesta de la API (status {response.status_code})")
 
@@ -159,8 +161,8 @@ def get_current_flow_data(flow_id):
     
     token = get_token()
     headers = {"X-Access-Token": token}
-
-    response = requests.get(url, headers=headers)
+    
+    response = requests.get(url, headers=headers, verify=False)
     print(f"📡 Respuesta de la API `current` (status {response.status_code})")
 
     if response.status_code == 200:

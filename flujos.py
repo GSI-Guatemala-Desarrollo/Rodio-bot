@@ -104,8 +104,6 @@ def caso_1_reten_IVA_GEN (
     
     h_introd_comprobantes_lista_descripciones, # Usuario (lista)
     h_introd_comprobantes_lista_iva, # Usuario (lista)
-    # Valores Cami
-    cami_nombre_empresa
     ):
     
     MAX_INTENTOS_LOGIN = 3
@@ -217,8 +215,6 @@ def caso_2_reten_IVA_e_ISR (
     h_introd_comprobantes_lista_descripciones, # Usuario (lista)
     h_introd_comprobantes_lista_iva, # Usuario (lista)
     
-    # Valores Cami
-    cami_nombre_empresa
     ):
 
     MAX_INTENTOS_LOGIN = 3
@@ -335,8 +331,6 @@ def caso_3_reten_IVA_PEQ (
     h_introd_comprobantes_lista_descripciones, # Usuario (lista)
     h_introd_comprobantes_lista_iva, # Usuario (lista)
     
-    # Valores Cami
-    cami_nombre_empresa
     ):
 
     MAX_INTENTOS_LOGIN = 3

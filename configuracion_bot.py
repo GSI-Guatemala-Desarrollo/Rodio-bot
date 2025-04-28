@@ -11,6 +11,9 @@ from constantes import (
     BRAVE_BINARY_PATH,
 )
 
+ULTIMO_LOG_FILE = None
+ULTIMO_LOG_TIMESTAMP = None
+
 
 # -x-x-x- INICIO CONFIGURACIÓN -x-x-x-
 
@@ -149,7 +152,7 @@ def configurar_driver():
 
     # Configurar preferencias de descargas
     prefs = {
-        "download.default_directory": r"C:\Users\Kev\Downloads",
+        "download.default_directory": r"C:\Users\ads_kevin.gonzalez\Downloads",
         "download.prompt_for_download": False,
         "download.directory_upgrade": True,
         "safebrowsing.enabled": True
