@@ -1,7 +1,7 @@
 # Ignorar el entorno virtual
 .venv/
 .env/
-
+venv/
 # Ignorar el archivo de variables de entorno
 .env
 
