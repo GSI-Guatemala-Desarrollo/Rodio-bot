@@ -14,6 +14,12 @@ def sat_navegar_por_busqueda(driver, texto_busqueda):
     :param texto_busqueda: Texto a buscar en la barra de búsqueda.
     """
     try:
+        try:
+            _ = driver.title
+        except Exception as e:
+            logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+            return
+        
         logging.info(f"\n\n\n-x-x-x- ('{texto_busqueda}') sat_navegar_por_busqueda -x-x-x-\n")
         # Intentar interactuar con la barra de búsqueda
         barra_busqueda = WebDriverWait(driver, 5).until(

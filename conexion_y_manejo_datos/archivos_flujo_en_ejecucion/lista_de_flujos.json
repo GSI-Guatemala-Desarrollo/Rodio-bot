@@ -411,14 +411,17 @@
             "tag": "Portal Proveedores",
             "display": {
                 "description": "GT00000206 | GBARRERA, S.A.",
-                "currentStageName": "Pantalla Resumen Bot",
+                "currentStageName": "Carga de Logs Fall\u00f3 SAT",
                 "currentStageType": "form",
-                "lastFinishedStageDate": "2025-04-16T20:24:07.301Z"
+                "lastFinishedStageDate": "2025-05-04T17:46:36.149Z"
             },
             "creationDate": "2025-04-16T20:22:45.872Z",
-            "currentStageId": "67a4f4f597d02bd450ba5f66",
+            "currentStageId": "67cf04bcb64dc6225f6d04d8",
             "assignmentType": "off",
-            "assigned": null
+            "assigned": [
+                "8DF7ruMLqV64Jv192tjd",
+                "yVyPByq9w9IqXbqs0i73"
+            ]
         }
     ]
 }

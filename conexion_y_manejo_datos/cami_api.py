@@ -36,8 +36,8 @@ expiration_time = None
 """
 
 # Token de prueba (no se obtiene de la API)
-token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwic3ViIjoieVZ5UEJ5cTl3OUlxWGJxczBpNzMiLCJhcHBfYWNjZXNzX2tleSI6bnVsbCwiZXhwIjoxNzQ1OTY3MTg5fQ.Gq8NRulRtKD2STqwDuyLdnu7MFfEIGXQZOfNYErwd7c"
-expiration_time = datetime.strptime("2025-04-29T22:53:09.883998+00:00", "%Y-%m-%dT%H:%M:%S.%f%z").replace(tzinfo=None)
+token = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0eXBlIjoiYWNjZXNzIiwic3ViIjoieVZ5UEJ5cTl3OUlxWGJxczBpNzMiLCJhcHBfYWNjZXNzX2tleSI6bnVsbCwiZXhwIjoxNzQ2NDY5ODg4fQ.HfSHmZecb2HqVlX3WiBgfCMkrjEU0YPqCdQq3TiOLOQ"
+expiration_time = datetime.strptime("2025-05-05T18:31:28.090266+00:00", "%Y-%m-%dT%H:%M:%S.%f%z").replace(tzinfo=None)
 
 GUATEMALA_OFFSET = timedelta(hours=-6)  # GMT-6
 

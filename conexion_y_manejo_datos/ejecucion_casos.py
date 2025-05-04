@@ -236,44 +236,40 @@ def ejecucion_caso_iva_isr(modified_data, driver):
         ret_isr1 = 0.05
         ret_isr2 = 0.07
 
-        # 2) Arrancamos la lista con los valores fijos
-        lista = [30000, 3600]
+        lista = []
 
-        # 3) Procesar según total_oc
         if total_oc > 30000:
-            # -- Línea 1 >30k --
+            # 2) Reemplazar primeras dos líneas por valores fijos
+            lista = [30000, 3600]
+
+            # Línea 1 con monto fijo
             r1 = caso1_calcular_linea_1(30000, lineas[0], ret_isr1, ret_iva)
             lista += [round(r1["IVA2"], 2), round(r1["ISR"], 2)]
 
-            # -- Línea 2 >30k --
+            # Línea 2 con monto fijo
             r2 = caso1_calcular_linea_2(
                 lineas[1], r1["L1TOTAL2"], r1["L1TOTAL3"], ret_isr2, ret_iva
             )
             lista += [round(r2["IVA2"], 2), round(r2["ISR"], 2)]
 
-            # -- Líneas 3+ >30k --
+            # Líneas adicionales (≥3)
             for imp in lineas[2:]:
                 r = caso1_calcular_linea_3(imp, ret_isr2, ret_iva)
                 lista += [round(r["IVA2"], 2), round(r["ISR"], 2)]
 
         else:
-            # -- Línea 1 ≤30k --
-            r1 = caso2_calcular_linea_1(lineas[0], ret_isr1, ret_iva)
-            lista += [round(r1["IVA2"], 2), round(r1["ISR"], 2)]
-
-            # -- Línea 2 ≤30k --
-            r2 = caso2_calcular_linea_2(
-                lineas[1], lineas[0], ret_isr1, ret_iva
-            )
-            lista += [round(r2["IVA2"], 2), round(r2["ISR"], 2)]
+            # ≤ 30k: procesar todo como línea 1 (sin monto fijo)
+            for imp in lineas:
+                r = caso2_calcular_linea_1(imp, ret_isr1, ret_iva)
+                lista += [round(r["IVA2"], 2), round(r["ISR"], 2)]
 
         # 4) Guardar lista intercalada
         modified_data["h_introd_comprobantes_lista_impt_base_retencion_sust"] = lista
-
+        
         # 5) Construir lista de porcentajes de retención
         n = len(lista)
         porc = []
-        if total_oc <= 30000:
+        if total_oc >= 30000:
             # Patrón: [GT050, TVA15, GT070, TVA15, GT070, TVA15, …]
             for i in range(n):
                 if i == 0:
@@ -285,7 +281,7 @@ def ejecucion_caso_iva_isr(modified_data, driver):
         else:
             # Patrón: [GT070, TVA15, GT070, TVA15, …]
             for i in range(n):
-                porc.append("GT070" if i % 2 == 0 else "TVA15")
+                porc.append("GT050" if i % 2 == 0 else "TVA15")
 
         modified_data["h_introd_comprobantes_lista_porcentaje_retencion"] = porc
 
@@ -474,4 +470,4 @@ def ejecucion_caso_iva_peq(modified_data, driver):
     except Exception as e:
         logging.error(f"Error crítico en el flujo 'Caso 3 - Reten IVA PEQ': {e}")
         
-        
+    

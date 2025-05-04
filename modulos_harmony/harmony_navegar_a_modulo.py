@@ -13,6 +13,11 @@ def harmony_navegar_a_modulo(driver, indices):
         driver: WebDriver activo.
         indices (tuple): Lista de índices (por nivel) para navegar por las listas.
     """
+    try:
+        _ = driver.title
+    except Exception as e:
+        logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+        return
     logging.info("\n\n\n-x-x-x- harmony_navegar_a_modulo -x-x-x-\n")
     logging.info("Verificando si cargó la página.")
 

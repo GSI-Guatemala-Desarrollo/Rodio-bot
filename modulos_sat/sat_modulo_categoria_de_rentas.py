@@ -12,6 +12,12 @@ def sat_categoria_de_rentas_busqueda_parametros(driver, CATEGORIA_DE_RENTAS_NIT_
     """
 
     try:
+        try:
+            _ = driver.title
+        except Exception as e:
+            logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+            return
+        
         logging.info(f"\n\n\n-x-x-x- (PASOS 23-24) sat_categoria_de_rentas_busqueda_parametros -x-x-x-\n")
         CATEGORIA_DE_RENTAS_ESTADO_DE_ASIGNACION = CATEGORIA_DE_RENTAS_ESTADO_DE_ASIGNACION - 1
         # Cambiar al iframe donde se encuentran los elementos
@@ -189,6 +195,11 @@ def sat_categoria_de_rentas_buscar_en_tabla(driver, numero_factura):
     :param numero_factura: Número de factura a buscar en la tabla.
     """
     try:
+        try:
+            _ = driver.title
+        except Exception as e:
+            logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+            return
         logging.info(f"\n\n\n-x-x-x- (PASOS 25-26) sat_categoria_de_rentas_buscar_en_tabla -x-x-x-\n")
         # Localizar la tabla
         tabla_xpath = "//*[@id='formContent:dtIdCatTable_data']"
@@ -244,6 +255,11 @@ def sat_categoria_de_rentas_asignar_categoria_y_regimen(driver, CATEGORIA_DE_REN
     :param CATEGORIA_DE_RENTAS_OPCION_REGIMEN: Constante que representa la opción de régimen a seleccionar.
     """
     try:
+        try:
+            _ = driver.title
+        except Exception as e:
+            logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+            return
         logging.info(f"\n\n\n-x-x-x- (PASOS 27-29) sat_categoria_de_rentas_asignar_categoria_y_regimen -x-x-x-\n")
         # Paso 1: Seleccionar categoría de renta
         label_categoria_xpath = "//*[@id='formContent:selTipoConsulta3_label']"

@@ -20,7 +20,12 @@ def sat_emision_constancias_de_retencion_busqueda_parametros(
     EMISION_CONSTANCIAS_SERIE_DE_FACTURA,
     EMISION_CONSTANCIAS_NO_DE_FACTURA,
 ):
-
+    try:
+        _ = driver.title
+    except Exception as e:
+        logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+        return
+    
     logging.info(f"\n\n\n-x-x-x- (PASOS 8-10) sat_emision_constancias_de_retencion_busqueda_parametros -x-x-x-\n")
     # Esperar a que cargue la tabla.
     time.sleep(3)
@@ -405,6 +410,13 @@ def sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_
     EMISION_CONSTANCIAS_FECHA_FACTURA
 ):
     try:
+        # Verificar si el navegador sigue disponible
+        try:
+            _ = driver.title
+        except Exception as e:
+            logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+            return
+        
         logging.info(f"\n\n\n-x-x-x- (PASOS 11-14) sat_emision_constancias_de_retencion_generar_retencion_y_cambiar_directorio_pdf -x-x-x-\n")
         # Verificar si existe el primer checkbox en la tabla
         checkbox_xpath_1 = "//*[@id='formContent:tblFacturas_data']/tr/td[1]/div/div[1]/input"

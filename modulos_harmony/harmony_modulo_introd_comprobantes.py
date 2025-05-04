@@ -18,6 +18,12 @@ def harmony_introd_comprobantes_agregar_factura(driver, proveedor_id, no_factura
     """
 
     try:
+        try:
+            _ = driver.title
+        except Exception as e:
+            logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+            return
+        
         logging.info("\n\n\n-x-x-x- (PASO 2) harmony_introd_comprobantes_agregar_factura -x-x-x-\n")
         # 1. Cambiar al iframe principal donde están los inputs
         logging.info("Cambiando al iframe principal (ptifrmtgtframe).")
@@ -102,6 +108,11 @@ def harmony_introd_comprobantes_copiar_documento(
     """
 
     try:
+        try:
+            _ = driver.title
+        except Exception as e:
+            logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+            return
         logging.info("\n\n\n-x-x-x- (PASOS 3-6) harmony_introd_comprobantes_copiar_documento -x-x-x-\n")
 
         # --- Nuevo Paso: Esperar a que aparezca el componente
@@ -281,6 +292,11 @@ def harmony_introd_comprobantes_anexar_documento_y_comentario(
     """
 
     try:
+        try:
+            _ = driver.title
+        except Exception as e:
+            logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+            return
         logging.info("\n\n\n-x-x-x- (PASOS 7-8) harmony_introd_comprobantes_anexar_documento_y_comentario -x-x-x-\n")
 
         #
@@ -507,6 +523,11 @@ def harmony_introd_comprobantes_pagos_y_retencion(driver, fecha_factura, total_r
     """
 
     try:
+        try:
+            _ = driver.title
+        except Exception as e:
+            logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+            return
         logging.info("\n\n\n-x-x-x- (PASOS 9-10) harmony_introd_comprobantes_pagos_y_retencion -x-x-x-\n")
 
         # [1] Cambiar al iframe principal
@@ -778,7 +799,12 @@ def harmony_introd_comprobantes_descripcion_e_iva(driver, descripciones, ivas):
             - Regresar a default_content() -> ptifrmtgtframe
          c) Si i < último, clic en "Siguiente" y esperar 3s
     """
-
+    try:
+        _ = driver.title
+    except Exception as e:
+        logging.info("El navegador no está disponible. Se detiene la ejecución de la función.")
+        return
+    
     logging.info("\n\n\n-x-x-x- (PASOS 11-12) harmony_introd_comprobantes_descripcion_e_iva -x-x-x-\n")
 
     # --- Asegurar que 'descripciones' sea tupla/lista ---

@@ -112,17 +112,15 @@ def caso_1_reten_IVA_GEN (
     while intento_login < MAX_INTENTOS_LOGIN:
         intento_login += 1
 
-# --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
-       #driver = configurar_driver() # Configurar el driver primero
-        #configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
+        # Crear una nueva instancia del driver en cada intento
+        driver = configurar_driver()
+        configurar_logging(driver, numero_caso)  # Solo si necesitas registrar logs por intento
+
         logging.info(f"==== Intento de login #{intento_login} para SAT ====")
 
-# --------------------- Caso 1 - Funciones SAT ---------------------
-    
         try:
-            # Pasos 1-3
             sat_dirigir_a_pagina_y_verificar_estado_login(driver)
-            break
+            break  # Si funciona, sal del ciclo
         except Exception as e:
             logging.warning(f"Error en intento de login #{intento_login}, la página no cargó a tiempo.")
             finalizar_automatizacion(driver)
@@ -217,28 +215,28 @@ def caso_2_reten_IVA_e_ISR (
     
     ):
 
+        
     MAX_INTENTOS_LOGIN = 3
     intento_login = 0
 
     while intento_login < MAX_INTENTOS_LOGIN:
         intento_login += 1
 
-# --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
-        #driver = configurar_driver() # Configurar el driver primero
-        #configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
+        # Crear una nueva instancia del driver en cada intento
+        driver = configurar_driver()
+        configurar_logging(driver, numero_caso)  # Solo si necesitas registrar logs por intento
+
         logging.info(f"==== Intento de login #{intento_login} para SAT ====")
 
-# --------------------- Caso 1 - Funciones SAT ---------------------
         try:
-            # Pasos 1-3
             sat_dirigir_a_pagina_y_verificar_estado_login(driver)
-            break
+            break  # Si funciona, sal del ciclo
         except Exception as e:
             logging.warning(f"Error en intento de login #{intento_login}, la página no cargó a tiempo.")
             finalizar_automatizacion(driver)
 
             if intento_login == MAX_INTENTOS_LOGIN:
-                logging.error("Se alcanzó el máximo de intentos de login. Abortando el flujo.")
+                logging.error("Se alcanzó el máximo de intentos de login. Abortando el flujo. Revise estado de la página SAT")
                 return
     # Pasos 4-7
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")
@@ -333,28 +331,28 @@ def caso_3_reten_IVA_PEQ (
     
     ):
 
+        
     MAX_INTENTOS_LOGIN = 3
     intento_login = 0
 
     while intento_login < MAX_INTENTOS_LOGIN:
         intento_login += 1
 
-# --------------------- CONFIGURACIÓN LOGGING Y DRIVER ---------------------
-        #driver = configurar_driver() # Configurar el driver primero
-        #configurar_logging(driver, numero_caso)  # Manejo de logs críticos con el driver actual
+        # Crear una nueva instancia del driver en cada intento
+        driver = configurar_driver()
+        configurar_logging(driver, numero_caso)  # Solo si necesitas registrar logs por intento
+
         logging.info(f"==== Intento de login #{intento_login} para SAT ====")
 
-# --------------------- Caso 1 - Funciones SAT ---------------------
         try:
-            # Pasos 1-3
             sat_dirigir_a_pagina_y_verificar_estado_login(driver)
-            break
+            break  # Si funciona, sal del ciclo
         except Exception as e:
             logging.warning(f"Error en intento de login #{intento_login}, la página no cargó a tiempo.")
             finalizar_automatizacion(driver)
 
             if intento_login == MAX_INTENTOS_LOGIN:
-                logging.error("Se alcanzó el máximo de intentos de login. Abortando el flujo.")
+                logging.error("Se alcanzó el máximo de intentos de login. Abortando el flujo. Revise estado de la página SAT")
                 return
     # Pasos 4-7
     sat_navegar_por_busqueda(driver, "Emision constancias de retencion")

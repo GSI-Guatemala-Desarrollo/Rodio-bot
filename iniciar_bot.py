@@ -62,22 +62,20 @@ def run_bot():
                             print("notificar_y_subir_archivos_cami")
                             notificar_y_subir_archivos_cami(configuracion_bot.ultimo_mensaje_critico, creationDate, modified_data)
                             
+                            print("\n\nFlujo finalizado, esperando 10 minutos para la siguiente iteración.")
                         else:
                             print("❌ No se pudieron obtener los datos del flujo actual.")
                     else:
                         print("❌ No se encontró un ID de flujo válido.")
                 else:
-                    print("❌ No se encontró un flujo válido.")
-                # Llamar a la función con el mensaje crítico (si hay)
-    
-            #except CriticalFlowError as cfe:
-            #    print(f"🚨 Error crítico en el flujo: {cfe}. Cerrando navegador y pasando al siguiente flujo.")
-                # Aquí ya se cerró el navegador dentro del CriticalHandler, así que solo dejamos de ejecutar el caso actual.
+                    print("❌ No se encontró un flujo disponible, esperando 1h.")
+                    time.sleep(3000)  # Espera 1h antes de la siguiente iteración
             except Exception as e:
+                print("❌ No se encontró un flujo disponible, esperando 1h.")
+                time.sleep(3000)  # Espera 1h antes de la siguiente iteración
                 print(f"🚨 Error en la verificación de flujos: {e}")
-
+            time.sleep(600)  # Espera 10 minutos antes de la siguiente iteración
             print("\n\nSiguiente flujo.")
-            time.sleep(10)  # Espera 1h antes de la siguiente iteración
 
     except KeyboardInterrupt:
         print("\n🛑 Bot detenido manualmente.")
